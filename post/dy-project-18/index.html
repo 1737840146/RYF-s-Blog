@@ -1,0 +1,366 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title> 类似抖音的短视频管理系统+Java后端+vue前端（18） | RYF&#39;s Blog</title>
+<link rel="shortcut icon" href="https://gblog.luciferryf.eu.org/favicon.ico?v=1678337464009">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://gblog.luciferryf.eu.org/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title=" 类似抖音的短视频管理系统+Java后端+vue前端（18） | RYF&#39;s Blog - Atom Feed" href="https://gblog.luciferryf.eu.org/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="实现点击商品进入商品详情页
+
+在路由中增加商品详情页
+
+detail.vue
+&lt;template&gt;
+	&lt;div class=&quot;detail&quot;&gt;
+		&lt;img class=&quot;bg&q..." />
+    <meta name="keywords" content="实习项目" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://gblog.luciferryf.eu.org">
+  <img class="avatar" src="https://gblog.luciferryf.eu.org/images/avatar.png?v=1678337464009" alt="">
+  </a>
+  <h1 class="site-title">
+    RYF&#39;s Blog
+  </h1>
+  <p class="site-description">
+    远离是非圈子  回归平静生活
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/1737840146" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+               类似抖音的短视频管理系统+Java后端+vue前端（18）
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-03-03
+              </span>
+              <span>
+                4 min read
+              </span>
+              
+                <a href="https://gblog.luciferryf.eu.org/tag/jmh76P6JN/" class="post-tag">
+                  # 实习项目
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://gblog.luciferryf.eu.org/post-images/dy-project-18.png" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <p>实现点击商品进入商品详情页</p>
+<!-- more -->
+<h1 id="在路由中增加商品详情页">在路由中增加商品详情页</h1>
+<figure data-type="image" tabindex="1"><img src="https://gblog.luciferryf.eu.org/post-images/1678337289979.png" alt="" loading="lazy"></figure>
+<h1 id="detailvue">detail.vue</h1>
+<pre><code class="language-html">&lt;template&gt;
+	&lt;div class=&quot;detail&quot;&gt;
+		&lt;img class=&quot;bg&quot; src=&quot;../../assets/detail/chihao.jpg&quot; alt=&quot;&quot;&gt;
+		&lt;button @click=&quot;goback()&quot; class=&quot;back&quot;&gt;返回&lt;/button&gt;
+		&lt;!-- 三个子组件的切换 --&gt;
+		&lt;div class=&quot;tab&quot;&gt;
+			&lt;div class=&quot;tab-item&quot;&gt;
+				&lt;router-link to=&quot;/detail/goods&quot;&gt;商品&lt;/router-link&gt;
+			&lt;/div&gt;
+			&lt;div class=&quot;tab-item&quot;&gt;
+				&lt;router-link to=&quot;/detail/review&quot;&gt;评价&lt;/router-link&gt;
+			&lt;/div&gt;
+			&lt;div class=&quot;tab-item&quot;&gt;
+				&lt;router-link to=&quot;/detail/shop&quot;&gt;商家&lt;/router-link&gt;
+			&lt;/div&gt;
+		&lt;/div&gt;
+		&lt;router-view&gt;&lt;/router-view&gt;
+	&lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+	//调用路由
+	import router from '@/router/index.js'
+	
+	export default{
+		name:&quot;detail&quot;,
+			data:function(){
+				return {}
+			},
+	
+		methods:{
+			goback:function(){
+				//返回首页
+				router.push(&quot;/&quot;)
+			}
+		},
+		components:{
+			
+		},
+		mounted() {
+			//刚进入详情页导航栏隐藏
+			this.$store.commit(&quot;changeNavShow&quot;,false)
+			//接受列表页面传过来的索引数组
+			var indexs = this.$route.query
+			console.log(indexs)
+		},
+		//销毁页面的时候，执行函数,让底部导航栏出现
+		destroyed() {
+			this.$store.commit(&quot;changeNavShow&quot;,true)
+		}
+	}
+&lt;/script&gt;
+
+&lt;style&gt;
+	.detail{
+		width: 100%;
+	}
+	.detail .bg{
+		width: 100%;
+		height: 150px;
+	}
+	.detail .back{
+		width: 60px;
+		height: 30px;
+		position: absolute;
+		top: 120px;
+		left: 0px;
+		border-radius: 20%;
+		border: 1px solid saddlebrown;
+	}
+	/* tab 切换的样式*/
+	.detail .tab{
+		width: 100%;
+		height: 30px;
+		display: flex;
+	}
+	.tab .tab-item{
+		flex: 1;
+		text-align: center;
+		background-color: whitesmoke;
+		line-height: 30px;
+	}
+	.tab .tab-item a{
+		text-decoration: none;
+		color: black;
+	}
+&lt;/style&gt;
+</code></pre>
+<h1 id="商品列表goodvue">商品列表good.vue</h1>
+<pre><code class="language-html">&lt;template&gt;
+	&lt;div id=&quot;wrap&quot;&gt;
+		&lt;!-- 左侧 --&gt;
+		&lt;div class=&quot;goodMenu&quot;&gt;
+			&lt;ul&gt;
+				&lt;li&gt;
+					&lt;img src=&quot;../../assets/detail/baokuan.png&quot; alt=&quot;&quot;&gt;爆款专区
+				&lt;/li&gt;
+				&lt;li&gt;
+					&lt;img src=&quot;../../assets/detail/remai.png&quot; alt=&quot;&quot;&gt;热卖专区
+				&lt;/li&gt;
+				&lt;li&gt;
+					&lt;img src=&quot;../../assets/detail/wangzhe.png&quot; alt=&quot;&quot;&gt;王者炒饭
+				&lt;/li&gt;
+				&lt;li&gt;
+					&lt;img src=&quot;../../assets/detail/wangzhe.png&quot; alt=&quot;&quot;&gt;王者炒面
+				&lt;/li&gt;
+				&lt;li&gt;
+					&lt;img src=&quot;../../assets/detail/wangzhe.png&quot; alt=&quot;&quot;&gt;王者小吃
+				&lt;/li&gt;
+				&lt;li&gt;
+					&lt;img src=&quot;../../assets/detail/baokuan.png&quot; alt=&quot;&quot;&gt;夏日冷饮
+				&lt;/li&gt;
+				
+			&lt;/ul&gt;
+		&lt;/div&gt;
+		
+		
+	&lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+	//导入外部的静态数据
+	import {getgoodList,getshopList} from &quot;@/assets/js/data.js&quot;
+	
+	export default{
+		name:&quot;goods&quot;,
+		data:function(){
+			return{
+				//左侧商品分类
+				goodList:getgoodList(),
+				//右侧具体商品条目
+				shopList:getshopList(),
+				//滚动坐标
+				scrollY:0
+			}
+		}
+	}
+&lt;/script&gt;
+
+&lt;style&gt;
+	#warp{
+		width: 100%;
+		display: flex;
+		height: 560px;
+		margin-top: 20px;
+		overflow: hidden;
+		position: fixed;
+	}
+	#warp .goodMenu{
+		height: 80%;
+		width: 20%;
+		flex: 1;
+		background-color: antiquewhite;
+	}
+	.goodMenu ul{
+		width: 100%;
+		height: 80%;
+		list-style: none;
+	}
+	.goodMenu ul li{
+		height: 40px;
+		font-size: 15px;
+		width: 100%;
+		line-height: 40px;
+		
+	}
+	.goodMenu ul li img{
+		width: 30px;
+		height: 30px;
+		position: relative;
+		top: 6px;
+		border-radius: 50%;
+	}
+&lt;/style&gt;
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E5%9C%A8%E8%B7%AF%E7%94%B1%E4%B8%AD%E5%A2%9E%E5%8A%A0%E5%95%86%E5%93%81%E8%AF%A6%E6%83%85%E9%A1%B5">在路由中增加商品详情页</a></li>
+<li><a href="#detailvue">detail.vue</a></li>
+<li><a href="#%E5%95%86%E5%93%81%E5%88%97%E8%A1%A8goodvue">商品列表good.vue</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://gblog.luciferryf.eu.org/post/dy-project-17/">
+              <h3 class="post-title">
+                 类似抖音的短视频管理系统+Java后端+vue前端（17）
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://gblog.luciferryf.eu.org/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

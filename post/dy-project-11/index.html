@@ -1,0 +1,339 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>类似抖音的短视频管理系统+Java后端+vue前端（11） | RYF&#39;s Blog</title>
+<link rel="shortcut icon" href="https://gblog.luciferryf.eu.org/favicon.ico?v=1678337464009">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://gblog.luciferryf.eu.org/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="类似抖音的短视频管理系统+Java后端+vue前端（11） | RYF&#39;s Blog - Atom Feed" href="https://gblog.luciferryf.eu.org/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="实现登录页面，点击验证码图片，更换验证码
+
+思路：启动服务器进入登录页面，实现表单数据传输到后台，实现点击验证码的更换，实现点击输入框改变样式
+一、在pom文件导入hutool包
+官网：https://www.hutool.cn/docs/..." />
+    <meta name="keywords" content="实习项目" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://gblog.luciferryf.eu.org">
+  <img class="avatar" src="https://gblog.luciferryf.eu.org/images/avatar.png?v=1678337464009" alt="">
+  </a>
+  <h1 class="site-title">
+    RYF&#39;s Blog
+  </h1>
+  <p class="site-description">
+    远离是非圈子  回归平静生活
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/1737840146" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              类似抖音的短视频管理系统+Java后端+vue前端（11）
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-02-24
+              </span>
+              <span>
+                7 min read
+              </span>
+              
+                <a href="https://gblog.luciferryf.eu.org/tag/jmh76P6JN/" class="post-tag">
+                  # 实习项目
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://gblog.luciferryf.eu.org/post-images/dy-project-11.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <p>实现登录页面，点击验证码图片，更换验证码</p>
+<!-- more -->
+<p>思路：启动服务器进入登录页面，实现表单数据传输到后台，实现点击验证码的更换，实现点击输入框改变样式</p>
+<h1 id="一-在pom文件导入hutool包">一、在pom文件导入hutool包</h1>
+<p>官网：<a href="https://www.hutool.cn/docs/#/captcha/%E6%A6%82%E8%BF%B0">https://www.hutool.cn/docs/#/captcha/概述</a></p>
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;cn.hutool&lt;/groupId&gt;
+    &lt;artifactId&gt;hutool-all&lt;/artifactId&gt;
+    &lt;version&gt;5.8.12&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h1 id="二-homecomtroller启动服务器进入登录页面">二、HomeComtroller启动服务器进入登录页面</h1>
+<pre><code class="language-java">    @RequestMapping(&quot;/&quot;)
+    public String  home(){
+        return &quot;login&quot;;
+    }
+</code></pre>
+<h1 id="三-将表单数据传输到后台">三、将表单数据传输到后台</h1>
+<h2 id="loginjs">login.js</h2>
+<pre><code class="language-js">layui.use('form',function () {
+    var form = layui.form;  //引入表单组件
+    var $ = layui.jquery;   //引入Ajax
+    var layer = layui.layer;    //引入弹出层
+
+    form.on('submit(login)',function (data) {
+        //组织默认事件发生
+        event.preventDefault();
+        console.log(data.field)
+        $.ajax({
+            url:&quot;/home/login&quot;,
+            type:&quot;post&quot;,
+            data:data.field,  //往后台传输表单信息
+            dataType: &quot;json&quot;,
+            //回调函数，得到回台返回的值
+            success:function (res){
+
+            }
+        })
+    })
+})
+</code></pre>
+<h2 id="homecontroller">HomeController</h2>
+<pre><code class="language-java">    @RequestMapping(&quot;/home/login&quot;)
+    @ResponseBody
+    public Result login (String username, String password, String code, HttpServletResponse response){
+        Result result = new Result();
+        System.out.println(username+&quot;....&quot;+password+&quot;....&quot;+code);
+        return result;
+    }
+</code></pre>
+<h1 id="四-实现验证码功能">四、实现验证码功能</h1>
+<h2 id="homecontroller验证码方法">HomeController验证码方法</h2>
+<pre><code class="language-java">    @RequestMapping(&quot;/home/getCode&quot;)
+    public void getCode (HttpServletResponse response){
+        //定义图形验证码的长、宽、验证码字符数、干扰线宽度
+        ShearCaptcha captcha = CaptchaUtil.createShearCaptcha(120, 35, 4, 4);
+        System.out.println( captcha.getCode());
+        //将验证码存储到Session缓存中
+        request.getSession().setAttribute(&quot;code&quot;,captcha.getCode());
+        try {
+            captcha.write(response.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+        }
+    }
+</code></pre>
+<h2 id="loginjs点击验证码刷新">login.js点击验证码刷新</h2>
+<pre><code class="language-js">//验证码的更换函数
+function changeCode() {
+    var codeImg = document.getElementById(&quot;codeImg&quot;);    //codeImg指的是验证码图片的id
+    //验证码有的时候会有缓存，拼接一个时间字符用来去掉缓存
+    codeImg.src = &quot;/home/getCode?time=&quot; + new Date().getTime()
+}
+</code></pre>
+<h1 id="五-实现点击输入框改变样式">五、实现点击输入框改变样式</h1>
+<pre><code class="language-js">    // 当点击用户名或者密码  聚焦或者失去焦点的时候，改变输入框父元素的样式
+    $(&quot;.loginBody .layui-form-item .layui-input&quot;).focus(function () {
+        // 当前点击input输入框的父元素增加样式
+        $(this).parent().addClass(&quot;layui-input-focus&quot;);
+    })
+    //失去焦点
+    $(&quot;.loginBody .layui-form-item .layui-input&quot;).blur(function () {
+        // 当前点击input输入框的父元素增加样式
+        $(this).parent().removeClass(&quot;layui-input-focus&quot;);
+        if ($(this).val() != '') {
+            //如果值不为空，不去掉动态样式
+            $(this).parent().addClass(&quot;layui-input-focus&quot;);
+        } else {
+            //如果值为空就去掉改样式
+            $(this).parent().removeClass(&quot;layui-input-focus&quot;);
+        }
+    })
+</code></pre>
+<h1 id="六-测试">六、测试</h1>
+<figure data-type="image" tabindex="1"><img src="https://gblog.luciferryf.eu.org/post-images/1677379414288.png" alt="" loading="lazy"></figure>
+<h1 id="七-loginhtml">七、login.html</h1>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html class=&quot;loginHtml&quot; lang=&quot;cn&quot; xmlns:th=&quot;http://www.thymeleaf.org&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;title&gt;后台登录&lt;/title&gt;
+    &lt;meta name=&quot;renderer&quot; content=&quot;webkit&quot;&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge,chrome=1&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, maximum-scale=1&quot;&gt;
+    &lt;meta name=&quot;apple-mobile-web-app-status-bar-style&quot; content=&quot;black&quot;&gt;
+    &lt;meta name=&quot;apple-mobile-web-app-capable&quot; content=&quot;yes&quot;&gt;
+    &lt;meta name=&quot;format-detection&quot; content=&quot;telephone=no&quot;&gt;
+    &lt;link rel=&quot;icon&quot; href=&quot;../img/ico.ico&quot; th:href=&quot;@{/img/ico.ico}&quot;&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;&quot; media=&quot;all&quot; th:href=&quot;@{/layui/css/layui.css}&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;&quot; media=&quot;all&quot; th:href=&quot;@{/css/public.css}&quot;/&gt;
+&lt;/head&gt;
+&lt;body class=&quot;loginBody&quot;&gt;
+&lt;form class=&quot;layui-form&quot;&gt;
+    &lt;div class=&quot;login_face&quot;&gt;&lt;img src=&quot;../img/douyin.png&quot; th:src=&quot;@{/img/douyin.png}&quot; class=&quot;userAvatar&quot;
+                                 style=&quot;width: 100%;height: 100%&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;layui-form-item input-item&quot;&gt;
+        &lt;label for=&quot;userName&quot;&gt;用户名&lt;/label&gt;
+        &lt;input type=&quot;text&quot; placeholder=&quot;请输入用户名&quot; autocomplete=&quot;off&quot; id=&quot;username&quot; name=&quot;username&quot; class=&quot;layui-input&quot;
+               lay-verify=&quot;required&quot;&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;layui-form-item input-item&quot;&gt;
+        &lt;label for=&quot;password&quot;&gt;密码&lt;/label&gt;
+        &lt;input type=&quot;password&quot; placeholder=&quot;请输入密码&quot; autocomplete=&quot;off&quot; id=&quot;password&quot; name=&quot;password&quot; class=&quot;layui-input&quot;
+               lay-verify=&quot;required&quot;&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;layui-form-item input-item&quot; id=&quot;imgCode&quot;&gt;
+        &lt;label for=&quot;code&quot;&gt;验证码&lt;/label&gt;
+        &lt;!--autocomplete=&quot;off&quot; 不显示之前的值--&gt;
+        &lt;input type=&quot;text&quot; placeholder=&quot;请输入验证码&quot; autocomplete=&quot;off&quot; id=&quot;code&quot; name=&quot;code&quot; class=&quot;layui-input&quot;
+                 lay-verify=&quot;required&quot;&gt;
+    &lt;img src=&quot;../home/getCode&quot; th:src=&quot;@{/home/getCode}&quot; onclick=&quot;changeCode()&quot; id=&quot;codeImg&quot;/&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;layui-form-item&quot;&gt;
+        &lt;button class=&quot;layui-btn layui-block&quot; lay-filter=&quot;login&quot; lay-submit&gt;登录&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/form&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;/layui/layui.js&quot; th:src=&quot;@{/layui/layui.js}&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;/js/login.js&quot; th:src=&quot;@{/js/login.js}&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E4%B8%80-%E5%9C%A8pom%E6%96%87%E4%BB%B6%E5%AF%BC%E5%85%A5hutool%E5%8C%85">一、在pom文件导入hutool包</a></li>
+<li><a href="#%E4%BA%8C-homecomtroller%E5%90%AF%E5%8A%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%9B%E5%85%A5%E7%99%BB%E5%BD%95%E9%A1%B5%E9%9D%A2">二、HomeComtroller启动服务器进入登录页面</a></li>
+<li><a href="#%E4%B8%89-%E5%B0%86%E8%A1%A8%E5%8D%95%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%E5%88%B0%E5%90%8E%E5%8F%B0">三、将表单数据传输到后台</a>
+<ul>
+<li><a href="#loginjs">login.js</a></li>
+<li><a href="#homecontroller">HomeController</a></li>
+</ul>
+</li>
+<li><a href="#%E5%9B%9B-%E5%AE%9E%E7%8E%B0%E9%AA%8C%E8%AF%81%E7%A0%81%E5%8A%9F%E8%83%BD">四、实现验证码功能</a>
+<ul>
+<li><a href="#homecontroller%E9%AA%8C%E8%AF%81%E7%A0%81%E6%96%B9%E6%B3%95">HomeController验证码方法</a></li>
+<li><a href="#loginjs%E7%82%B9%E5%87%BB%E9%AA%8C%E8%AF%81%E7%A0%81%E5%88%B7%E6%96%B0">login.js点击验证码刷新</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BA%94-%E5%AE%9E%E7%8E%B0%E7%82%B9%E5%87%BB%E8%BE%93%E5%85%A5%E6%A1%86%E6%94%B9%E5%8F%98%E6%A0%B7%E5%BC%8F">五、实现点击输入框改变样式</a></li>
+<li><a href="#%E5%85%AD-%E6%B5%8B%E8%AF%95">六、测试</a></li>
+<li><a href="#%E4%B8%83-loginhtml">七、login.html</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://gblog.luciferryf.eu.org/post/dy-project-10/">
+              <h3 class="post-title">
+                类似抖音的短视频管理系统+Java后端+vue前端（10）
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://gblog.luciferryf.eu.org/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

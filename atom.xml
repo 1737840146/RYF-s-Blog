@@ -1,0 +1,1879 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://gblog.luciferryf.eu.org</id>
+    <title>RYF&apos;s Blog</title>
+    <updated>2023-03-09T04:51:38.566Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://gblog.luciferryf.eu.org"/>
+    <link rel="self" href="https://gblog.luciferryf.eu.org/atom.xml"/>
+    <subtitle>远离是非圈子  回归平静生活</subtitle>
+    <logo>https://gblog.luciferryf.eu.org/images/avatar.png</logo>
+    <icon>https://gblog.luciferryf.eu.org/favicon.ico</icon>
+    <rights>All rights reserved 2023, RYF&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[ 类似抖音的短视频管理系统+Java后端+vue前端（18）]]></title>
+        <id>https://gblog.luciferryf.eu.org/post/dy-project-18/</id>
+        <link href="https://gblog.luciferryf.eu.org/post/dy-project-18/">
+        </link>
+        <updated>2023-03-03T04:46:35.000Z</updated>
+        <summary type="html"><![CDATA[<p>实现点击商品进入商品详情页</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>实现点击商品进入商品详情页</p>
+<!-- more -->
+<h1 id="在路由中增加商品详情页">在路由中增加商品详情页</h1>
+<figure data-type="image" tabindex="1"><img src="https://gblog.luciferryf.eu.org/post-images/1678337289979.png" alt="" loading="lazy"></figure>
+<h1 id="detailvue">detail.vue</h1>
+<pre><code class="language-html">&lt;template&gt;
+	&lt;div class=&quot;detail&quot;&gt;
+		&lt;img class=&quot;bg&quot; src=&quot;../../assets/detail/chihao.jpg&quot; alt=&quot;&quot;&gt;
+		&lt;button @click=&quot;goback()&quot; class=&quot;back&quot;&gt;返回&lt;/button&gt;
+		&lt;!-- 三个子组件的切换 --&gt;
+		&lt;div class=&quot;tab&quot;&gt;
+			&lt;div class=&quot;tab-item&quot;&gt;
+				&lt;router-link to=&quot;/detail/goods&quot;&gt;商品&lt;/router-link&gt;
+			&lt;/div&gt;
+			&lt;div class=&quot;tab-item&quot;&gt;
+				&lt;router-link to=&quot;/detail/review&quot;&gt;评价&lt;/router-link&gt;
+			&lt;/div&gt;
+			&lt;div class=&quot;tab-item&quot;&gt;
+				&lt;router-link to=&quot;/detail/shop&quot;&gt;商家&lt;/router-link&gt;
+			&lt;/div&gt;
+		&lt;/div&gt;
+		&lt;router-view&gt;&lt;/router-view&gt;
+	&lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+	//调用路由
+	import router from '@/router/index.js'
+	
+	export default{
+		name:&quot;detail&quot;,
+			data:function(){
+				return {}
+			},
+	
+		methods:{
+			goback:function(){
+				//返回首页
+				router.push(&quot;/&quot;)
+			}
+		},
+		components:{
+			
+		},
+		mounted() {
+			//刚进入详情页导航栏隐藏
+			this.$store.commit(&quot;changeNavShow&quot;,false)
+			//接受列表页面传过来的索引数组
+			var indexs = this.$route.query
+			console.log(indexs)
+		},
+		//销毁页面的时候，执行函数,让底部导航栏出现
+		destroyed() {
+			this.$store.commit(&quot;changeNavShow&quot;,true)
+		}
+	}
+&lt;/script&gt;
+
+&lt;style&gt;
+	.detail{
+		width: 100%;
+	}
+	.detail .bg{
+		width: 100%;
+		height: 150px;
+	}
+	.detail .back{
+		width: 60px;
+		height: 30px;
+		position: absolute;
+		top: 120px;
+		left: 0px;
+		border-radius: 20%;
+		border: 1px solid saddlebrown;
+	}
+	/* tab 切换的样式*/
+	.detail .tab{
+		width: 100%;
+		height: 30px;
+		display: flex;
+	}
+	.tab .tab-item{
+		flex: 1;
+		text-align: center;
+		background-color: whitesmoke;
+		line-height: 30px;
+	}
+	.tab .tab-item a{
+		text-decoration: none;
+		color: black;
+	}
+&lt;/style&gt;
+</code></pre>
+<h1 id="商品列表goodvue">商品列表good.vue</h1>
+<pre><code class="language-html">&lt;template&gt;
+	&lt;div id=&quot;wrap&quot;&gt;
+		&lt;!-- 左侧 --&gt;
+		&lt;div class=&quot;goodMenu&quot;&gt;
+			&lt;ul&gt;
+				&lt;li&gt;
+					&lt;img src=&quot;../../assets/detail/baokuan.png&quot; alt=&quot;&quot;&gt;爆款专区
+				&lt;/li&gt;
+				&lt;li&gt;
+					&lt;img src=&quot;../../assets/detail/remai.png&quot; alt=&quot;&quot;&gt;热卖专区
+				&lt;/li&gt;
+				&lt;li&gt;
+					&lt;img src=&quot;../../assets/detail/wangzhe.png&quot; alt=&quot;&quot;&gt;王者炒饭
+				&lt;/li&gt;
+				&lt;li&gt;
+					&lt;img src=&quot;../../assets/detail/wangzhe.png&quot; alt=&quot;&quot;&gt;王者炒面
+				&lt;/li&gt;
+				&lt;li&gt;
+					&lt;img src=&quot;../../assets/detail/wangzhe.png&quot; alt=&quot;&quot;&gt;王者小吃
+				&lt;/li&gt;
+				&lt;li&gt;
+					&lt;img src=&quot;../../assets/detail/baokuan.png&quot; alt=&quot;&quot;&gt;夏日冷饮
+				&lt;/li&gt;
+				
+			&lt;/ul&gt;
+		&lt;/div&gt;
+		
+		
+	&lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+	//导入外部的静态数据
+	import {getgoodList,getshopList} from &quot;@/assets/js/data.js&quot;
+	
+	export default{
+		name:&quot;goods&quot;,
+		data:function(){
+			return{
+				//左侧商品分类
+				goodList:getgoodList(),
+				//右侧具体商品条目
+				shopList:getshopList(),
+				//滚动坐标
+				scrollY:0
+			}
+		}
+	}
+&lt;/script&gt;
+
+&lt;style&gt;
+	#warp{
+		width: 100%;
+		display: flex;
+		height: 560px;
+		margin-top: 20px;
+		overflow: hidden;
+		position: fixed;
+	}
+	#warp .goodMenu{
+		height: 80%;
+		width: 20%;
+		flex: 1;
+		background-color: antiquewhite;
+	}
+	.goodMenu ul{
+		width: 100%;
+		height: 80%;
+		list-style: none;
+	}
+	.goodMenu ul li{
+		height: 40px;
+		font-size: 15px;
+		width: 100%;
+		line-height: 40px;
+		
+	}
+	.goodMenu ul li img{
+		width: 30px;
+		height: 30px;
+		position: relative;
+		top: 6px;
+		border-radius: 50%;
+	}
+&lt;/style&gt;
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[ 类似抖音的短视频管理系统+Java后端+vue前端（17）]]></title>
+        <id>https://gblog.luciferryf.eu.org/post/dy-project-17/</id>
+        <link href="https://gblog.luciferryf.eu.org/post/dy-project-17/">
+        </link>
+        <updated>2023-03-02T03:24:06.000Z</updated>
+        <summary type="html"><![CDATA[<p>列表组件，实现点击分类下方显示对应的商品列表</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>列表组件，实现点击分类下方显示对应的商品列表</p>
+<!-- more -->
+<p>通过引入data.js文件引入列表信息，然后在主题中获取主题的序列，传给list中，实现点击主题切换列表</p>
+<h1 id="将主题列表单独写入到一个js文件中">将主题列表单独写入到一个js文件中</h1>
+<p><img src="https://gblog.luciferryf.eu.org/post-images/1678335004678.png" alt="" loading="lazy"><br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1678335071064.png" alt="" loading="lazy"></p>
+<h1 id="新建listvue">新建list.vue</h1>
+<pre><code class="language-html">&lt;template&gt;
+	&lt;div class=&quot;list&quot;&gt;
+		&lt;h2&gt;{{data1[this.$store.state.myindex][0].type}}&lt;/h2&gt;
+		&lt;ul&gt;
+			
+			&lt;!-- index 是二维列表data1中的子列表的索引 --&gt;
+			&lt;li v-for=&quot;(item,index) in data1[this.$store.state.myindex]&quot;&gt;
+				&lt;router-link :to=&quot;{path:'/detail'}&quot;&gt;
+					&lt;div class=&quot;bg&quot;&gt;
+						
+						  &lt;img :src=&quot;item.picUrl&quot; alt=&quot;&quot;&gt;
+					
+					&lt;/div&gt;
+					&lt;div class=&quot;content&quot;&gt;
+						&lt;div class=&quot;title&quot;&gt;
+							{{item.name}}
+						&lt;/div&gt;
+						&lt;div class=&quot;second&quot;&gt;
+							&lt;div class=&quot;count&quot;&gt;月售：{{item.count}}&lt;/div&gt;
+							&lt;div class=&quot;distance&quot;&gt;{{item.distance}}km&lt;/div&gt;
+							&lt;div class=&quot;time&quot;&gt;{{item.time}}分钟&lt;/div&gt;
+						&lt;/div&gt;
+						&lt;div class=&quot;third&quot;&gt;
+							&lt;div class=&quot;price&quot;&gt;￥{{item.price}} 起送&lt;/div&gt;
+											  
+						&lt;/div&gt;
+					&lt;/div&gt;
+				
+				&lt;/router-link&gt;
+			&lt;/li&gt;
+				
+		&lt;/ul&gt;
+	&lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+	import {getTakeOuts} from '@/assets/js/data.js'
+	export default{
+		name:&quot;list&quot;,
+		data:function(){
+			return{
+				data1:getTakeOuts(),
+				index1:0,
+				index2:this.$store.state.myindex
+			}
+		},
+		//props:[&quot;typeIndex1&quot;]
+	}
+&lt;/script&gt;
+
+&lt;style&gt;
+	.list{
+		width: 100%;
+		margin-top: 140px;
+		
+	}
+	.list h2{
+		text-align: center;
+	}
+	.list ul{
+		width: 100%;
+	}
+	.list ul li a{
+		width: 100%;
+		display: flex;
+	}
+	.bg img{
+		width: 60px;
+		height: 60px;
+		border-radius: 70%;
+		flex: 1;
+	}
+	.content{
+			flex:3;
+		}
+		
+		.content  .title{
+			font-size:16px;
+			color: #00aa7f;
+		}
+		/*  内容中的第二行的样式 */
+		.content  .second{
+			
+			display: flex;
+			font-size:12px;
+		
+		}
+		.content  .second div{
+			margin-left:5px;
+		}
+		
+		.content .second .count{
+			font-weight: bold;
+			flex:1;
+		}
+		.content .second .distance{
+			color:#007AFF;
+			flex:1;
+		}
+		.content .second .time{
+			color:gold;
+			flex:1;
+		}
+		
+		.content  .third{
+			font-size:13px;
+			color: purple;
+		}
+&lt;/style&gt;
+</code></pre>
+<h1 id="在catogery中获取列表序列">在catogery中获取列表序列</h1>
+<figure data-type="image" tabindex="1"><img src="https://gblog.luciferryf.eu.org/post-images/1678336962573.png" alt="" loading="lazy"></figure>
+<h1 id="在list中获取catgery中的列表序列">在list中获取catgery中的列表序列</h1>
+<figure data-type="image" tabindex="2"><img src="https://gblog.luciferryf.eu.org/post-images/1678337050795.png" alt="" loading="lazy"></figure>
+<h1 id="在home中加入list">在home中加入list</h1>
+<figure data-type="image" tabindex="3"><img src="https://gblog.luciferryf.eu.org/post-images/1678337114780.png" alt="" loading="lazy"></figure>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[ 类似抖音的短视频管理系统+Java后端+vue前端（16）]]></title>
+        <id>https://gblog.luciferryf.eu.org/post/dy-project-16/</id>
+        <link href="https://gblog.luciferryf.eu.org/post/dy-project-16/">
+        </link>
+        <updated>2023-03-01T08:25:32.000Z</updated>
+        <summary type="html"><![CDATA[<p>外卖项目首页搭建</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>外卖项目首页搭建</p>
+<!-- more -->
+<h1 id="前期准备">前期准备</h1>
+<h2 id="安装swiper">安装swiper</h2>
+<p>官网：https://3.swiper.com.cn/usage/index.html</p>
+<pre><code class="language-cmd">npm  install -i  swiper@4.5.1  -s
+</code></pre>
+<h2 id="编写路由">编写路由</h2>
+<p>在src目录下新建router目录，并新建index.js<br>
+在views下新建三个vue，分别是Home、Order、My</p>
+<pre><code class="language-js">import Vue from 'vue'
+import VueRouter from 'vue-router'
+import HomeView from '../views/HomeView.vue'
+import Home from '../views/Home.vue'
+
+Vue.use(VueRouter)
+
+const routes = [
+  {
+    path: '/',
+    name: 'home',
+    component: Home
+  },
+  {
+    path: '/order',
+    name: 'order',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =&gt; import(/* webpackChunkName: &quot;about&quot; */ '../views/Order.vue')
+  },
+  {
+    path: '/my',
+    name: 'my',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =&gt; import(/* webpackChunkName: &quot;about&quot; */ '../views/My.vue')
+  }
+]
+
+const router = new VueRouter({
+  mode: 'history',
+  base: process.env.BASE_URL,
+  routes
+})
+
+export default router
+</code></pre>
+<h1 id="底部主栏">底部主栏</h1>
+<p>新建NavButtom.vue</p>
+<pre><code class="language-html">&lt;template&gt;
+	&lt;div  class=&quot;nav-bottom&quot;&gt;
+		&lt;router-link to=&quot;/&quot;&gt;
+			&lt;i&gt;首页&lt;/i&gt;
+		&lt;/router-link&gt;
+		&lt;router-link to=&quot;/order&quot;&gt;
+			&lt;i&gt;订单&lt;/i&gt;
+		&lt;/router-link&gt;
+		&lt;router-link to=&quot;/my&quot;&gt;
+			&lt;i&gt;我的&lt;/i&gt;
+		&lt;/router-link&gt;
+	&lt;/div&gt;
+	
+&lt;/template&gt;
+
+&lt;script&gt;
+&lt;/script&gt;
+
+&lt;style&gt;
+	.nav-bottom{
+		width:100%;
+		height:40px;
+		background-color: antiquewhite;
+		position: fixed;
+		bottom: 0;
+		display: flex;
+	}
+	
+	.nav-bottom a{
+		display: block;
+		width:33%;
+		flex:1;
+		text-decoration: none;
+		line-height: 40px;
+		text-align: center;
+	/* 	width:200px; */
+	}
+	
+&lt;/style&gt;
+</code></pre>
+<p>在App.vue里引入NavButtom</p>
+<pre><code class="language-html">&lt;template&gt;
+  &lt;div id=&quot;app&quot;&gt;
+	  &lt;NavBottom&gt;&lt;/NavBottom&gt;
+    &lt;router-view/&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+&lt;script&gt;
+	import NavBottom from &quot;@/components/NavButtom.vue&quot;
+	export default{
+		&quot;name&quot;:&quot;app&quot;,
+		data:function(){
+			return{
+				
+			}
+		},
+		components:{
+			NavBottom
+		}
+	}
+	
+&lt;/script&gt;
+
+&lt;style&gt;
+  *{
+	  margin:0;
+	  padding:0;
+  }
+&lt;/style&gt;
+</code></pre>
+<p>效果<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677659995811.png" alt="" loading="lazy"></p>
+<h1 id="轮播图">轮播图</h1>
+<p>新建Banner.vue</p>
+<pre><code class="language-html">&lt;template&gt;
+		&lt;div class=&quot;banner&quot;&gt; 
+		&lt;!--  绑定src属性 --&gt;
+		&lt;!-- &lt;img :src=&quot;imgs[myindex]&quot; /&gt; --&gt;
+			&lt;div class=&quot;swiper-container&quot;&gt;
+				&lt;div class=&quot;swiper-wrapper&quot;&gt;
+					&lt;div class=&quot;swiper-slide&quot;&gt;
+						&lt;img :src=&quot;imgs[0]&quot; alt=&quot;&quot;&gt;
+					&lt;/div&gt;
+					&lt;div class=&quot;swiper-slide&quot;&gt;
+						&lt;img :src=&quot;imgs[1]&quot; alt=&quot;&quot;&gt;
+					&lt;/div&gt;
+					&lt;div class=&quot;swiper-slide&quot;&gt;
+						&lt;img :src=&quot;imgs[2]&quot; alt=&quot;&quot;&gt;
+					&lt;/div&gt;
+				&lt;/div&gt;
+				&lt;!-- 如果需要分页器 --&gt;
+				&lt;div class=&quot;swiper-pagination&quot;&gt;&lt;/div&gt;
+				
+				&lt;!-- 如果需要导航按钮 --&gt;
+				&lt;div class=&quot;swiper-button-prev&quot;&gt;&lt;/div&gt;
+				&lt;div class=&quot;swiper-button-next&quot;&gt;&lt;/div&gt;
+				
+				&lt;!-- 如果需要滚动条 --&gt;
+				&lt;div class=&quot;swiper-scrollbar&quot;&gt;&lt;/div&gt;
+			&lt;/div&gt;
+		&lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+	import Swiper from 'swiper'
+	import 'swiper/dist/css/swiper.css'
+		export default{
+			name:&quot;banner&quot;,
+			data:function(){
+				return {
+					imgs:[
+						require(&quot;@/assets/banner/banner1.jpg&quot;),
+						require(&quot;@/assets/banner/banner2.jpg&quot;),
+						require(&quot;@/assets/banner/banner3.jpg&quot;)
+						
+					],
+					myindex:0
+				}
+			},
+			mounted() {
+				var that = this
+				var mySwiper = new Swiper ('.swiper-container', {
+				    // 图片的滚动方向
+					// direction: 'vertical',
+					speed:1000,
+					autoplay:{
+						delay:3000
+					},
+					autoplay:true,
+				    loop: true,
+				    
+				    // 如果需要分页器
+				    pagination:{
+						el:'.swiper-pagination'
+					},
+				    
+				    // 如果需要前进后退按钮
+				    navigation: {
+						nextEl:'.swiper-button-next',
+						prevEl:'.swiper-button-prev'
+					},
+				    
+				    // 如果需要滚动条
+				    scrollbar: {
+						el:'.swiper-scrollbar'
+					},
+				  })        
+			}
+		}
+&lt;/script&gt;
+&lt;style&gt;
+		.banner{
+			width:100%;
+			/* position: fixed; */
+		}
+		img{
+			width:100%;
+			height: 150px;
+		}
+&lt;/style&gt;
+</code></pre>
+<p>效果<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677660170951.png" alt="" loading="lazy"></p>
+<h1 id="推荐">推荐</h1>
+<p>新建catogery.vue</p>
+<pre><code class="language-html">&lt;template&gt;
+	&lt;div class=&quot;catogery&quot;&gt;
+		&lt;ul&gt;
+			&lt;li v-for=&quot;(item,index) in subjects&quot;&gt;
+				&lt;img :src=&quot;item.pic&quot; alt=&quot;&quot; @click=&quot;changeType(index)&quot;&gt;
+				&lt;div&gt;
+					&lt;label for=&quot;&quot;&gt;{{item.subject}}&lt;/label&gt;
+				&lt;/div&gt;
+			&lt;/li&gt;
+			
+		&lt;/ul&gt;
+	&lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+	export default{
+		name:&quot;catogery&quot;,
+		data:function(){
+			return{
+				subjects:[
+					{subject:&quot;热门&quot;,pic:require('@/assets/catogery/hot.png')}
+				,  {subject:&quot;披萨&quot;,pic:require('@/assets/catogery/liulian.jpg')}
+				,  {subject:&quot;皮蛋瘦肉粥&quot;,pic:require('@/assets/catogery/zhou.jpg')}
+				,	{subject:&quot;饺子馄饨&quot;,pic:require('@/assets/catogery/jiaozi.jpg')}
+				,  {subject:&quot;披萨&quot;,pic:require('@/assets/catogery/liulian.jpg')}
+				,  {subject:&quot;皮蛋瘦肉粥&quot;,pic:require('@/assets/catogery/zhou.jpg')}
+				]
+
+			}
+		},
+		methods:{
+			changeType:function(data){
+				console.log(&quot;.....&quot;+data)
+			}
+		}
+	}
+&lt;/script&gt;
+
+&lt;style&gt;
+	.catogery{
+		/* margin-top: 150px; */
+		width: 100%;
+		height: 140px;
+		background: whitesmoke;
+		position: absolute;
+	}
+	.catogery ul{
+		display: flex;
+		flex-wrap: wrap;
+		font-size: 12px;
+		justify-content: space-around;
+	}
+	.catogery ul li{
+		width: 30%;
+		text-align: center;
+		list-style: none;
+	}
+	.catogery ul li img{
+		width: 45px;
+		height: 45px;
+		border-radius: 20%;
+	}
+&lt;/style&gt;
+</code></pre>
+<p>在home中引入Banner和catogery</p>
+<pre><code class="language-html">&lt;template&gt;
+	&lt;div class=&quot;home&quot;&gt;
+		&lt;Banner&gt;&lt;/Banner&gt;
+		&lt;Catogery&gt;&lt;/Catogery&gt;
+		&lt;router-view/&gt;
+	&lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+	import Banner from &quot;@/components/Banner.vue&quot;
+	import Catogery from &quot;@/components/catogery.vue&quot;
+	export default{
+		&quot;name&quot;:&quot;home&quot;,
+		data:function(){
+			return{
+				
+			}
+		},
+		components:{
+			Banner,
+			Catogery
+		}
+	}
+&lt;/script&gt;
+
+&lt;style&gt;
+	.home{
+		height: 900px;
+	}
+&lt;/style&gt;
+</code></pre>
+<p>效果<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677660335163.png" alt="" loading="lazy"></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[类似抖音的短视频管理系统+Java后端+vue前端（15）]]></title>
+        <id>https://gblog.luciferryf.eu.org/post/dy-project-15/</id>
+        <link href="https://gblog.luciferryf.eu.org/post/dy-project-15/">
+        </link>
+        <updated>2023-02-28T03:06:27.000Z</updated>
+        <summary type="html"><![CDATA[<p>vue组件：把网页中的html+css+javascript封装起来，形成一个标签</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>vue组件：把网页中的html+css+javascript封装起来，形成一个标签</p>
+<!-- more -->
+<h1 id="普通网页的组件及通讯">普通网页的组件及通讯</h1>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+	&lt;head&gt;
+		&lt;meta charset=&quot;utf-8&quot; /&gt;
+		&lt;title&gt;&lt;/title&gt;
+		&lt;!-- &lt;script src=&quot;https://unpkg.com/vue@next&quot;&gt;&lt;/script&gt; --&gt;
+		&lt;script src=&quot;js/v2.6.10/vue.js&quot; type=&quot;text/javascript&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;div id=&quot;app&quot;&gt;
+			{{msg}}&lt;br/&gt;
+			&lt;mydemo&gt;&lt;/mydemo&gt;
+			&lt;br/&gt;
+			&lt;hello :title = &quot;title&quot; @xiaoming=&quot;receiveMsgFromChild&quot;&gt;&lt;/hello&gt;
+		&lt;/div&gt;
+		&lt;div id=&quot;app2&quot;&gt;
+			&lt;mydemo&gt;&lt;/mydemo&gt;&lt;br/&gt;
+		
+		&lt;/div&gt;
+		&lt;script&gt;
+			//全局组件
+			Vue.component('mydemo', {
+			  data: function () {
+			    return {
+			      msg1:&quot;AAAAAAA&quot;
+			    }
+			  },
+			  template: '&lt;div&gt;{{msg1}}&lt;/div&gt;'
+			})
+			var helloobj={
+				data:function(){
+					return{
+						msg2:&quot;我是app 局部组件&quot;,
+						score:1,
+					}
+				},
+				props:[&quot;title&quot;],
+				template:`&lt;div&gt;
+					
+					  &lt;h1&gt;{{msg2}}&lt;/h1&gt; &lt;br/&gt;
+					  &lt;h2&gt;...........{{title}}&lt;/h2&gt;
+					  {{score}}
+					  &lt;button @click=&quot;score=score+1&quot;&gt;计数&lt;/button&gt;
+					 &lt;button @click=&quot;addScore()&quot;&gt;计数2&lt;/button&gt;&lt;br/&gt;
+					 &lt;button @click=&quot;ziChuanFu()&quot;&gt;子组件给父组件发送消息&lt;/button&gt;
+					&lt;/div&gt;`,
+				methods:{
+					addScore:function(){
+						this.score = this.score+1;
+					},
+					ziChuanFu:function(){
+						this.$emit(&quot;xiaoming&quot;,{&quot;xuehao&quot;:&quot;额hi黑恶hi&quot;,age:1232})
+					}
+				}
+	}
+			
+			var app = new Vue({
+				el:&quot;#app&quot;,
+				data:{
+					msg:&quot;123123&quot;,
+					title:&quot;我是一个标题 来自父组件&quot;
+				},
+				components:{
+					&quot;hello&quot;:helloobj
+				},
+				methods:{
+					receiveMsgFromChild:function(data){
+						console.log(data)
+					}
+				}
+			})
+			var  app1 = new Vue({
+				el:&quot;#app2&quot;
+				
+				
+			})
+		&lt;/script&gt;
+	&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h1 id="插槽">插槽</h1>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+	&lt;head&gt;
+		&lt;meta charset=&quot;utf-8&quot;&gt;
+		&lt;title&gt;&lt;/title&gt;
+		&lt;script src=&quot;js/v2.6.10/vue.js&quot;&gt;&lt;/script&gt;
+		
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;div id=&quot;app&quot;&gt;
+			&lt;hello&gt;
+				&lt;!-- 俱名插槽 --&gt;
+			&lt;template v-slot:ch2&gt;
+			    &lt;h1&gt;Here might be a page title&lt;/h1&gt;
+			  &lt;/template&gt;
+			  &lt;button&gt;difuhsdiuhfd&lt;/button&gt;
+			&lt;/hello&gt;
+			  &lt;img src=&quot;img/a.gif&quot;&gt;
+			
+		&lt;/div&gt;
+		
+		&lt;script&gt;
+			// 在组件之间填充内容，可以使用插槽slot
+			var obj = {
+				data:function(){
+					return{
+						msg1:&quot;我是hello子组件&quot;
+					}
+				},
+				template:`
+				 &lt;div&gt;{{msg1}}&lt;/br&gt;
+				  &lt;slot name='ch2'&gt;&lt;/slot&gt;
+				  &lt;slot&gt;&lt;/slot&gt;
+				 &lt;/div&gt;
+				`
+			}
+			
+			var app = new Vue({
+				el:&quot;#app&quot;,
+				components:{
+					&quot;hello&quot;:obj
+				}
+			})
+		&lt;/script&gt;
+	&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h1 id="动态组件">动态组件</h1>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+	&lt;head&gt;
+		&lt;meta charset=&quot;utf-8&quot;&gt;
+		&lt;title&gt;&lt;/title&gt;
+		&lt;script src=&quot;js/v2.6.10/vue.js&quot;&gt;&lt;/script&gt;
+		&lt;style&gt;
+			ul{
+				width: 100%;
+				display: flex;
+				list-style: none;
+				position: absolute;
+				bottom: 0;
+				font-size: 40px;
+				font-weight: bold;
+			}
+			ul li {
+				flex: 1;
+			}
+		&lt;/style&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;div id=&quot;app&quot;&gt;
+			&lt;!-- keep-alive缓存组件的值 --&gt;
+			&lt;keep-alive&gt;
+				&lt;component :is = &quot;is&quot;&gt;&lt;/component&gt;
+			&lt;/keep-alive&gt;
+			&lt;ul&gt;
+				&lt;li @click = &quot;changeComponent('home')&quot;&gt;home&lt;/li&gt;
+				&lt;li @click = &quot;changeComponent('order')&quot;&gt;order&lt;/li&gt;	
+				&lt;li @click = &quot;changeComponent('my')&quot;&gt;my&lt;/li&gt;
+
+			&lt;/ul&gt;
+		&lt;/div&gt;
+		
+		&lt;script&gt;
+			var home = {
+				data:function(){
+					return{
+						score:1
+					}
+				},
+				template:`&lt;div&gt;AAAA...{{score}}
+				&lt;button @click=&quot;score++&quot;&gt;++&lt;/button&gt;&lt;/div&gt;
+					`,
+			}
+			var order = {
+				template:`&lt;div&gt;BBBB&lt;/div&gt;`,
+			}
+			var my = {
+				template:`&lt;div&gt;CCCC&lt;/div&gt;`,
+			}
+			
+			var app = new Vue({
+				el:&quot;#app&quot;,
+				data:{
+					is:&quot;home&quot;
+				},
+				components:{
+					&quot;home&quot;:home,
+					&quot;order&quot;:order,
+					&quot;my&quot;:my
+				},
+				methods:{
+					changeComponent(zhi){
+						this.is = zhi
+					}
+				}
+			})
+		&lt;/script&gt;
+	&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h1 id="非父子组件传输">非父子组件传输</h1>
+<pre><code class="language-html">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+	&lt;head&gt;
+		&lt;meta charset=&quot;utf-8&quot;&gt;
+		&lt;title&gt;&lt;/title&gt;
+		&lt;script src=&quot;js/v2.6.10/vue.js&quot;&gt;&lt;/script&gt;
+		
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;div id=&quot;app&quot;&gt;
+			&lt;helloa&gt;&lt;/helloa&gt;
+			&lt;hellob&gt;&lt;/hellob&gt;
+		&lt;/div&gt;
+		&lt;script&gt;
+			//事件总线传输非父子组件的消息（空的vue对象）
+			var bus = new Vue();
+			
+			var obj1={
+				data:function(){
+					return {
+						msg1:&quot;&quot;
+					}
+				},
+				template:`
+					&lt;div&gt;AAAAAAAAA
+					&lt;br /&gt;
+					&lt;span&gt;接受b组件的消息:{{msg1}}&lt;/span&gt;
+					&lt;br/&gt;
+					&lt;button @click=&quot;sendMssege&quot;&gt;向hellob传输消息&lt;/button&gt;
+					&lt;/div&gt;
+					
+				`,
+				methods:{
+					sendMssege:function(){
+						bus.$emit(&quot;aa&quot;,&quot;来自组件A组件的问候&quot;)
+					}
+				},
+				//组件都加载完之后执行的函数
+				mounted(){
+					var that = this
+					bus.$on(&quot;bb&quot;,function(data){
+						console.log(data)
+						that.msg1 = data
+					})
+				}
+			}
+			var obj2={
+				data:function(){
+					return {
+						msg2:&quot;&quot;
+					}
+				},
+				template:`
+					&lt;div&gt;BBBBBBBBBB
+					&lt;br /&gt;
+					&lt;span&gt;接受a组件的消息:{{msg2}}&lt;/span&gt;
+					&lt;br/&gt;
+					&lt;button @click=&quot;sendMssege&quot;&gt;向helloa传输消息&lt;/button&gt;
+					&lt;/div&gt;
+				`,
+				methods:{
+					sendMssege:function(){
+						bus.$emit(&quot;bb&quot;,&quot;来自组件B组件的问候&quot;)
+					}
+				},
+				//组件都加载完之后执行的函数
+				mounted(){
+					var  that = this
+					bus.$on(&quot;aa&quot;,function(data){
+						console.log(data)
+						that.msg2 = data
+					})
+				}
+			}
+			
+			var app = new Vue({
+				el:&quot;#app&quot;,
+				data:{
+					msg:&quot;123123132123&quot;
+				},
+				components:{
+					&quot;helloa&quot;:obj1,
+					&quot;hellob&quot;:obj2,
+				}
+			})
+		&lt;/script&gt;
+	&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h1 id="过滤器">过滤器</h1>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+	&lt;head&gt;
+		&lt;meta charset=&quot;utf-8&quot;&gt;
+		&lt;title&gt;&lt;/title&gt;
+		&lt;script src=&quot;js/v2.6.10/vue.js&quot;&gt;&lt;/script&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;div id=&quot;app&quot;&gt;
+			{{msg|capitalMsg}}
+		&lt;/div&gt;
+		&lt;script&gt;
+			var app = new Vue({
+				el:&quot;#app&quot;,
+				data:{
+					msg:&quot;abCDEFG&quot;
+				},
+				filters:{
+					capitalMsg:function(value){
+						if(!value){
+							return ''
+						}
+						var zhi = value.charAt(0).toUpperCase()+value.slice(1)
+						return zhi.split(&quot;&quot;).reverse().join(&quot;&quot;)
+					}
+				}
+			})
+		&lt;/script&gt;
+	&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h1 id="自定义指令">自定义指令</h1>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+	&lt;head&gt;
+		&lt;meta charset=&quot;utf-8&quot;&gt;
+		&lt;title&gt;&lt;/title&gt;
+		&lt;script src=&quot;js/v2.6.10/vue.js&quot;&gt;&lt;/script&gt;
+		&lt;style&gt;
+			@keyframes zhuan{
+				from{
+					transform: rotate(0deg);
+				}
+				to{
+					transform: rotate(360deg);
+				}
+			}
+		&lt;/style&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;div id=&quot;app&quot;&gt;
+			{{msg}}&lt;br/&gt;
+			&lt;input v-focus/&gt;&lt;br /&gt;
+			&lt;input v-focus1/&gt;&lt;br /&gt;
+			&lt;div id=&quot;hook-arguments-example&quot; v-demo:foo.a.b=&quot;message&quot;&gt;
+				
+				
+			&lt;/div&gt;
+			&lt;!--  带有参数的自定义指令 --&gt;
+			&lt;div id=&quot;baseexample&quot;&gt;
+			  &lt;p&gt;Scroll down the page&lt;/p&gt;
+			  &lt;!--  让当前的p元素标签距离上边是200像素 --&gt;
+			  &lt;p v-pin=&quot;1000&quot;&gt;Stick me 200px from the top of the page&lt;/p&gt;
+			&lt;/div&gt;
+			
+			&lt;div id=&quot;dynamicexample&quot;&gt;
+			  &lt;h3&gt;...............Scroll down inside this section ↓&lt;/h3&gt;
+			  &lt;p v-pin1:[direction]=&quot;80&quot;&gt;I am pinned onto the page at 200px to the left.&lt;/p&gt;
+			&lt;/div&gt;
+			
+		&lt;/div&gt;
+	&lt;/body&gt;
+	&lt;script&gt;
+		//注册一个全局自定义指令 v-focus
+		Vue.directive('focus',{
+			// 当被绑定的元素插入到 DOM 中时……
+			inserted:function(el){
+				// 聚焦元素
+				// el 相当于input对象
+				el.focus()
+				el.style.border = &quot;10px solid pink&quot;
+			}
+		})
+		// 输出钩子函数一些参数
+		// binding绑定了一参数   vnode虚拟节点
+		Vue.directive('demo', {
+		  bind: function (el, binding, vnode) {
+		    var s = JSON.stringify
+		    el.innerHTML =
+		      'name: '       + s(binding.name) + '&lt;br&gt;' +
+		      'value: '      + s(binding.value) + '&lt;br&gt;' +
+		      'expression: ' + s(binding.expression) + '&lt;br&gt;' +
+		      'argument: '   + s(binding.arg) + '&lt;br&gt;' +
+		      'modifiers: '  + s(binding.modifiers) + '&lt;br&gt;' +
+		      'vnode keys: ' + Object.keys(vnode).join(', ')
+		  }
+		})
+		Vue.directive('pin', {
+		  bind: function (el, binding, vnode) {
+		    el.style.position = 'fixed'
+		    el.style.top = binding.value + 'px'
+			 el.style.left = binding.value + 'px'
+		  }
+		})
+		
+		
+		Vue.directive('pin1', {
+		  bind: function (el, binding, vnode) {
+		    el.style.position = 'fixed'
+		    var s = (binding.arg == 'left' ? 'left' : 'animation')
+			// 	//  style[s] = style.animation
+		    //el.style[s] = binding.value + 'px'
+			// 有旋转的效果
+			el.style[s] = &quot;zhuan 3s linear infinite&quot;
+		  }
+		})
+		var app = new Vue({
+			el:&quot;#app&quot;,
+			data:{
+				msg:&quot;qewoi2313iojioj&quot;,
+				direction:&quot;top&quot;
+			},
+			directives: {
+			  focus1: {
+			    // 指令的定义
+			    inserted: function (el) {
+					// v-focus1 这个指令 让输入框变长
+			      el.style.width = &quot;900px&quot;;
+			    }
+			  }
+			}
+		
+		})
+	&lt;/script&gt;
+&lt;/html&gt;
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[类似抖音的短视频管理系统+Java后端+vue前端（14）]]></title>
+        <id>https://gblog.luciferryf.eu.org/post/dy-project-14/</id>
+        <link href="https://gblog.luciferryf.eu.org/post/dy-project-14/">
+        </link>
+        <updated>2023-02-27T02:29:29.000Z</updated>
+        <summary type="html"><![CDATA[<p>vue基础语法</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>vue基础语法</p>
+<!-- more -->
+<h1 id="vue项目框架">vue项目框架</h1>
+<figure data-type="image" tabindex="1"><img src="https://gblog.luciferryf.eu.org/post-images/1677465329256.jpg" alt="" loading="lazy"></figure>
+<h1 id="新建vueconfigjs">新建vue.config.js</h1>
+<pre><code class="language-js">let path = require('path')
+const {defineConfig} =  require('@vue/cli-service')
+module.exports = defineConfig({  
+    devServer: {
+        open: true,
+        host: 'localhost',
+        port: '9999',
+		historyApiFallback:true,
+		allowedHosts:&quot;all&quot;,
+		client:{
+			webSocketURL:'ws://0.0.0.0:9999/ws'
+		},
+		headers:{
+			'Access-Control-Allow-Origin':'*'
+		},
+		proxy: {
+			'/': {
+				target: 'http://localhost:3000', // 要请求springboot 后端的地址		      
+				changeOrigin: true,
+				pathRewrite: {
+					'^/': '/'
+				},
+				ws:false
+			}
+		}						//解决跨域问题
+    },
+	configureWebpack:(config)=&gt;{
+		config.resolve = {
+			extensions:['.js','.json','.vue'],
+			alias:{
+				'@':path.resolve(__dirname,'./src')
+			}		
+		}		
+	}
+});
+</code></pre>
+<h1 id="新建app1vue并在mainjs中添加">新建App1.vue并在main.js中添加</h1>
+<figure data-type="image" tabindex="2"><img src="https://gblog.luciferryf.eu.org/post-images/1677467071592.png" alt="" loading="lazy"></figure>
+<pre><code class="language-html">&lt;template&gt;
+  &lt;div id=&quot;app&quot;&gt;
+	  &lt;!-- {{插值表达式}} --&gt;
+	  &lt;!-- 以vue结尾的叫组件 --&gt;
+	  &lt;h1&gt;{{msg}}&lt;/h1&gt;
+	  &lt;ul&gt;
+		  &lt;!-- v-for 循环遍历数组 --&gt;
+		  &lt;li v-for=&quot;item in array&quot;&gt;
+			  {{item}}
+		  &lt;/li&gt;
+	  &lt;/ul&gt;
+	  &lt;!-- v-if 控制标签的显示与消失 --&gt;
+	  &lt;img v-if=&quot;flag&quot; :src=&quot;picUrl&quot; id=&quot;img1&quot;/&gt;
+	  &lt;!-- v- 控制标签的显示与隐藏 --&gt;
+	  &lt;img v-show=&quot;flag&quot; :src=&quot;picUrl1&quot;/&gt;
+	  &lt;!-- vue中的点击事件 --&gt;
+	  &lt;button v-on:click=&quot;flag =! flag&quot;&gt;显示与隐藏&lt;/button&gt;
+	  &lt;button @click=&quot;flag =! flag&quot;&gt;点击事件简写方式&lt;/button&gt;
+	  &lt;!-- v-html可以将标签元素嵌入到元素当中 --&gt;
+	  &lt;!-- v-bind:class样式属性绑定，样式是否存在由isActive决定--&gt;
+	  &lt;div v-html=&quot;myhtml1&quot; v-bind:class=&quot;{myborder:isActive}&quot;&gt;
+		  234234
+	  &lt;/div&gt;
+	  &lt;button @click=&quot;myAlert()&quot;&gt;点击弹出窗口&lt;/button&gt;
+	  &lt;!-- 实现双向数据绑定 --&gt;
+	  &lt;!-- v-model是语法优化 --&gt;
+	  &lt;!-- @keydown.enter 按下回车 --&gt;
+	  &lt;br /&gt;
+	  {{msg1}} 
+	  &lt;br /&gt;
+	  &lt;input v-model=&quot;msg1&quot; @keydown.enter=&quot;myAlert()&quot;/&gt;
+	  &lt;br/&gt;
+	  {{reverseMsg}}
+	  &lt;br /&gt;	  
+	  &lt;button @click=&quot;getJoke()&quot;&gt;笑话&lt;/button&gt;
+	  &lt;table border=&quot;1&quot;&gt;
+		  &lt;tr v-for=&quot;joke in msg2&quot;&gt;
+			  &lt;td&gt;
+				  {{joke}}
+			  &lt;/td&gt;
+			   
+		  &lt;/tr&gt;
+	  &lt;/table&gt;
+	  &lt;br /&gt;
+	  &lt;button @click=&quot;getVideo()&quot;&gt;笑话&lt;/button&gt;
+	  &lt;table border=&quot;1&quot;&gt;
+	  		  &lt;tr v-for=&quot;video in msg3&quot;&gt;
+	  			  &lt;td&gt;
+	  				  {{video}}
+	  			  &lt;/td&gt;
+	  			   
+	  		  &lt;/tr&gt;
+	  &lt;/table&gt;
+	  
+  &lt;/div&gt;
+&lt;/template&gt;
+&lt;script&gt;
+	//vue基础
+	export default{
+		name:'app1',
+		data:function(){
+			return{
+				msg:&quot;qweqweqwe&quot;,
+				array:['html','云计算','网络安全','大数据','java'],
+				flag:true,
+				myhtml:&quot;&lt;h2&gt;白龙马蹄朝西&lt;/h2&gt;&quot;,
+				myhtml1:&quot;&lt;img :src='picUrl'&gt;&quot;,
+				msg1:&quot;白龙马蹄朝西&quot;,
+				isActive:true,
+				//require 引入图片  @ 代表根路径
+				picUrl:require('@/assets/tiktok.png'),
+				picUrl1:require('@/assets/logo.png'),
+				msg2:'',
+				msg3:''
+			}
+		},
+		methods:{
+			myAlert:function(){
+				// alert(&quot;点点点点点点&quot;)
+				var img = document.getElementById(&quot;img1&quot;);
+				img.style.width = img.offsetWidth +5 +&quot;px&quot;;
+			},
+			getJoke:function(){
+				//通过'axios将msg2的值换掉
+				//this在then里面的function没有意义，所以需要将它赋值给that
+				var that = this
+				this.$http.get(&quot;https://autumnfish.cn/api/joke/list?num=5&quot;).then(function(res){
+					console.log(res)
+					that.msg2 = res
+				})
+			},
+			getVideo:function(){
+					//通过'axios将msg2的值换掉
+					//this在then里面的function没有意义，所以需要将它赋值给that
+					var that = this
+					axios({
+						type:&quot;get&quot;,
+						url:&quot;/videos/showAll&quot;,
+						method:&quot;get&quot;,
+						hraders:{
+							'content-type':'application/x-www-form-urlencoded'
+						}
+					}).then(function(res){
+						console.log(res)
+						that.msg3 = res
+					})
+				}
+			
+		},
+		computed:{
+			reverseMsg:function(msg1){
+				// split(&quot;&quot;)变成数组，reverse()反翻转，join(&quot;&quot;)变成字符串
+				return this.msg1.split(&quot;&quot;).reverse().join(&quot;&quot;)
+			}
+		}
+	}
+&lt;/script&gt;
+
+&lt;style&gt;
+.myborder{
+	width: 200px;
+	height: 200px;
+	border: 1px black solid;
+}
+img{
+	width: 100px;
+}
+&lt;/style&gt;
+</code></pre>
+<h1 id="mainjs">main.js</h1>
+<pre><code class="language-js">import Vue from 'vue'
+
+import App1 from './App1.vue'
+import router from './router'
+import store from './store'
+//axios 相对与ajax
+import axios from 'axios'
+
+Vue.config.productionTip = false
+//相当与vuecli中的全局变量
+Vue.prototype.$http = axios
+
+new Vue({
+  router,
+  store,
+  render: h =&gt; h(App1)
+}).$mount('#app')
+</code></pre>
+<h1 id="需要在项目node_moudules下安装axios">需要在项目node_moudules下安装axios</h1>
+<p>axios相当于ajax</p>
+<pre><code class="language-cmd">npm install -i axios -S
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[类似抖音的短视频管理系统+Java后端+vue前端（13）]]></title>
+        <id>https://gblog.luciferryf.eu.org/post/dy-project-13/</id>
+        <link href="https://gblog.luciferryf.eu.org/post/dy-project-13/">
+        </link>
+        <updated>2023-02-27T01:17:38.000Z</updated>
+        <summary type="html"><![CDATA[<p>安装vueCli，新建vue项目</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>安装vueCli，新建vue项目</p>
+<!-- more -->
+<h1 id="node安装">node安装</h1>
+<p>建议安装node16<br>
+安装完成后cmd命令行检查版本<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677461082148.png" alt="" loading="lazy"></p>
+<h1 id="node环境配置">node环境配置</h1>
+<ol>
+<li>在通过npm安装vue或webpack的时候，node.js默认安装在路径C:\Users\用户名\AppData\Roaming下，为了不占用C盘空间，并且出现系统禁止脚本运行的情况（装vue脚手架时可能报错），所以强烈建议将路径改到安装包里的。 首先进入node.js的安装目录，新建node_global和node_cache两个文件夹，如下图：<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677461214514.png" alt="" loading="lazy"></li>
+<li>在cmd终端输入两个命令 以下是我自己的node 安装路径 建议修改成你自己的</li>
+</ol>
+<pre><code class="language-cmd">npm config set prefix D:\nodejs\node_global
+npm config set cache D:\nodejs\node_cache
+</code></pre>
+<ol>
+<li>修改保存位置后，设置环境变量（我的电脑-&gt;属性-&gt;高级系统设置-&gt;高级-&gt;环境变量），在系统变量中新建一个NODE_PATH变量，变量值为文件node_modules的路径（在你node.js安装路径里就能找到）<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677462451541.png" alt="" loading="lazy"></li>
+<li>在path里配置node安装路径，和上面两个文件夹的路径<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677462711506.png" alt="" loading="lazy"></li>
+<li>再编辑用户变量里的Path，将最后一个路径C:\Users\用户名\AppData\Roaming改成刚刚新建的node_global路径 D:\nodejs\node_global，配置完成。</li>
+<li>切换阿里云镜像</li>
+</ol>
+<pre><code class="language-cmd">npm install -g cnpm --registry=https://registry.npm.taobao.org
+npm config set registry https://registry.npm.taobao.org
+</code></pre>
+<h1 id="安装vuecli30">安装vueCli3.0</h1>
+<pre><code class="language-cmd">npm uninstall -g @vue/cli
+npm install -g @vue/cli@3.11.0
+</code></pre>
+<h1 id="安装脚手架">安装脚手架</h1>
+<p>注意以管理员身份打开 cmd 输入以下命令</p>
+<pre><code class="language-cmd">cnpm install -g vue-cli
+</code></pre>
+<h1 id="创建-vue-标准空项目">创建 vue 标准空项目</h1>
+<p>以管理员 打开 cmd 进入到项目文件夹 输入 如下命令</p>
+<pre><code class="language-cmd">vue create &lt;Project Name&gt; //文件名 不支持驼峰（含大写字母）
+</code></pre>
+<p>具体操作如下：<br>
+首先，会提示你选择一个preset（预设）：<br>
+① 除最后两个，其他选项都是你此前保存的预设配置（如下图第一个“ my-default”是我之前保存的预设配置，如今便可以直接用了）：<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677463762550.png" alt="" loading="lazy"><br>
+如果没有配置保存过，则只有以下两个选项：<br>
+② default（babel，eslint）：默认设置（直接enter）非常适合快速创建一个新项目的原型，没有带任何辅助功能的 npm包<br>
+③ Manually select features：自定义配置（按方向键 ↓）是我们所需要的面向生产的项目，提供可选功能的 npm 包<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677464238078.png" alt="" loading="lazy"><br>
+手动选择需要添加的配置项：</p>
+<pre><code class="language-cmd">? Check the features needed for your project: (Press &lt;space&gt; to select, &lt;a&gt; to toggle all, &lt;i&gt; to invert selection)
+&gt;( ) Babel //转码器，可以将ES6代码转为ES5代码，从而在现有环境执行。
+( ) TypeScript// TypeScript是一个JavaScript（后缀.js）的超集（后缀.ts）包含并扩展了 JavaScript 的语法，需要被编译输出为 JavaScript在浏览器运行，目前较少人再用
+( ) Progressive Web App (PWA) Support// 渐进式Web应用程序
+( ) Router // vue-router（vue路由）
+( ) Vuex // vuex（vue的状态管理模式）
+( ) CSS Pre-processors // CSS 预处理器（如：less、sass）
+( ) Linter / Formatter // 代码风格检查和格式化（如：ESlint）
+( ) Unit Testing // 单元测试（unit tests）
+( ) E2E Testing // e2e（end to end） 测试
+</code></pre>
+<p>选择完后直接enter，然后会提示你选择对应功能的具体工具包，选择自己擅长或者使用广泛的（方便遇到问题时百度），简介如下：</p>
+<ol>
+<li>是否使用history router：<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677464353317.png" alt="" loading="lazy"><br>
+Vue-Router 利用了浏览器自身的hash 模式和 history 模式的特性来实现前端路由（通过调用浏览器提供的接口）</li>
+<li>如何存放配置 ：<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677464643716.png" alt="" loading="lazy"></li>
+<li>是否保存本次配置（y:记录本次配置，然后需要你起个名; n：不记录本次配置）：<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677464766146.png" alt="" loading="lazy"></li>
+<li>搭建完成：<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677464947043.png" alt="" loading="lazy"></li>
+</ol>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[类似抖音的短视频管理系统+Java后端+vue前端（12）]]></title>
+        <id>https://gblog.luciferryf.eu.org/post/dy-project-12/</id>
+        <link href="https://gblog.luciferryf.eu.org/post/dy-project-12/">
+        </link>
+        <updated>2023-02-26T02:46:04.000Z</updated>
+        <summary type="html"><![CDATA[<p>实现登录功能，登录成功跳转首页，首页显示用户名</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>实现登录功能，登录成功跳转首页，首页显示用户名</p>
+<!-- more -->
+<h1 id="实现点击登录按钮弹出登录窗口">实现点击登录按钮弹出登录窗口</h1>
+<pre><code class="language-js">    $(&quot;#login&quot;).click(function () {
+        //alert(&quot;123&quot;)
+        //window.location.href = &quot;/templates/login.html&quot;;
+        layer.open({
+            type:2,
+            title:&quot;登录&quot;,
+            shade:0.5,  //窗口的外部阴影配置
+            shareClose:true,    //点击外部窗口消失
+            area:[&quot;50%&quot;,&quot;50%&quot;],
+            content:&quot;/templates/login.html&quot;
+
+        })
+    })
+</code></pre>
+<h1 id="数据库层mapper">数据库层Mapper</h1>
+<pre><code class="language-java">    public Users selectUserByName(@Param(&quot;username&quot;) String username);
+</code></pre>
+<pre><code class="language-xml">  &lt;select id=&quot;selectUserByName&quot; parameterType=&quot;java.lang.String&quot; resultMap=&quot;BaseResultMap&quot;&gt;
+    select username, password
+    from users
+    where username = #{username,jdbcType=VARCHAR}
+  &lt;/select&gt;
+</code></pre>
+<h1 id="业务层userservice">业务层UserService</h1>
+<pre><code class="language-java">    Result login(String username, String password, String code, HttpServletRequest request);
+
+</code></pre>
+<p>impl</p>
+<pre><code class="language-java">    @Override
+    public Result login(String username, String password, String code, HttpServletRequest request) {
+        Result result = new Result();
+        //获取验证码
+        String code1 = (String) request.getSession().getAttribute(&quot;code&quot;);
+        //验证码进行匹配，匹配的时候忽略大小写
+        if (!code1.equalsIgnoreCase(code)){
+            result.setMessage(&quot;验证码错误&quot;);
+        }else {
+            Users users = usersMapper.selectUserByName(username);
+            if (users == null || !users.getPassword().equals(password)){
+                result.setMessage(&quot;用户名或密码错误&quot;);
+            }else {
+                //符合条件
+                request.getSession().setAttribute(&quot;user&quot;,users);
+                result.setStatus(0);
+                result.setMessage(&quot;ok&quot;);
+            }
+        }
+        return result;
+    }
+</code></pre>
+<h1 id="控制层controller">控制层Controller</h1>
+<pre><code class="language-java">    @RequestMapping(&quot;/home/login&quot;)
+    @ResponseBody
+    public Result login (String username, String password, String code, HttpServletRequest request){
+        System.out.println(username+&quot;=========&quot;+password+&quot;=========&quot;+code);
+        Result result = userService.login(username,password,code,request);
+        return result;
+    }
+</code></pre>
+<h1 id="回调函数得到后台返回的值">回调函数，得到后台返回的值</h1>
+<pre><code class="language-js">            //回调函数，得到回台返回的值
+            success:function (res){
+                if (res.message == &quot;ok&quot;){
+                    //登录成功跳转主页面
+                    //window.location.href = &quot;/&quot;
+                    window.parent.location.reload()
+                }
+                else {
+                    layer.alert(res.message)
+                }
+            }
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[类似抖音的短视频管理系统+Java后端+vue前端（11）]]></title>
+        <id>https://gblog.luciferryf.eu.org/post/dy-project-11/</id>
+        <link href="https://gblog.luciferryf.eu.org/post/dy-project-11/">
+        </link>
+        <updated>2023-02-24T08:32:17.000Z</updated>
+        <summary type="html"><![CDATA[<p>实现登录页面，点击验证码图片，更换验证码</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>实现登录页面，点击验证码图片，更换验证码</p>
+<!-- more -->
+<p>思路：启动服务器进入登录页面，实现表单数据传输到后台，实现点击验证码的更换，实现点击输入框改变样式</p>
+<h1 id="一-在pom文件导入hutool包">一、在pom文件导入hutool包</h1>
+<p>官网：<a href="https://www.hutool.cn/docs/#/captcha/%E6%A6%82%E8%BF%B0">https://www.hutool.cn/docs/#/captcha/概述</a></p>
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;cn.hutool&lt;/groupId&gt;
+    &lt;artifactId&gt;hutool-all&lt;/artifactId&gt;
+    &lt;version&gt;5.8.12&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h1 id="二-homecomtroller启动服务器进入登录页面">二、HomeComtroller启动服务器进入登录页面</h1>
+<pre><code class="language-java">    @RequestMapping(&quot;/&quot;)
+    public String  home(){
+        return &quot;login&quot;;
+    }
+</code></pre>
+<h1 id="三-将表单数据传输到后台">三、将表单数据传输到后台</h1>
+<h2 id="loginjs">login.js</h2>
+<pre><code class="language-js">layui.use('form',function () {
+    var form = layui.form;  //引入表单组件
+    var $ = layui.jquery;   //引入Ajax
+    var layer = layui.layer;    //引入弹出层
+
+    form.on('submit(login)',function (data) {
+        //组织默认事件发生
+        event.preventDefault();
+        console.log(data.field)
+        $.ajax({
+            url:&quot;/home/login&quot;,
+            type:&quot;post&quot;,
+            data:data.field,  //往后台传输表单信息
+            dataType: &quot;json&quot;,
+            //回调函数，得到回台返回的值
+            success:function (res){
+
+            }
+        })
+    })
+})
+</code></pre>
+<h2 id="homecontroller">HomeController</h2>
+<pre><code class="language-java">    @RequestMapping(&quot;/home/login&quot;)
+    @ResponseBody
+    public Result login (String username, String password, String code, HttpServletResponse response){
+        Result result = new Result();
+        System.out.println(username+&quot;....&quot;+password+&quot;....&quot;+code);
+        return result;
+    }
+</code></pre>
+<h1 id="四-实现验证码功能">四、实现验证码功能</h1>
+<h2 id="homecontroller验证码方法">HomeController验证码方法</h2>
+<pre><code class="language-java">    @RequestMapping(&quot;/home/getCode&quot;)
+    public void getCode (HttpServletResponse response){
+        //定义图形验证码的长、宽、验证码字符数、干扰线宽度
+        ShearCaptcha captcha = CaptchaUtil.createShearCaptcha(120, 35, 4, 4);
+        System.out.println( captcha.getCode());
+        //将验证码存储到Session缓存中
+        request.getSession().setAttribute(&quot;code&quot;,captcha.getCode());
+        try {
+            captcha.write(response.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+        }
+    }
+</code></pre>
+<h2 id="loginjs点击验证码刷新">login.js点击验证码刷新</h2>
+<pre><code class="language-js">//验证码的更换函数
+function changeCode() {
+    var codeImg = document.getElementById(&quot;codeImg&quot;);    //codeImg指的是验证码图片的id
+    //验证码有的时候会有缓存，拼接一个时间字符用来去掉缓存
+    codeImg.src = &quot;/home/getCode?time=&quot; + new Date().getTime()
+}
+</code></pre>
+<h1 id="五-实现点击输入框改变样式">五、实现点击输入框改变样式</h1>
+<pre><code class="language-js">    // 当点击用户名或者密码  聚焦或者失去焦点的时候，改变输入框父元素的样式
+    $(&quot;.loginBody .layui-form-item .layui-input&quot;).focus(function () {
+        // 当前点击input输入框的父元素增加样式
+        $(this).parent().addClass(&quot;layui-input-focus&quot;);
+    })
+    //失去焦点
+    $(&quot;.loginBody .layui-form-item .layui-input&quot;).blur(function () {
+        // 当前点击input输入框的父元素增加样式
+        $(this).parent().removeClass(&quot;layui-input-focus&quot;);
+        if ($(this).val() != '') {
+            //如果值不为空，不去掉动态样式
+            $(this).parent().addClass(&quot;layui-input-focus&quot;);
+        } else {
+            //如果值为空就去掉改样式
+            $(this).parent().removeClass(&quot;layui-input-focus&quot;);
+        }
+    })
+</code></pre>
+<h1 id="六-测试">六、测试</h1>
+<figure data-type="image" tabindex="1"><img src="https://gblog.luciferryf.eu.org/post-images/1677379414288.png" alt="" loading="lazy"></figure>
+<h1 id="七-loginhtml">七、login.html</h1>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html class=&quot;loginHtml&quot; lang=&quot;cn&quot; xmlns:th=&quot;http://www.thymeleaf.org&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;title&gt;后台登录&lt;/title&gt;
+    &lt;meta name=&quot;renderer&quot; content=&quot;webkit&quot;&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge,chrome=1&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, maximum-scale=1&quot;&gt;
+    &lt;meta name=&quot;apple-mobile-web-app-status-bar-style&quot; content=&quot;black&quot;&gt;
+    &lt;meta name=&quot;apple-mobile-web-app-capable&quot; content=&quot;yes&quot;&gt;
+    &lt;meta name=&quot;format-detection&quot; content=&quot;telephone=no&quot;&gt;
+    &lt;link rel=&quot;icon&quot; href=&quot;../img/ico.ico&quot; th:href=&quot;@{/img/ico.ico}&quot;&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;&quot; media=&quot;all&quot; th:href=&quot;@{/layui/css/layui.css}&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;&quot; media=&quot;all&quot; th:href=&quot;@{/css/public.css}&quot;/&gt;
+&lt;/head&gt;
+&lt;body class=&quot;loginBody&quot;&gt;
+&lt;form class=&quot;layui-form&quot;&gt;
+    &lt;div class=&quot;login_face&quot;&gt;&lt;img src=&quot;../img/douyin.png&quot; th:src=&quot;@{/img/douyin.png}&quot; class=&quot;userAvatar&quot;
+                                 style=&quot;width: 100%;height: 100%&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;layui-form-item input-item&quot;&gt;
+        &lt;label for=&quot;userName&quot;&gt;用户名&lt;/label&gt;
+        &lt;input type=&quot;text&quot; placeholder=&quot;请输入用户名&quot; autocomplete=&quot;off&quot; id=&quot;username&quot; name=&quot;username&quot; class=&quot;layui-input&quot;
+               lay-verify=&quot;required&quot;&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;layui-form-item input-item&quot;&gt;
+        &lt;label for=&quot;password&quot;&gt;密码&lt;/label&gt;
+        &lt;input type=&quot;password&quot; placeholder=&quot;请输入密码&quot; autocomplete=&quot;off&quot; id=&quot;password&quot; name=&quot;password&quot; class=&quot;layui-input&quot;
+               lay-verify=&quot;required&quot;&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;layui-form-item input-item&quot; id=&quot;imgCode&quot;&gt;
+        &lt;label for=&quot;code&quot;&gt;验证码&lt;/label&gt;
+        &lt;!--autocomplete=&quot;off&quot; 不显示之前的值--&gt;
+        &lt;input type=&quot;text&quot; placeholder=&quot;请输入验证码&quot; autocomplete=&quot;off&quot; id=&quot;code&quot; name=&quot;code&quot; class=&quot;layui-input&quot;
+                 lay-verify=&quot;required&quot;&gt;
+    &lt;img src=&quot;../home/getCode&quot; th:src=&quot;@{/home/getCode}&quot; onclick=&quot;changeCode()&quot; id=&quot;codeImg&quot;/&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;layui-form-item&quot;&gt;
+        &lt;button class=&quot;layui-btn layui-block&quot; lay-filter=&quot;login&quot; lay-submit&gt;登录&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/form&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;/layui/layui.js&quot; th:src=&quot;@{/layui/layui.js}&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;/js/login.js&quot; th:src=&quot;@{/js/login.js}&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[类似抖音的短视频管理系统+Java后端+vue前端（10）]]></title>
+        <id>https://gblog.luciferryf.eu.org/post/dy-project-10/</id>
+        <link href="https://gblog.luciferryf.eu.org/post/dy-project-10/">
+        </link>
+        <updated>2023-02-24T07:01:11.000Z</updated>
+        <summary type="html"><![CDATA[<p>poi文件导入，将excel表格直接导入到数据库</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>poi文件导入，将excel表格直接导入到数据库</p>
+<!-- more -->
+<h1 id="导入poi工具类">导入poi工具类</h1>
+<pre><code class="language-java">public class MyPoi {
+    public static List&lt;Student&gt; POIUtil(MultipartFile file, HttpServletRequest request) {
+        //list用来装从  xlsx文件中读取的大量的数据
+        List&lt;Student&gt; list = new ArrayList&lt;Student&gt;();
+        try {
+            Workbook book = null;
+            //判断文件是不是以  xlsx结尾的文件
+            if (file.getOriginalFilename().endsWith(&quot;.xlsx&quot;)) {
+                //对book进行初始化
+                book = new XSSFWorkbook(file.getInputStream());
+            } else {
+                book = new HSSFWorkbook(file.getInputStream());
+            }
+            //获取 表格的第一个sheet
+            Sheet sheet = book.getSheetAt(0);
+            // 判断第一个sheet里有多少行数据
+            System.out.println(sheet.getLastRowNum());
+            //如果数据小于1直接将空集合返回
+            if (sheet.getLastRowNum() &lt; 1) {
+                return list;
+            }
+            //从第一行(实际是第二行开始读取数据)
+            for (int i = 1; i &lt;= sheet.getLastRowNum(); i++) {
+                // 获取这一行的类
+                Row row = sheet.getRow(i);
+                // row (行)在获取每一列
+                row.getCell(0).setCellType(CellType.STRING);
+                String id = row.getCell(0).getStringCellValue();
+                row.getCell(1).setCellType(CellType.STRING);
+                String stu_id = row.getCell(1).getStringCellValue();
+                row.getCell(2).setCellType(CellType.STRING);
+                String stu_name = row.getCell(2).getStringCellValue();
+                row.getCell(3).setCellType(CellType.STRING);
+                String age = row.getCell(3).getStringCellValue();
+                //创建一个学生的对象，以上读取的数据用来初始化该对象
+                Student stu = new Student();
+                stu.setId(id);
+                stu.setStuId(stu_id);
+                stu.setStuName(stu_name);
+                stu.setAge(age);
+                //将stu的对象 放到List表格当中
+                list.add(stu);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return list;
+        }
+        return list;
+    }
+}
+</code></pre>
+<h1 id="通过maven脚本构建student类">通过maven脚本构建Student类</h1>
+<h1 id="编写addexcelhtml文件">编写addExcel.html文件</h1>
+<pre><code class="language-html">&lt;body&gt;
+&lt;form class=&quot;layui-form&quot; action=&quot;&quot; lay-filter=&quot;example&quot; id=&quot;form&quot;&gt;
+    &lt;div class=&quot;layui-form-item&quot;&gt;
+        &lt;label class=&quot;layui-form-label&quot;&gt;xls文档&lt;/label&gt;
+        &lt;div class=&quot;layui-input-block&quot;&gt;
+            &lt;input type=&quot;text&quot; id=&quot;video_url&quot; name=&quot;videoPath&quot; class=&quot;layui-input layui-disabled&quot;/&gt;
+            &lt;!--//上传按钮--&gt;
+            &lt;button type=&quot;button&quot; class=&quot;layui-btn&quot; id=&quot;shangchuan&quot;&gt;选择文档&lt;/button&gt;
+            &lt;button type=&quot;button&quot; class=&quot;layui-btn&quot; id=&quot;myupload&quot;&gt;上传&lt;/button&gt;
+            &lt;/br&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+
+&lt;/form&gt;
+&lt;/body&gt;
+&lt;script src=&quot;../layui/layui.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;../js/mydata.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+<h1 id="mydatajs">mydata.js</h1>
+<h2 id="弹出上传文件页面">弹出上传文件页面</h2>
+<pre><code class="language-js">case 'daoru':
+    var  layer = layui.layer;
+    //layer.msg('编辑');
+    layer.open({
+        type:2,
+        title:&quot;添加文档&quot;,
+        shade:0.5,
+        shadeClose:true,
+        area:[&quot;90%&quot;,&quot;90%&quot;],
+        content:&quot;/templates/addExcel.html&quot;
+    })
+    break;
+</code></pre>
+<h2 id="文件上传">文件上传</h2>
+<pre><code class="language-js">    //文件上传
+    upload.render({
+        elem: '#shangchuan' //绑定选择文件的按钮
+        ,url: '/videos/addExcel/' // 上传文档的路径
+        ,auto: false //选择文件后不自动上传
+        ,accept:'file'
+        ,size:500000
+        ,bindAction: '#myupload' //指向一个按钮触发上传
+        ,choose: function(obj){
+            //将每次选择的文件追加到文件队列
+            var files = obj.pushFile();
+            //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
+            obj.preview(function(index, file, result){
+                console.log(index); //得到文件的名称
+                var  filename =file.name;
+                //把文件名称写入到输入框里
+                $(&quot;#video_url&quot;).val(filename)
+            });
+        }
+        //上传完毕弹出一个小窗口
+        ,done: function(res, index, upload){
+            if (res.message == &quot;ok&quot;){
+                layer.msg(&quot;上传完毕 &quot;)
+            }
+        },
+        error:function (res) {
+            layer.msg(res.message)
+            //关闭弹窗
+            layer.closeAll()
+        }
+    });
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://gblog.luciferryf.eu.org/post-images/1677227235658.png" alt="" loading="lazy"></figure>
+<h1 id="控制层controller">控制层controller</h1>
+<pre><code class="language-java"> //文件上传
+ @RequestMapping(&quot;/addExcel&quot;)
+ @ResponseBody
+ public Result addExcel(MultipartFile file, HttpServletRequest request){
+  Result result = new Result();
+  //输出到后台的文件名
+  String filename = file.getOriginalFilename();
+  System.out.println(filename);
+  try {
+   List&lt;Student&gt; students = MyPoi.POIUtil(file,request);
+   for (Student student:students){
+    stuService.insert(student);
+   }
+   result.setMessage(&quot;ok&quot;);
+  }catch (Exception e){
+   e.printStackTrace();
+   result.setMessage(&quot;error&quot;);
+  }
+  return result;
+ }
+</code></pre>
+<h1 id="业务层service">业务层Service</h1>
+<pre><code class="language-java">    public int insert(Student student);
+</code></pre>
+<p>seviceimpl.java</p>
+<pre><code class="language-java">@Service
+public class StuServiceImpl implements StuService {
+    @Autowired
+    StudentMapper studentMapper;
+
+    @Override
+    public int insert(Student student) {
+        return studentMapper.insert(student);
+    }
+}
+</code></pre>
+<h1 id="测试">测试</h1>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[类似抖音的短视频管理系统+Java后端+vue前端（9）]]></title>
+        <id>https://gblog.luciferryf.eu.org/post/dy-project-9/</id>
+        <link href="https://gblog.luciferryf.eu.org/post/dy-project-9/">
+        </link>
+        <updated>2023-02-24T05:20:06.000Z</updated>
+        <summary type="html"><![CDATA[<p>选中数据，点击头工具栏的按钮进行删除</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>选中数据，点击头工具栏的按钮进行删除</p>
+<!-- more -->
+<h1 id="获取选中的数据将数据放到数组中">获取选中的数据，将数据放到数组中</h1>
+<pre><code class="language-js">    var delete1 = checkStatus.data;
+    var ids = [];
+    for (var i = 0;i&lt;delete1.length ;i++){
+        ids.push(delete1[i].id)
+    }
+    console.log(ids)
+</code></pre>
+<p><img src="https://gblog.luciferryf.eu.org/post-images/1677225458972.png" alt="" loading="lazy"><br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677219608230.png" alt="" loading="lazy"></p>
+<h1 id="用ajax将要删除的id传送到后台">用Ajax将要删除的id传送到后台</h1>
+<pre><code class="language-js">    case 'del':
+        var  layer = layui.layer;
+        //layer.msg('删除');
+        //将删除的id的数组传送到后台
+        $.ajax({
+            type:&quot;get&quot;,
+            url:&quot;/videos/del&quot;,
+            data:{
+                ids:ids
+            },
+            traditional:true,//如果传送的数据是数组，则需要
+            dataType:&quot;json&quot;,
+        })
+        break;
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://gblog.luciferryf.eu.org/post-images/1677225520798.png" alt="" loading="lazy"></figure>
+<h1 id="控制层controller">控制层Controller</h1>
+<pre><code class="language-java">    //del
+    @RequestMapping(&quot;/del&quot;)
+    @ResponseBody
+    public Result del(String[] ids){
+        Result result = new Result();
+        System.out.println(ids);
+        try {
+            for (String id:ids){
+                videoService.deleteByPrimaryKey(id);
+            }
+            result.setMessage(&quot;ok&quot;);
+            result.setStatus(0);
+        }catch (Exception e){
+            e.printStackTrace();
+            result.setMessage(&quot;error&quot;);
+        }
+        return result;
+    }
+</code></pre>
+<h1 id="业务层service">业务层Service</h1>
+<p>Service.java</p>
+<pre><code class="language-java">    int deleteByPrimaryKey(String id);
+</code></pre>
+<p>ServiceImpl.java</p>
+<pre><code class="language-java">    @Override
+    public int deleteByPrimaryKey(String id) {
+        return videoMapper.deleteByPrimaryKey(id);
+    }
+</code></pre>
+<h1 id="将结果反馈给前端">将结果反馈给前端</h1>
+<pre><code class="language-js">    success:function (res) {
+        if (res.message = &quot;ok&quot;){
+            layer.alert(res.message,{icon:2},function (index){
+                layer.close(index)
+                tableIns.reload()
+                //再刷新之前弹出窗口确认
+                //window.location.reload()
+            })
+        }
+    }
+</code></pre>
+<figure data-type="image" tabindex="2"><img src="https://gblog.luciferryf.eu.org/post-images/1677226439708.png" alt="" loading="lazy"></figure>
+]]></content>
+    </entry>
+</feed>

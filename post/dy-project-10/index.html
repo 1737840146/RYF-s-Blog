@@ -1,0 +1,354 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>类似抖音的短视频管理系统+Java后端+vue前端（10） | RYF&#39;s Blog</title>
+<link rel="shortcut icon" href="https://gblog.luciferryf.eu.org/favicon.ico?v=1678337464009">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://gblog.luciferryf.eu.org/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="类似抖音的短视频管理系统+Java后端+vue前端（10） | RYF&#39;s Blog - Atom Feed" href="https://gblog.luciferryf.eu.org/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="poi文件导入，将excel表格直接导入到数据库
+
+导入poi工具类
+public class MyPoi {
+    public static List&lt;Student&gt; POIUtil(MultipartFile file..." />
+    <meta name="keywords" content="实习项目" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://gblog.luciferryf.eu.org">
+  <img class="avatar" src="https://gblog.luciferryf.eu.org/images/avatar.png?v=1678337464009" alt="">
+  </a>
+  <h1 class="site-title">
+    RYF&#39;s Blog
+  </h1>
+  <p class="site-description">
+    远离是非圈子  回归平静生活
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/1737840146" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              类似抖音的短视频管理系统+Java后端+vue前端（10）
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-02-24
+              </span>
+              <span>
+                5 min read
+              </span>
+              
+                <a href="https://gblog.luciferryf.eu.org/tag/jmh76P6JN/" class="post-tag">
+                  # 实习项目
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://gblog.luciferryf.eu.org/post-images/dy-project-10.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <p>poi文件导入，将excel表格直接导入到数据库</p>
+<!-- more -->
+<h1 id="导入poi工具类">导入poi工具类</h1>
+<pre><code class="language-java">public class MyPoi {
+    public static List&lt;Student&gt; POIUtil(MultipartFile file, HttpServletRequest request) {
+        //list用来装从  xlsx文件中读取的大量的数据
+        List&lt;Student&gt; list = new ArrayList&lt;Student&gt;();
+        try {
+            Workbook book = null;
+            //判断文件是不是以  xlsx结尾的文件
+            if (file.getOriginalFilename().endsWith(&quot;.xlsx&quot;)) {
+                //对book进行初始化
+                book = new XSSFWorkbook(file.getInputStream());
+            } else {
+                book = new HSSFWorkbook(file.getInputStream());
+            }
+            //获取 表格的第一个sheet
+            Sheet sheet = book.getSheetAt(0);
+            // 判断第一个sheet里有多少行数据
+            System.out.println(sheet.getLastRowNum());
+            //如果数据小于1直接将空集合返回
+            if (sheet.getLastRowNum() &lt; 1) {
+                return list;
+            }
+            //从第一行(实际是第二行开始读取数据)
+            for (int i = 1; i &lt;= sheet.getLastRowNum(); i++) {
+                // 获取这一行的类
+                Row row = sheet.getRow(i);
+                // row (行)在获取每一列
+                row.getCell(0).setCellType(CellType.STRING);
+                String id = row.getCell(0).getStringCellValue();
+                row.getCell(1).setCellType(CellType.STRING);
+                String stu_id = row.getCell(1).getStringCellValue();
+                row.getCell(2).setCellType(CellType.STRING);
+                String stu_name = row.getCell(2).getStringCellValue();
+                row.getCell(3).setCellType(CellType.STRING);
+                String age = row.getCell(3).getStringCellValue();
+                //创建一个学生的对象，以上读取的数据用来初始化该对象
+                Student stu = new Student();
+                stu.setId(id);
+                stu.setStuId(stu_id);
+                stu.setStuName(stu_name);
+                stu.setAge(age);
+                //将stu的对象 放到List表格当中
+                list.add(stu);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return list;
+        }
+        return list;
+    }
+}
+</code></pre>
+<h1 id="通过maven脚本构建student类">通过maven脚本构建Student类</h1>
+<h1 id="编写addexcelhtml文件">编写addExcel.html文件</h1>
+<pre><code class="language-html">&lt;body&gt;
+&lt;form class=&quot;layui-form&quot; action=&quot;&quot; lay-filter=&quot;example&quot; id=&quot;form&quot;&gt;
+    &lt;div class=&quot;layui-form-item&quot;&gt;
+        &lt;label class=&quot;layui-form-label&quot;&gt;xls文档&lt;/label&gt;
+        &lt;div class=&quot;layui-input-block&quot;&gt;
+            &lt;input type=&quot;text&quot; id=&quot;video_url&quot; name=&quot;videoPath&quot; class=&quot;layui-input layui-disabled&quot;/&gt;
+            &lt;!--//上传按钮--&gt;
+            &lt;button type=&quot;button&quot; class=&quot;layui-btn&quot; id=&quot;shangchuan&quot;&gt;选择文档&lt;/button&gt;
+            &lt;button type=&quot;button&quot; class=&quot;layui-btn&quot; id=&quot;myupload&quot;&gt;上传&lt;/button&gt;
+            &lt;/br&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+
+&lt;/form&gt;
+&lt;/body&gt;
+&lt;script src=&quot;../layui/layui.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;../js/mydata.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+<h1 id="mydatajs">mydata.js</h1>
+<h2 id="弹出上传文件页面">弹出上传文件页面</h2>
+<pre><code class="language-js">case 'daoru':
+    var  layer = layui.layer;
+    //layer.msg('编辑');
+    layer.open({
+        type:2,
+        title:&quot;添加文档&quot;,
+        shade:0.5,
+        shadeClose:true,
+        area:[&quot;90%&quot;,&quot;90%&quot;],
+        content:&quot;/templates/addExcel.html&quot;
+    })
+    break;
+</code></pre>
+<h2 id="文件上传">文件上传</h2>
+<pre><code class="language-js">    //文件上传
+    upload.render({
+        elem: '#shangchuan' //绑定选择文件的按钮
+        ,url: '/videos/addExcel/' // 上传文档的路径
+        ,auto: false //选择文件后不自动上传
+        ,accept:'file'
+        ,size:500000
+        ,bindAction: '#myupload' //指向一个按钮触发上传
+        ,choose: function(obj){
+            //将每次选择的文件追加到文件队列
+            var files = obj.pushFile();
+            //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
+            obj.preview(function(index, file, result){
+                console.log(index); //得到文件的名称
+                var  filename =file.name;
+                //把文件名称写入到输入框里
+                $(&quot;#video_url&quot;).val(filename)
+            });
+        }
+        //上传完毕弹出一个小窗口
+        ,done: function(res, index, upload){
+            if (res.message == &quot;ok&quot;){
+                layer.msg(&quot;上传完毕 &quot;)
+            }
+        },
+        error:function (res) {
+            layer.msg(res.message)
+            //关闭弹窗
+            layer.closeAll()
+        }
+    });
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://gblog.luciferryf.eu.org/post-images/1677227235658.png" alt="" loading="lazy"></figure>
+<h1 id="控制层controller">控制层controller</h1>
+<pre><code class="language-java"> //文件上传
+ @RequestMapping(&quot;/addExcel&quot;)
+ @ResponseBody
+ public Result addExcel(MultipartFile file, HttpServletRequest request){
+  Result result = new Result();
+  //输出到后台的文件名
+  String filename = file.getOriginalFilename();
+  System.out.println(filename);
+  try {
+   List&lt;Student&gt; students = MyPoi.POIUtil(file,request);
+   for (Student student:students){
+    stuService.insert(student);
+   }
+   result.setMessage(&quot;ok&quot;);
+  }catch (Exception e){
+   e.printStackTrace();
+   result.setMessage(&quot;error&quot;);
+  }
+  return result;
+ }
+</code></pre>
+<h1 id="业务层service">业务层Service</h1>
+<pre><code class="language-java">    public int insert(Student student);
+</code></pre>
+<p>seviceimpl.java</p>
+<pre><code class="language-java">@Service
+public class StuServiceImpl implements StuService {
+    @Autowired
+    StudentMapper studentMapper;
+
+    @Override
+    public int insert(Student student) {
+        return studentMapper.insert(student);
+    }
+}
+</code></pre>
+<h1 id="测试">测试</h1>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E5%AF%BC%E5%85%A5poi%E5%B7%A5%E5%85%B7%E7%B1%BB">导入poi工具类</a></li>
+<li><a href="#%E9%80%9A%E8%BF%87maven%E8%84%9A%E6%9C%AC%E6%9E%84%E5%BB%BAstudent%E7%B1%BB">通过maven脚本构建Student类</a></li>
+<li><a href="#%E7%BC%96%E5%86%99addexcelhtml%E6%96%87%E4%BB%B6">编写addExcel.html文件</a></li>
+<li><a href="#mydatajs">mydata.js</a>
+<ul>
+<li><a href="#%E5%BC%B9%E5%87%BA%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E9%A1%B5%E9%9D%A2">弹出上传文件页面</a></li>
+<li><a href="#%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0">文件上传</a></li>
+</ul>
+</li>
+<li><a href="#%E6%8E%A7%E5%88%B6%E5%B1%82controller">控制层controller</a></li>
+<li><a href="#%E4%B8%9A%E5%8A%A1%E5%B1%82service">业务层Service</a></li>
+<li><a href="#%E6%B5%8B%E8%AF%95">测试</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://gblog.luciferryf.eu.org/post/dy-project-9/">
+              <h3 class="post-title">
+                类似抖音的短视频管理系统+Java后端+vue前端（9）
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://gblog.luciferryf.eu.org/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

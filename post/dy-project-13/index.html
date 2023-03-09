@@ -1,0 +1,259 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>类似抖音的短视频管理系统+Java后端+vue前端（13） | RYF&#39;s Blog</title>
+<link rel="shortcut icon" href="https://gblog.luciferryf.eu.org/favicon.ico?v=1678337464009">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://gblog.luciferryf.eu.org/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="类似抖音的短视频管理系统+Java后端+vue前端（13） | RYF&#39;s Blog - Atom Feed" href="https://gblog.luciferryf.eu.org/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="安装vueCli，新建vue项目
+
+node安装
+建议安装node16
+安装完成后cmd命令行检查版本
+
+node环境配置
+
+在通过npm安装vue或webpack的时候，node.js默认安装在路径C:\Users\用户名\AppData..." />
+    <meta name="keywords" content="实习项目" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://gblog.luciferryf.eu.org">
+  <img class="avatar" src="https://gblog.luciferryf.eu.org/images/avatar.png?v=1678337464009" alt="">
+  </a>
+  <h1 class="site-title">
+    RYF&#39;s Blog
+  </h1>
+  <p class="site-description">
+    远离是非圈子  回归平静生活
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/1737840146" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              类似抖音的短视频管理系统+Java后端+vue前端（13）
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-02-27
+              </span>
+              <span>
+                4 min read
+              </span>
+              
+                <a href="https://gblog.luciferryf.eu.org/tag/jmh76P6JN/" class="post-tag">
+                  # 实习项目
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://gblog.luciferryf.eu.org/post-images/dy-project-13.png" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <p>安装vueCli，新建vue项目</p>
+<!-- more -->
+<h1 id="node安装">node安装</h1>
+<p>建议安装node16<br>
+安装完成后cmd命令行检查版本<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677461082148.png" alt="" loading="lazy"></p>
+<h1 id="node环境配置">node环境配置</h1>
+<ol>
+<li>在通过npm安装vue或webpack的时候，node.js默认安装在路径C:\Users\用户名\AppData\Roaming下，为了不占用C盘空间，并且出现系统禁止脚本运行的情况（装vue脚手架时可能报错），所以强烈建议将路径改到安装包里的。 首先进入node.js的安装目录，新建node_global和node_cache两个文件夹，如下图：<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677461214514.png" alt="" loading="lazy"></li>
+<li>在cmd终端输入两个命令 以下是我自己的node 安装路径 建议修改成你自己的</li>
+</ol>
+<pre><code class="language-cmd">npm config set prefix D:\nodejs\node_global
+npm config set cache D:\nodejs\node_cache
+</code></pre>
+<ol>
+<li>修改保存位置后，设置环境变量（我的电脑-&gt;属性-&gt;高级系统设置-&gt;高级-&gt;环境变量），在系统变量中新建一个NODE_PATH变量，变量值为文件node_modules的路径（在你node.js安装路径里就能找到）<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677462451541.png" alt="" loading="lazy"></li>
+<li>在path里配置node安装路径，和上面两个文件夹的路径<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677462711506.png" alt="" loading="lazy"></li>
+<li>再编辑用户变量里的Path，将最后一个路径C:\Users\用户名\AppData\Roaming改成刚刚新建的node_global路径 D:\nodejs\node_global，配置完成。</li>
+<li>切换阿里云镜像</li>
+</ol>
+<pre><code class="language-cmd">npm install -g cnpm --registry=https://registry.npm.taobao.org
+npm config set registry https://registry.npm.taobao.org
+</code></pre>
+<h1 id="安装vuecli30">安装vueCli3.0</h1>
+<pre><code class="language-cmd">npm uninstall -g @vue/cli
+npm install -g @vue/cli@3.11.0
+</code></pre>
+<h1 id="安装脚手架">安装脚手架</h1>
+<p>注意以管理员身份打开 cmd 输入以下命令</p>
+<pre><code class="language-cmd">cnpm install -g vue-cli
+</code></pre>
+<h1 id="创建-vue-标准空项目">创建 vue 标准空项目</h1>
+<p>以管理员 打开 cmd 进入到项目文件夹 输入 如下命令</p>
+<pre><code class="language-cmd">vue create &lt;Project Name&gt; //文件名 不支持驼峰（含大写字母）
+</code></pre>
+<p>具体操作如下：<br>
+首先，会提示你选择一个preset（预设）：<br>
+① 除最后两个，其他选项都是你此前保存的预设配置（如下图第一个“ my-default”是我之前保存的预设配置，如今便可以直接用了）：<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677463762550.png" alt="" loading="lazy"><br>
+如果没有配置保存过，则只有以下两个选项：<br>
+② default（babel，eslint）：默认设置（直接enter）非常适合快速创建一个新项目的原型，没有带任何辅助功能的 npm包<br>
+③ Manually select features：自定义配置（按方向键 ↓）是我们所需要的面向生产的项目，提供可选功能的 npm 包<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677464238078.png" alt="" loading="lazy"><br>
+手动选择需要添加的配置项：</p>
+<pre><code class="language-cmd">? Check the features needed for your project: (Press &lt;space&gt; to select, &lt;a&gt; to toggle all, &lt;i&gt; to invert selection)
+&gt;( ) Babel //转码器，可以将ES6代码转为ES5代码，从而在现有环境执行。
+( ) TypeScript// TypeScript是一个JavaScript（后缀.js）的超集（后缀.ts）包含并扩展了 JavaScript 的语法，需要被编译输出为 JavaScript在浏览器运行，目前较少人再用
+( ) Progressive Web App (PWA) Support// 渐进式Web应用程序
+( ) Router // vue-router（vue路由）
+( ) Vuex // vuex（vue的状态管理模式）
+( ) CSS Pre-processors // CSS 预处理器（如：less、sass）
+( ) Linter / Formatter // 代码风格检查和格式化（如：ESlint）
+( ) Unit Testing // 单元测试（unit tests）
+( ) E2E Testing // e2e（end to end） 测试
+</code></pre>
+<p>选择完后直接enter，然后会提示你选择对应功能的具体工具包，选择自己擅长或者使用广泛的（方便遇到问题时百度），简介如下：</p>
+<ol>
+<li>是否使用history router：<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677464353317.png" alt="" loading="lazy"><br>
+Vue-Router 利用了浏览器自身的hash 模式和 history 模式的特性来实现前端路由（通过调用浏览器提供的接口）</li>
+<li>如何存放配置 ：<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677464643716.png" alt="" loading="lazy"></li>
+<li>是否保存本次配置（y:记录本次配置，然后需要你起个名; n：不记录本次配置）：<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677464766146.png" alt="" loading="lazy"></li>
+<li>搭建完成：<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677464947043.png" alt="" loading="lazy"></li>
+</ol>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#node%E5%AE%89%E8%A3%85">node安装</a></li>
+<li><a href="#node%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE">node环境配置</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85vuecli30">安装vueCli3.0</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85%E8%84%9A%E6%89%8B%E6%9E%B6">安装脚手架</a></li>
+<li><a href="#%E5%88%9B%E5%BB%BA-vue-%E6%A0%87%E5%87%86%E7%A9%BA%E9%A1%B9%E7%9B%AE">创建 vue 标准空项目</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://gblog.luciferryf.eu.org/post/dy-project-12/">
+              <h3 class="post-title">
+                类似抖音的短视频管理系统+Java后端+vue前端（12）
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://gblog.luciferryf.eu.org/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

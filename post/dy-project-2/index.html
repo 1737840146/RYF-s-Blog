@@ -1,0 +1,662 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>类似抖音的短视频管理系统+Java后端+vue前端（2） | RYF&#39;s Blog</title>
+<link rel="shortcut icon" href="https://gblog.luciferryf.eu.org/favicon.ico?v=1678337464009">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://gblog.luciferryf.eu.org/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="类似抖音的短视频管理系统+Java后端+vue前端（2） | RYF&#39;s Blog - Atom Feed" href="https://gblog.luciferryf.eu.org/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="进行项目的基本配置以及项目的Mybatis的配置，包括maven项目配置文件pom.xml、Mybatis配置文件mybatis-config.xml、Mybatis连接数据库所需要的数据库信息文件db.properties、Spring和..." />
+    <meta name="keywords" content="实习项目" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://gblog.luciferryf.eu.org">
+  <img class="avatar" src="https://gblog.luciferryf.eu.org/images/avatar.png?v=1678337464009" alt="">
+  </a>
+  <h1 class="site-title">
+    RYF&#39;s Blog
+  </h1>
+  <p class="site-description">
+    远离是非圈子  回归平静生活
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/1737840146" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              类似抖音的短视频管理系统+Java后端+vue前端（2）
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-02-20
+              </span>
+              <span>
+                20 min read
+              </span>
+              
+                <a href="https://gblog.luciferryf.eu.org/tag/jmh76P6JN/" class="post-tag">
+                  # 实习项目
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://gblog.luciferryf.eu.org/post-images/dy-project-2.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <p>进行项目的基本配置以及项目的Mybatis的配置，包括maven项目配置文件pom.xml、Mybatis配置文件mybatis-config.xml、Mybatis连接数据库所需要的数据库信息文件db.properties、Spring和Mybatis整合文件spring-mybatis.xml、MyBatis发生器(MBG)文件generatorConfig.xml、MBG所需要的数据库信息文件config.properties和日志配置文件log4j.properties，并且在后端通过单元测试进行对数据库的增删改查操作</p>
+<!-- more -->
+<h1 id="配置maven项目配置文件pomxml"><strong>配置maven项目配置文件pom.xml</strong></h1>
+<h2 id="定义项目的jdk版本">定义项目的JDK版本</h2>
+<pre><code>&lt;properties&gt;
+    &lt;maven.compiler.source&gt;1.8&lt;/maven.compiler.source&gt;
+    &lt;maven.compiler.target&gt;1.8&lt;/maven.compiler.target&gt;
+    &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
+&lt;/properties&gt;
+</code></pre>
+<h2 id="项目的依赖项">项目的依赖项</h2>
+<pre><code>&lt;dependencies&gt;
+&lt;!--第三方依赖验证码--&gt;
+&lt;!--    &lt;dependency&gt;--&gt;
+&lt;!--      &lt;groupId&gt;cn.dsna.util.images&lt;/groupId&gt;--&gt;
+&lt;!--      &lt;artifactId&gt;ValidateCode&lt;/artifactId&gt;--&gt;
+&lt;!--      &lt;version&gt;1.0&lt;/version&gt;--&gt;
+&lt;!--    &lt;/dependency&gt;--&gt;
+&lt;!-- https://mvnrepository.com/artifact/org.apache.poi/poi --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.apache.poi&lt;/groupId&gt;
+  &lt;artifactId&gt;poi&lt;/artifactId&gt;
+  &lt;version&gt;5.2.3&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.apache.poi&lt;/groupId&gt;
+  &lt;artifactId&gt;poi-ooxml&lt;/artifactId&gt;
+  &lt;version&gt;5.2.3&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!-- https://mvnrepository.com/artifact/org.mybatis.generator/mybatis-generator-core --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.mybatis.generator&lt;/groupId&gt;
+  &lt;artifactId&gt;mybatis-generator-core&lt;/artifactId&gt;
+  &lt;version&gt;1.4.1&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!--整合Spring的测试包--&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-test&lt;/artifactId&gt;
+  &lt;version&gt;5.3.24&lt;/version&gt;
+  &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+&lt;!--导入myBatis和Spring整合的中间包--&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.mybatis&lt;/groupId&gt;
+  &lt;artifactId&gt;mybatis-spring&lt;/artifactId&gt;
+  &lt;version&gt;3.0.0&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!-- 导入spring的相关包--&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-context&lt;/artifactId&gt;
+  &lt;version&gt;5.3.22&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!-- spring-core --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-core&lt;/artifactId&gt;
+  &lt;version&gt;5.3.22&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!-- spring-web --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-web&lt;/artifactId&gt;
+        &lt;version&gt;5.3.22&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!-- spring-beans --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-beans&lt;/artifactId&gt;
+  &lt;version&gt;5.3.22&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!-- spring-webmvc --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-webmvc&lt;/artifactId&gt;
+        &lt;version&gt;5.3.22&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!-- spring-aop --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-aop&lt;/artifactId&gt;
+  &lt;version&gt;5.3.22&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!-- spring-jdbc --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-jdbc&lt;/artifactId&gt;
+  &lt;version&gt;5.3.22&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!-- spring-tx --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-tx&lt;/artifactId&gt;
+  &lt;version&gt;5.3.22&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!--导入mybatis的包 --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.mybatis&lt;/groupId&gt;
+  &lt;artifactId&gt;mybatis&lt;/artifactId&gt;
+  &lt;version&gt;3.5.11&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!--导入mybatis运行的时候的一些依赖包日志相关的 --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;log4j&lt;/groupId&gt;
+  &lt;artifactId&gt;log4j&lt;/artifactId&gt;
+  &lt;version&gt;1.2.17&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;commons-logging&lt;/groupId&gt;
+  &lt;artifactId&gt;commons-logging&lt;/artifactId&gt;
+  &lt;version&gt;1.2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
+  &lt;artifactId&gt;log4j-to-slf4j&lt;/artifactId&gt;
+  &lt;version&gt;2.17.2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
+  &lt;artifactId&gt;slf4j-log4j12&lt;/artifactId&gt;
+  &lt;version&gt;1.7.2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
+  &lt;artifactId&gt;slf4j-api&lt;/artifactId&gt;
+  &lt;version&gt;1.7.36&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!--导入的是日志相关的包 --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;commons-logging&lt;/groupId&gt;
+  &lt;artifactId&gt;commons-logging&lt;/artifactId&gt;
+  &lt;version&gt;1.2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!--导入aspectj的相关包 --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.aspectj&lt;/groupId&gt;
+  &lt;artifactId&gt;aspectjweaver&lt;/artifactId&gt;
+  &lt;version&gt;1.9.19&lt;/version&gt;
+  &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;
+&lt;!--导入cglib代理的包 --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;cglib&lt;/groupId&gt;
+  &lt;artifactId&gt;cglib&lt;/artifactId&gt;
+  &lt;version&gt;3.3.0&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!--引入c3p0 包 --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;com.mchange&lt;/groupId&gt;
+  &lt;artifactId&gt;c3p0&lt;/artifactId&gt;
+  &lt;version&gt;0.9.5.5&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;mysql&lt;/groupId&gt;
+  &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+  &lt;version&gt;8.0.30&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!--导入Servlet的API--&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;javax.servlet&lt;/groupId&gt;
+  &lt;artifactId&gt;javax.servlet-api&lt;/artifactId&gt;
+  &lt;version&gt;4.0.1&lt;/version&gt;
+  &lt;scope&gt;provided&lt;/scope&gt;
+&lt;/dependency&gt;
+&lt;!-- 导入我们jstl的标签库的包 --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;javax.servlet.jsp.jstl&lt;/groupId&gt;
+  &lt;artifactId&gt;javax.servlet.jsp.jstl-api&lt;/artifactId&gt;
+  &lt;version&gt;1.2.2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!-- https://mvnrepository.com/artifact/javax.servlet/jsp-api --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;javax.servlet&lt;/groupId&gt;
+  &lt;artifactId&gt;jsp-api&lt;/artifactId&gt;
+  &lt;version&gt;2.0&lt;/version&gt;
+  &lt;scope&gt;provided&lt;/scope&gt;
+&lt;/dependency&gt;
+&lt;!-- https://mvnrepository.com/artifact/org.apache.taglibs/taglibs-standard-impl --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.apache.taglibs&lt;/groupId&gt;
+  &lt;artifactId&gt;taglibs-standard-impl&lt;/artifactId&gt;
+  &lt;version&gt;1.2.5&lt;/version&gt;
+  &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;
+&lt;!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
+  &lt;artifactId&gt;jackson-core&lt;/artifactId&gt;
+        &lt;version&gt;2.9.5&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
+  &lt;artifactId&gt;jackson-databind&lt;/artifactId&gt;
+        &lt;version&gt;2.9.5&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
+  &lt;artifactId&gt;jackson-annotations&lt;/artifactId&gt;
+        &lt;version&gt;2.9.5&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;commons-io&lt;/groupId&gt;
+  &lt;artifactId&gt;commons-io&lt;/artifactId&gt;
+  &lt;version&gt;2.11.0&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!--shriro的核心包主要在该项目用来完成密码的加密功能--&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.apache.shiro&lt;/groupId&gt;
+  &lt;artifactId&gt;shiro-core&lt;/artifactId&gt;
+  &lt;version&gt;1.10.1&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.thymeleaf&lt;/groupId&gt;
+  &lt;artifactId&gt;thymeleaf&lt;/artifactId&gt;
+  &lt;version&gt;3.0.10.RELEASE&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.thymeleaf&lt;/groupId&gt;
+  &lt;artifactId&gt;thymeleaf-spring5&lt;/artifactId&gt;
+        &lt;version&gt;3.0.10.RELEASE&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;commons-fileupload&lt;/groupId&gt;
+  &lt;artifactId&gt;commons-fileupload&lt;/artifactId&gt;
+  &lt;version&gt;1.4&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;junit&lt;/groupId&gt;
+  &lt;artifactId&gt;junit&lt;/artifactId&gt;
+    &lt;version&gt;4.12&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!--    &lt;dependency&gt;--&gt;
+&lt;!--      &lt;groupId&gt;org.apache.poi&lt;/groupId&gt;--&gt;
+&lt;!--      &lt;artifactId&gt;poi-ooxml-schemas&lt;/artifactId&gt;--&gt;
+&lt;!--      &lt;version&gt;4.1.2&lt;/version&gt;--&gt;
+&lt;!--    &lt;/dependency&gt;--&gt;
+&lt;/dependencies&gt;
+</code></pre>
+<h2 id="项目的插件">项目的插件</h2>
+<pre><code>&lt;build&gt;
+    &lt;finalName&gt;tiktok-project&lt;/finalName&gt;
+    &lt;pluginManagement&gt;&lt;!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) --&gt;
+    &lt;plugins&gt;
+        &lt;plugin&gt;
+        &lt;groupId&gt;org.mybatis.generator&lt;/groupId&gt;
+        &lt;artifactId&gt;mybatis-generator-maven-plugin&lt;/artifactId&gt;
+        &lt;version&gt;1.4.1&lt;/version&gt;
+        &lt;!--设置配置文件的位置--&gt;
+        &lt;configuration&gt;
+            &lt;configurationFile&gt;src/main/resources/generatorConfig.xml&lt;/configurationFile&gt;
+            &lt;overwrite&gt;true&lt;/overwrite&gt;
+            &lt;verbose&gt;true&lt;/verbose&gt;
+        &lt;/configuration&gt;
+        &lt;dependencies&gt;
+            &lt;dependency&gt;
+            &lt;groupId&gt;mysql&lt;/groupId&gt;
+            &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+            &lt;version&gt;8.0.30&lt;/version&gt;
+            &lt;/dependency&gt;
+        &lt;/dependencies&gt;
+        &lt;/plugin&gt;
+
+        &lt;plugin&gt;
+        &lt;artifactId&gt;maven-clean-plugin&lt;/artifactId&gt;
+        &lt;version&gt;3.1.0&lt;/version&gt;
+        &lt;/plugin&gt;
+        &lt;!-- see http://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_war_packaging --&gt;
+        &lt;plugin&gt;
+        &lt;artifactId&gt;maven-resources-plugin&lt;/artifactId&gt;
+        &lt;version&gt;3.0.2&lt;/version&gt;
+        &lt;/plugin&gt;
+        &lt;plugin&gt;
+        &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+        &lt;version&gt;3.8.0&lt;/version&gt;
+        &lt;/plugin&gt;
+        &lt;plugin&gt;
+        &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
+        &lt;version&gt;2.22.1&lt;/version&gt;
+        &lt;/plugin&gt;
+        &lt;plugin&gt;
+        &lt;artifactId&gt;maven-war-plugin&lt;/artifactId&gt;
+        &lt;version&gt;3.2.2&lt;/version&gt;
+        &lt;/plugin&gt;
+        &lt;plugin&gt;
+        &lt;artifactId&gt;maven-install-plugin&lt;/artifactId&gt;
+        &lt;version&gt;2.5.2&lt;/version&gt;
+        &lt;/plugin&gt;
+        &lt;plugin&gt;
+        &lt;artifactId&gt;maven-deploy-plugin&lt;/artifactId&gt;
+        &lt;version&gt;2.8.2&lt;/version&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+    &lt;/pluginManagement&gt;
+&lt;/build&gt;
+</code></pre>
+<h1 id="编写spring和mybatis整合文件spring-mybatisxml"><strong>编写Spring和Mybatis整合文件spring-mybatis.xml</strong></h1>
+<pre><code>&lt;!--配置Spring的扫描器   给带有特定注解bean注册到容器中--&gt;
+    &lt;context:component-scan base-package=&quot;com.qf.dy&quot;&gt;
+    &lt;/context:component-scan&gt;
+
+    &lt;!--引入数据库的初始文件文件 --&gt;
+    &lt;bean id=&quot;propertyConfigurer&quot;
+        class=&quot;org.springframework.beans.factory.config.PropertyPlaceholderConfigurer&quot;&gt;
+        &lt;property name=&quot;location&quot; value=&quot;classpath:db.properties&quot;/&gt;
+    &lt;/bean&gt;
+
+    &lt;!-- 配置数据源 c3p0 --&gt;
+    &lt;bean id=&quot;dataSource&quot; class=&quot;com.mchange.v2.c3p0.ComboPooledDataSource&quot;
+    &gt;
+        &lt;property name=&quot;driverClass&quot; value=&quot;${driver}&quot;/&gt;
+        &lt;property name=&quot;jdbcUrl&quot; value=&quot;${url}&quot;/&gt;
+        &lt;property name=&quot;user&quot; value=&quot;${username}&quot;/&gt;
+        &lt;property name=&quot;password&quot; value=&quot;${password}&quot;/&gt;
+        &lt;!-- c3p0连接池的私有属性 --&gt;
+        &lt;property name=&quot;maxPoolSize&quot; value=&quot;${maxActive}&quot;/&gt;
+        &lt;property name=&quot;minPoolSize&quot; value=&quot;${minActive}&quot;/&gt;
+        &lt;property name=&quot;initialPoolSize&quot; value=&quot;${initialSize}&quot;/&gt;
+        &lt;!-- 关闭连接后不自动commit --&gt;
+        &lt;property name=&quot;autoCommitOnClose&quot; value=&quot;${autoCommitOnClose}&quot;/&gt;
+        &lt;!-- 获取连接超时时间 --&gt;
+        &lt;property name=&quot;checkoutTimeout&quot; value=&quot;${maxWait}&quot;/&gt;
+        &lt;!-- 当获取连接失败重试次数 --&gt;
+        &lt;property name=&quot;acquireRetryAttempts&quot; value=&quot;${acquireRetryAttempts}&quot;/&gt;
+    &lt;/bean&gt;
+
+    &lt;!-- spring和MyBatis整合，通过spring来管理MyBatis的SqlSessionFactory会话工厂 --&gt;
+    &lt;bean id=&quot;sqlSessionFactory&quot; class=&quot;org.mybatis.spring.SqlSessionFactoryBean&quot;&gt;
+        &lt;!--注入我们的数据源 --&gt;
+        &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot;&gt;
+        &lt;/property&gt;
+        &lt;!--指定mybatis的配置文件路径，该配置文件下不需要再定义数据库连接信息和mapper信息了，但是可以有一些关于mybatis的配置信息--&gt;
+        &lt;property name=&quot;configLocation&quot; value=&quot;classpath:mybatis-config.xml&quot;/&gt;
+        &lt;!--扫描mapper配置文件中的.xml文件--&gt;
+        &lt;property name=&quot;mapperLocations&quot; value=&quot;classpath:mapper/*.xml&quot;/&gt;
+        &lt;!--设置别名--&gt;
+        &lt;property name=&quot;typeAliasesPackage&quot; value=&quot;com.qf.dy.pojo&quot;&gt;
+        &lt;/property&gt;
+    &lt;/bean&gt;
+
+    &lt;!-- 定义sqlSession对象，通过SqlSessionTemplate来产生，需要在构造方法中指定会话工厂
+        相当于原来mybatis中的sessionFactory.openSession();SqlSessionTemplate是线程安全的，所以采用单例模式
+    --&gt;
+    &lt;bean id=&quot;sqlSessionTemplate&quot; class=&quot;org.mybatis.spring.SqlSessionTemplate&quot; destroy-method=&quot;clearCache&quot;&gt;
+        &lt;!--注入会话工厂--&gt;
+        &lt;constructor-arg index=&quot;0&quot; ref=&quot;sqlSessionFactory&quot;/&gt;
+    &lt;/bean&gt;
+
+    &lt;!--定义mybaits的DAO接口所在的包名，spring会自动查找其下的接口，并为其自动创建bean，无需我们定义--&gt;
+    &lt;bean id=&quot;mapperScannerConfigurer&quot; class=&quot;org.mybatis.spring.mapper.MapperScannerConfigurer&quot;&gt;
+        &lt;!--注入sqlSessionTemplate--&gt;
+        &lt;property name=&quot;sqlSessionTemplateBeanName&quot; value=&quot;sqlSessionTemplate&quot;/&gt;
+        &lt;!--配置要扫描的dao包 --&gt;
+        &lt;property name=&quot;basePackage&quot; value=&quot;com.qf.dy.dao&quot;&gt;
+        &lt;/property&gt;
+    &lt;/bean&gt;
+
+    &lt;!-- JDBC事务管理器 --&gt;
+    &lt;bean id=&quot;transactionManager&quot; class=&quot;org.springframework.jdbc.datasource.DataSourceTransactionManager&quot;&gt;
+        &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot;/&gt;
+    &lt;/bean&gt;
+
+    &lt;!-- 启用支持annotation注解方式事务管理 --&gt;
+    &lt;tx:annotation-driven transaction-manager=&quot;transactionManager&quot;/&gt;
+</code></pre>
+<h1 id="编写mybatis配置文件mybatis-configxml"><strong>编写Mybatis配置文件mybatis-config.xml</strong></h1>
+<p>mybatis-config.xml文件模板</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE configuration 
+     PUBLIC &quot;-//mybatis.org//DTD Config 3.0//EN&quot;  
+    &quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;&gt;
+&lt;configuration&gt;
+&lt;!--    &lt;settings&gt;--&gt;
+&lt;!--        &lt;setting name=&quot;logImpl&quot; value=&quot;STDOUT_LOGGING&quot;/&gt;--&gt;
+&lt;!--    &lt;/settings&gt;--&gt;
+
+    &lt;!--设置别名--&gt;
+    &lt;typeAliases&gt;
+        &lt;!--name；实体类所在的包名--&gt;
+        &lt;package name=&quot;&quot;/&gt;
+    &lt;/typeAliases&gt;
+
+    &lt;mappers&gt;
+        &lt;!--name：是包名  这个包中的所有mapper.xml 一次都能加载--&gt;
+        &lt;package name=&quot;&quot;/&gt;
+    &lt;/mappers&gt;
+&lt;/configuration&gt;
+</code></pre>
+<h1 id="编写mbg所需要的数据库信息文件configproperties"><strong>编写MBG所需要的数据库信息文件config.properties</strong></h1>
+<pre><code>driverClassName=com.mysql.cj.jdbc.Driver
+validationQuery=select 1
+jdbc_url=jdbc:mysql://localhost:3306/db_short_video?serverTimezone=UTC
+jdbc_username=root
+jdbc_password=123456
+</code></pre>
+<h1 id="编写mybatis连接数据库所需要的数据库信息文件dbproperties"><strong>编写Mybatis连接数据库所需要的数据库信息文件db.properties</strong></h1>
+<pre><code>#mysql
+driver=com.mysql.cj.jdbc.Driver
+url=jdbc:mysql://127.0.0.1:3306/db_short_video?useUnicode=true&amp;characterEncoding=UTF-8
+username=root
+password=123456
+#\u5B9A\u4E49\u521D\u59CB\u8FDE\u63A5\u6570
+initialSize=2
+#\u5B9A\u4E49\u6700\u5927\u8FDE\u63A5\u6570
+maxActive=20
+#\u5B9A\u4E49\u6700\u5C0F\u8FDE\u63A5\u6570
+minActive=2
+#\u5B9A\u4E49\u6700\u957F\u7B49\u5F85\u65F6\u95F4
+maxWait=60000
+#\u662F\u5426\u5728\u8FDE\u63A5\u5173\u95ED\u65F6\u81EA\u52A8\u63D0\u4EA4\u4E8B\u52A1
+autoCommitOnClose=false
+#\u5F53\u83B7\u53D6\u8FDE\u63A5\u5931\u8D25\u91CD\u8BD5\u6B21\u6570
+acquireRetryAttempts=5
+</code></pre>
+<h1 id="编写日志配置文件log4jproperties"><strong>编写日志配置文件log4j.properties</strong></h1>
+<pre><code>log4j.rootLogger=info, stdout
+
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%d %p [%c] - %m%n
+
+log4j.appender.logfile=org.apache.log4j.FileAppender
+log4j.appender.logfile.File=target/spring.log
+log4j.appender.logfile.layout=org.apache.log4j.PatternLayout
+log4j.appender.logfile.layout.ConversionPattern=%d %p [%c] - %m%n
+</code></pre>
+<h1 id="编写mybatis发生器mbg文件generatorconfigxml"><strong>编写MyBatis发生器(MBG)文件generatorConfig.xml</strong></h1>
+<blockquote>
+<p>MyBatis发生器(MBG)是一个用于MyBatis的代码生成器。<br>
+它将为所有版本的MyBatis生成代码。<br>
+它将反省一个数据库表(或多个表),并将生成的工件可以使用访问表(s)。<br>
+这减少初始设置对象的麻烦和配置文件与数据库表进行交互。<br>
+MBG试图作出重大影响大部分的数据库操作简单的CRUD(创建、检索、更新、删除)。<br>
+你仍然需要手工编写SQL和对象连接查询,或存储过程。</p>
+</blockquote>
+<p>新建一个maven配置，并在命令行输入<code>mybatis-generator:generate</code><br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1676901148455.png" alt="" loading="lazy"><br>
+创建完成后运行maven配置，自动创建上述文件<br>
+修改下图配置的<code>tableName</code>和<code>domainObjectName</code>完成数据库其余表的创建<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1676901487625.png" alt="" loading="lazy"></p>
+<h1 id="在main目录下新建java文件夹"><strong>在main目录下新建java文件夹</strong></h1>
+<figure data-type="image" tabindex="1"><img src="https://gblog.luciferryf.eu.org/post-images/1676900839527.png" alt="" loading="lazy"></figure>
+<h1 id="在src目录下新建test文件夹"><strong>在src目录下新建test文件夹</strong></h1>
+<p>创建java包并创建测试类<br>
+在test类上创建注解</p>
+<pre><code>@RunWith(SpringJUnit4ClassRunner.class)
+//加载Spring配置文件
+@ContextConfiguration(locations = {&quot;classpath:spring-mybatis.xml&quot;})
+</code></pre>
+<p>进行单元测试<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1676901025981.png" alt="" loading="lazy"></p>
+<h1 id="项目整体框架"><strong>项目整体框架</strong></h1>
+<figure data-type="image" tabindex="2"><img src="https://gblog.luciferryf.eu.org/post-images/1676901559756.png" alt="" loading="lazy"></figure>
+<h1 id="今天项目中所遇到的问题"><strong>今天项目中所遇到的问题</strong></h1>
+<p>在进行单元测试过程中，出现了一个错误，如下</p>
+<pre><code>java.lang.IllegalStateException: Failed to load ApplicationContext
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [spring-mybatis.xml]: Invocation of init method failed; nested exception is java.lang.NoClassDefFoundError: com/microsoft/schemas/vml/STStrokeArrowWidth
+Caused by: java.lang.NoClassDefFoundError: com/microsoft/schemas/vml/STStrokeArrowWidth
+Caused by: java.lang.ClassNotFoundException: com.microsoft.schemas.vml.STStrokeArrowWidth
+</code></pre>
+<p>原因：JDK版本问题<br>
+解决办法：我的的JDK版本为17，改成1.8后好了</p>
+<ol>
+<li>在pom.xml文件中修改项目的jdk版本，然后重新加载项目</li>
+<li>打开项目结构，将项目的SDK版本、模块源的语言级别、模块的依赖SDK版本都改成1.8</li>
+</ol>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E9%85%8D%E7%BD%AEmaven%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6pomxml"><strong>配置maven项目配置文件pom.xml</strong></a>
+<ul>
+<li><a href="#%E5%AE%9A%E4%B9%89%E9%A1%B9%E7%9B%AE%E7%9A%84jdk%E7%89%88%E6%9C%AC">定义项目的JDK版本</a></li>
+<li><a href="#%E9%A1%B9%E7%9B%AE%E7%9A%84%E4%BE%9D%E8%B5%96%E9%A1%B9">项目的依赖项</a></li>
+<li><a href="#%E9%A1%B9%E7%9B%AE%E7%9A%84%E6%8F%92%E4%BB%B6">项目的插件</a></li>
+</ul>
+</li>
+<li><a href="#%E7%BC%96%E5%86%99spring%E5%92%8Cmybatis%E6%95%B4%E5%90%88%E6%96%87%E4%BB%B6spring-mybatisxml"><strong>编写Spring和Mybatis整合文件spring-mybatis.xml</strong></a></li>
+<li><a href="#%E7%BC%96%E5%86%99mybatis%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6mybatis-configxml"><strong>编写Mybatis配置文件mybatis-config.xml</strong></a></li>
+<li><a href="#%E7%BC%96%E5%86%99mbg%E6%89%80%E9%9C%80%E8%A6%81%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BF%A1%E6%81%AF%E6%96%87%E4%BB%B6configproperties"><strong>编写MBG所需要的数据库信息文件config.properties</strong></a></li>
+<li><a href="#%E7%BC%96%E5%86%99mybatis%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%8D%AE%E5%BA%93%E6%89%80%E9%9C%80%E8%A6%81%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BF%A1%E6%81%AF%E6%96%87%E4%BB%B6dbproperties"><strong>编写Mybatis连接数据库所需要的数据库信息文件db.properties</strong></a></li>
+<li><a href="#%E7%BC%96%E5%86%99%E6%97%A5%E5%BF%97%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6log4jproperties"><strong>编写日志配置文件log4j.properties</strong></a></li>
+<li><a href="#%E7%BC%96%E5%86%99mybatis%E5%8F%91%E7%94%9F%E5%99%A8mbg%E6%96%87%E4%BB%B6generatorconfigxml"><strong>编写MyBatis发生器(MBG)文件generatorConfig.xml</strong></a></li>
+<li><a href="#%E5%9C%A8main%E7%9B%AE%E5%BD%95%E4%B8%8B%E6%96%B0%E5%BB%BAjava%E6%96%87%E4%BB%B6%E5%A4%B9"><strong>在main目录下新建java文件夹</strong></a></li>
+<li><a href="#%E5%9C%A8src%E7%9B%AE%E5%BD%95%E4%B8%8B%E6%96%B0%E5%BB%BAtest%E6%96%87%E4%BB%B6%E5%A4%B9"><strong>在src目录下新建test文件夹</strong></a></li>
+<li><a href="#%E9%A1%B9%E7%9B%AE%E6%95%B4%E4%BD%93%E6%A1%86%E6%9E%B6"><strong>项目整体框架</strong></a></li>
+<li><a href="#%E4%BB%8A%E5%A4%A9%E9%A1%B9%E7%9B%AE%E4%B8%AD%E6%89%80%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><strong>今天项目中所遇到的问题</strong></a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://gblog.luciferryf.eu.org/post/dy-project-1/">
+              <h3 class="post-title">
+                类似抖音的短视频管理系统+Java后端+vue前端（1）
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://gblog.luciferryf.eu.org/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

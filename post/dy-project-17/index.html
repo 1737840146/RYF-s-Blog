@@ -1,0 +1,311 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title> 类似抖音的短视频管理系统+Java后端+vue前端（17） | RYF&#39;s Blog</title>
+<link rel="shortcut icon" href="https://gblog.luciferryf.eu.org/favicon.ico?v=1678337464009">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://gblog.luciferryf.eu.org/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title=" 类似抖音的短视频管理系统+Java后端+vue前端（17） | RYF&#39;s Blog - Atom Feed" href="https://gblog.luciferryf.eu.org/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="列表组件，实现点击分类下方显示对应的商品列表
+
+通过引入data.js文件引入列表信息，然后在主题中获取主题的序列，传给list中，实现点击主题切换列表
+将主题列表单独写入到一个js文件中
+
+
+新建list.vue
+&lt;template..." />
+    <meta name="keywords" content="实习项目" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://gblog.luciferryf.eu.org">
+  <img class="avatar" src="https://gblog.luciferryf.eu.org/images/avatar.png?v=1678337464009" alt="">
+  </a>
+  <h1 class="site-title">
+    RYF&#39;s Blog
+  </h1>
+  <p class="site-description">
+    远离是非圈子  回归平静生活
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/1737840146" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+               类似抖音的短视频管理系统+Java后端+vue前端（17）
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-03-02
+              </span>
+              <span>
+                3 min read
+              </span>
+              
+                <a href="https://gblog.luciferryf.eu.org/tag/jmh76P6JN/" class="post-tag">
+                  # 实习项目
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://gblog.luciferryf.eu.org/post-images/dy-project-17.png" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <p>列表组件，实现点击分类下方显示对应的商品列表</p>
+<!-- more -->
+<p>通过引入data.js文件引入列表信息，然后在主题中获取主题的序列，传给list中，实现点击主题切换列表</p>
+<h1 id="将主题列表单独写入到一个js文件中">将主题列表单独写入到一个js文件中</h1>
+<p><img src="https://gblog.luciferryf.eu.org/post-images/1678335004678.png" alt="" loading="lazy"><br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1678335071064.png" alt="" loading="lazy"></p>
+<h1 id="新建listvue">新建list.vue</h1>
+<pre><code class="language-html">&lt;template&gt;
+	&lt;div class=&quot;list&quot;&gt;
+		&lt;h2&gt;{{data1[this.$store.state.myindex][0].type}}&lt;/h2&gt;
+		&lt;ul&gt;
+			
+			&lt;!-- index 是二维列表data1中的子列表的索引 --&gt;
+			&lt;li v-for=&quot;(item,index) in data1[this.$store.state.myindex]&quot;&gt;
+				&lt;router-link :to=&quot;{path:'/detail'}&quot;&gt;
+					&lt;div class=&quot;bg&quot;&gt;
+						
+						  &lt;img :src=&quot;item.picUrl&quot; alt=&quot;&quot;&gt;
+					
+					&lt;/div&gt;
+					&lt;div class=&quot;content&quot;&gt;
+						&lt;div class=&quot;title&quot;&gt;
+							{{item.name}}
+						&lt;/div&gt;
+						&lt;div class=&quot;second&quot;&gt;
+							&lt;div class=&quot;count&quot;&gt;月售：{{item.count}}&lt;/div&gt;
+							&lt;div class=&quot;distance&quot;&gt;{{item.distance}}km&lt;/div&gt;
+							&lt;div class=&quot;time&quot;&gt;{{item.time}}分钟&lt;/div&gt;
+						&lt;/div&gt;
+						&lt;div class=&quot;third&quot;&gt;
+							&lt;div class=&quot;price&quot;&gt;￥{{item.price}} 起送&lt;/div&gt;
+											  
+						&lt;/div&gt;
+					&lt;/div&gt;
+				
+				&lt;/router-link&gt;
+			&lt;/li&gt;
+				
+		&lt;/ul&gt;
+	&lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+	import {getTakeOuts} from '@/assets/js/data.js'
+	export default{
+		name:&quot;list&quot;,
+		data:function(){
+			return{
+				data1:getTakeOuts(),
+				index1:0,
+				index2:this.$store.state.myindex
+			}
+		},
+		//props:[&quot;typeIndex1&quot;]
+	}
+&lt;/script&gt;
+
+&lt;style&gt;
+	.list{
+		width: 100%;
+		margin-top: 140px;
+		
+	}
+	.list h2{
+		text-align: center;
+	}
+	.list ul{
+		width: 100%;
+	}
+	.list ul li a{
+		width: 100%;
+		display: flex;
+	}
+	.bg img{
+		width: 60px;
+		height: 60px;
+		border-radius: 70%;
+		flex: 1;
+	}
+	.content{
+			flex:3;
+		}
+		
+		.content  .title{
+			font-size:16px;
+			color: #00aa7f;
+		}
+		/*  内容中的第二行的样式 */
+		.content  .second{
+			
+			display: flex;
+			font-size:12px;
+		
+		}
+		.content  .second div{
+			margin-left:5px;
+		}
+		
+		.content .second .count{
+			font-weight: bold;
+			flex:1;
+		}
+		.content .second .distance{
+			color:#007AFF;
+			flex:1;
+		}
+		.content .second .time{
+			color:gold;
+			flex:1;
+		}
+		
+		.content  .third{
+			font-size:13px;
+			color: purple;
+		}
+&lt;/style&gt;
+</code></pre>
+<h1 id="在catogery中获取列表序列">在catogery中获取列表序列</h1>
+<figure data-type="image" tabindex="1"><img src="https://gblog.luciferryf.eu.org/post-images/1678336962573.png" alt="" loading="lazy"></figure>
+<h1 id="在list中获取catgery中的列表序列">在list中获取catgery中的列表序列</h1>
+<figure data-type="image" tabindex="2"><img src="https://gblog.luciferryf.eu.org/post-images/1678337050795.png" alt="" loading="lazy"></figure>
+<h1 id="在home中加入list">在home中加入list</h1>
+<figure data-type="image" tabindex="3"><img src="https://gblog.luciferryf.eu.org/post-images/1678337114780.png" alt="" loading="lazy"></figure>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E5%B0%86%E4%B8%BB%E9%A2%98%E5%88%97%E8%A1%A8%E5%8D%95%E7%8B%AC%E5%86%99%E5%85%A5%E5%88%B0%E4%B8%80%E4%B8%AAjs%E6%96%87%E4%BB%B6%E4%B8%AD">将主题列表单独写入到一个js文件中</a></li>
+<li><a href="#%E6%96%B0%E5%BB%BAlistvue">新建list.vue</a></li>
+<li><a href="#%E5%9C%A8catogery%E4%B8%AD%E8%8E%B7%E5%8F%96%E5%88%97%E8%A1%A8%E5%BA%8F%E5%88%97">在catogery中获取列表序列</a></li>
+<li><a href="#%E5%9C%A8list%E4%B8%AD%E8%8E%B7%E5%8F%96catgery%E4%B8%AD%E7%9A%84%E5%88%97%E8%A1%A8%E5%BA%8F%E5%88%97">在list中获取catgery中的列表序列</a></li>
+<li><a href="#%E5%9C%A8home%E4%B8%AD%E5%8A%A0%E5%85%A5list">在home中加入list</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://gblog.luciferryf.eu.org/post/dy-project-16/">
+              <h3 class="post-title">
+                 类似抖音的短视频管理系统+Java后端+vue前端（16）
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://gblog.luciferryf.eu.org/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

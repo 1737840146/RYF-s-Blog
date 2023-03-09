@@ -1,0 +1,621 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>类似抖音的短视频管理系统+Java后端+vue前端（15） | RYF&#39;s Blog</title>
+<link rel="shortcut icon" href="https://gblog.luciferryf.eu.org/favicon.ico?v=1678337464009">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://gblog.luciferryf.eu.org/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="类似抖音的短视频管理系统+Java后端+vue前端（15） | RYF&#39;s Blog - Atom Feed" href="https://gblog.luciferryf.eu.org/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="vue组件：把网页中的html+css+javascript封装起来，形成一个标签
+
+普通网页的组件及通讯
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+	&lt;head&gt;
+		&lt;meta charse..." />
+    <meta name="keywords" content="实习项目" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://gblog.luciferryf.eu.org">
+  <img class="avatar" src="https://gblog.luciferryf.eu.org/images/avatar.png?v=1678337464009" alt="">
+  </a>
+  <h1 class="site-title">
+    RYF&#39;s Blog
+  </h1>
+  <p class="site-description">
+    远离是非圈子  回归平静生活
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/1737840146" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              类似抖音的短视频管理系统+Java后端+vue前端（15）
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-02-28
+              </span>
+              <span>
+                10 min read
+              </span>
+              
+                <a href="https://gblog.luciferryf.eu.org/tag/jmh76P6JN/" class="post-tag">
+                  # 实习项目
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://gblog.luciferryf.eu.org/post-images/dy-project-15.png" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <p>vue组件：把网页中的html+css+javascript封装起来，形成一个标签</p>
+<!-- more -->
+<h1 id="普通网页的组件及通讯">普通网页的组件及通讯</h1>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+	&lt;head&gt;
+		&lt;meta charset=&quot;utf-8&quot; /&gt;
+		&lt;title&gt;&lt;/title&gt;
+		&lt;!-- &lt;script src=&quot;https://unpkg.com/vue@next&quot;&gt;&lt;/script&gt; --&gt;
+		&lt;script src=&quot;js/v2.6.10/vue.js&quot; type=&quot;text/javascript&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;div id=&quot;app&quot;&gt;
+			{{msg}}&lt;br/&gt;
+			&lt;mydemo&gt;&lt;/mydemo&gt;
+			&lt;br/&gt;
+			&lt;hello :title = &quot;title&quot; @xiaoming=&quot;receiveMsgFromChild&quot;&gt;&lt;/hello&gt;
+		&lt;/div&gt;
+		&lt;div id=&quot;app2&quot;&gt;
+			&lt;mydemo&gt;&lt;/mydemo&gt;&lt;br/&gt;
+		
+		&lt;/div&gt;
+		&lt;script&gt;
+			//全局组件
+			Vue.component('mydemo', {
+			  data: function () {
+			    return {
+			      msg1:&quot;AAAAAAA&quot;
+			    }
+			  },
+			  template: '&lt;div&gt;{{msg1}}&lt;/div&gt;'
+			})
+			var helloobj={
+				data:function(){
+					return{
+						msg2:&quot;我是app 局部组件&quot;,
+						score:1,
+					}
+				},
+				props:[&quot;title&quot;],
+				template:`&lt;div&gt;
+					
+					  &lt;h1&gt;{{msg2}}&lt;/h1&gt; &lt;br/&gt;
+					  &lt;h2&gt;...........{{title}}&lt;/h2&gt;
+					  {{score}}
+					  &lt;button @click=&quot;score=score+1&quot;&gt;计数&lt;/button&gt;
+					 &lt;button @click=&quot;addScore()&quot;&gt;计数2&lt;/button&gt;&lt;br/&gt;
+					 &lt;button @click=&quot;ziChuanFu()&quot;&gt;子组件给父组件发送消息&lt;/button&gt;
+					&lt;/div&gt;`,
+				methods:{
+					addScore:function(){
+						this.score = this.score+1;
+					},
+					ziChuanFu:function(){
+						this.$emit(&quot;xiaoming&quot;,{&quot;xuehao&quot;:&quot;额hi黑恶hi&quot;,age:1232})
+					}
+				}
+	}
+			
+			var app = new Vue({
+				el:&quot;#app&quot;,
+				data:{
+					msg:&quot;123123&quot;,
+					title:&quot;我是一个标题 来自父组件&quot;
+				},
+				components:{
+					&quot;hello&quot;:helloobj
+				},
+				methods:{
+					receiveMsgFromChild:function(data){
+						console.log(data)
+					}
+				}
+			})
+			var  app1 = new Vue({
+				el:&quot;#app2&quot;
+				
+				
+			})
+		&lt;/script&gt;
+	&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h1 id="插槽">插槽</h1>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+	&lt;head&gt;
+		&lt;meta charset=&quot;utf-8&quot;&gt;
+		&lt;title&gt;&lt;/title&gt;
+		&lt;script src=&quot;js/v2.6.10/vue.js&quot;&gt;&lt;/script&gt;
+		
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;div id=&quot;app&quot;&gt;
+			&lt;hello&gt;
+				&lt;!-- 俱名插槽 --&gt;
+			&lt;template v-slot:ch2&gt;
+			    &lt;h1&gt;Here might be a page title&lt;/h1&gt;
+			  &lt;/template&gt;
+			  &lt;button&gt;difuhsdiuhfd&lt;/button&gt;
+			&lt;/hello&gt;
+			  &lt;img src=&quot;img/a.gif&quot;&gt;
+			
+		&lt;/div&gt;
+		
+		&lt;script&gt;
+			// 在组件之间填充内容，可以使用插槽slot
+			var obj = {
+				data:function(){
+					return{
+						msg1:&quot;我是hello子组件&quot;
+					}
+				},
+				template:`
+				 &lt;div&gt;{{msg1}}&lt;/br&gt;
+				  &lt;slot name='ch2'&gt;&lt;/slot&gt;
+				  &lt;slot&gt;&lt;/slot&gt;
+				 &lt;/div&gt;
+				`
+			}
+			
+			var app = new Vue({
+				el:&quot;#app&quot;,
+				components:{
+					&quot;hello&quot;:obj
+				}
+			})
+		&lt;/script&gt;
+	&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h1 id="动态组件">动态组件</h1>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+	&lt;head&gt;
+		&lt;meta charset=&quot;utf-8&quot;&gt;
+		&lt;title&gt;&lt;/title&gt;
+		&lt;script src=&quot;js/v2.6.10/vue.js&quot;&gt;&lt;/script&gt;
+		&lt;style&gt;
+			ul{
+				width: 100%;
+				display: flex;
+				list-style: none;
+				position: absolute;
+				bottom: 0;
+				font-size: 40px;
+				font-weight: bold;
+			}
+			ul li {
+				flex: 1;
+			}
+		&lt;/style&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;div id=&quot;app&quot;&gt;
+			&lt;!-- keep-alive缓存组件的值 --&gt;
+			&lt;keep-alive&gt;
+				&lt;component :is = &quot;is&quot;&gt;&lt;/component&gt;
+			&lt;/keep-alive&gt;
+			&lt;ul&gt;
+				&lt;li @click = &quot;changeComponent('home')&quot;&gt;home&lt;/li&gt;
+				&lt;li @click = &quot;changeComponent('order')&quot;&gt;order&lt;/li&gt;	
+				&lt;li @click = &quot;changeComponent('my')&quot;&gt;my&lt;/li&gt;
+
+			&lt;/ul&gt;
+		&lt;/div&gt;
+		
+		&lt;script&gt;
+			var home = {
+				data:function(){
+					return{
+						score:1
+					}
+				},
+				template:`&lt;div&gt;AAAA...{{score}}
+				&lt;button @click=&quot;score++&quot;&gt;++&lt;/button&gt;&lt;/div&gt;
+					`,
+			}
+			var order = {
+				template:`&lt;div&gt;BBBB&lt;/div&gt;`,
+			}
+			var my = {
+				template:`&lt;div&gt;CCCC&lt;/div&gt;`,
+			}
+			
+			var app = new Vue({
+				el:&quot;#app&quot;,
+				data:{
+					is:&quot;home&quot;
+				},
+				components:{
+					&quot;home&quot;:home,
+					&quot;order&quot;:order,
+					&quot;my&quot;:my
+				},
+				methods:{
+					changeComponent(zhi){
+						this.is = zhi
+					}
+				}
+			})
+		&lt;/script&gt;
+	&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h1 id="非父子组件传输">非父子组件传输</h1>
+<pre><code class="language-html">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+	&lt;head&gt;
+		&lt;meta charset=&quot;utf-8&quot;&gt;
+		&lt;title&gt;&lt;/title&gt;
+		&lt;script src=&quot;js/v2.6.10/vue.js&quot;&gt;&lt;/script&gt;
+		
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;div id=&quot;app&quot;&gt;
+			&lt;helloa&gt;&lt;/helloa&gt;
+			&lt;hellob&gt;&lt;/hellob&gt;
+		&lt;/div&gt;
+		&lt;script&gt;
+			//事件总线传输非父子组件的消息（空的vue对象）
+			var bus = new Vue();
+			
+			var obj1={
+				data:function(){
+					return {
+						msg1:&quot;&quot;
+					}
+				},
+				template:`
+					&lt;div&gt;AAAAAAAAA
+					&lt;br /&gt;
+					&lt;span&gt;接受b组件的消息:{{msg1}}&lt;/span&gt;
+					&lt;br/&gt;
+					&lt;button @click=&quot;sendMssege&quot;&gt;向hellob传输消息&lt;/button&gt;
+					&lt;/div&gt;
+					
+				`,
+				methods:{
+					sendMssege:function(){
+						bus.$emit(&quot;aa&quot;,&quot;来自组件A组件的问候&quot;)
+					}
+				},
+				//组件都加载完之后执行的函数
+				mounted(){
+					var that = this
+					bus.$on(&quot;bb&quot;,function(data){
+						console.log(data)
+						that.msg1 = data
+					})
+				}
+			}
+			var obj2={
+				data:function(){
+					return {
+						msg2:&quot;&quot;
+					}
+				},
+				template:`
+					&lt;div&gt;BBBBBBBBBB
+					&lt;br /&gt;
+					&lt;span&gt;接受a组件的消息:{{msg2}}&lt;/span&gt;
+					&lt;br/&gt;
+					&lt;button @click=&quot;sendMssege&quot;&gt;向helloa传输消息&lt;/button&gt;
+					&lt;/div&gt;
+				`,
+				methods:{
+					sendMssege:function(){
+						bus.$emit(&quot;bb&quot;,&quot;来自组件B组件的问候&quot;)
+					}
+				},
+				//组件都加载完之后执行的函数
+				mounted(){
+					var  that = this
+					bus.$on(&quot;aa&quot;,function(data){
+						console.log(data)
+						that.msg2 = data
+					})
+				}
+			}
+			
+			var app = new Vue({
+				el:&quot;#app&quot;,
+				data:{
+					msg:&quot;123123132123&quot;
+				},
+				components:{
+					&quot;helloa&quot;:obj1,
+					&quot;hellob&quot;:obj2,
+				}
+			})
+		&lt;/script&gt;
+	&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h1 id="过滤器">过滤器</h1>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+	&lt;head&gt;
+		&lt;meta charset=&quot;utf-8&quot;&gt;
+		&lt;title&gt;&lt;/title&gt;
+		&lt;script src=&quot;js/v2.6.10/vue.js&quot;&gt;&lt;/script&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;div id=&quot;app&quot;&gt;
+			{{msg|capitalMsg}}
+		&lt;/div&gt;
+		&lt;script&gt;
+			var app = new Vue({
+				el:&quot;#app&quot;,
+				data:{
+					msg:&quot;abCDEFG&quot;
+				},
+				filters:{
+					capitalMsg:function(value){
+						if(!value){
+							return ''
+						}
+						var zhi = value.charAt(0).toUpperCase()+value.slice(1)
+						return zhi.split(&quot;&quot;).reverse().join(&quot;&quot;)
+					}
+				}
+			})
+		&lt;/script&gt;
+	&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h1 id="自定义指令">自定义指令</h1>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+	&lt;head&gt;
+		&lt;meta charset=&quot;utf-8&quot;&gt;
+		&lt;title&gt;&lt;/title&gt;
+		&lt;script src=&quot;js/v2.6.10/vue.js&quot;&gt;&lt;/script&gt;
+		&lt;style&gt;
+			@keyframes zhuan{
+				from{
+					transform: rotate(0deg);
+				}
+				to{
+					transform: rotate(360deg);
+				}
+			}
+		&lt;/style&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;div id=&quot;app&quot;&gt;
+			{{msg}}&lt;br/&gt;
+			&lt;input v-focus/&gt;&lt;br /&gt;
+			&lt;input v-focus1/&gt;&lt;br /&gt;
+			&lt;div id=&quot;hook-arguments-example&quot; v-demo:foo.a.b=&quot;message&quot;&gt;
+				
+				
+			&lt;/div&gt;
+			&lt;!--  带有参数的自定义指令 --&gt;
+			&lt;div id=&quot;baseexample&quot;&gt;
+			  &lt;p&gt;Scroll down the page&lt;/p&gt;
+			  &lt;!--  让当前的p元素标签距离上边是200像素 --&gt;
+			  &lt;p v-pin=&quot;1000&quot;&gt;Stick me 200px from the top of the page&lt;/p&gt;
+			&lt;/div&gt;
+			
+			&lt;div id=&quot;dynamicexample&quot;&gt;
+			  &lt;h3&gt;...............Scroll down inside this section ↓&lt;/h3&gt;
+			  &lt;p v-pin1:[direction]=&quot;80&quot;&gt;I am pinned onto the page at 200px to the left.&lt;/p&gt;
+			&lt;/div&gt;
+			
+		&lt;/div&gt;
+	&lt;/body&gt;
+	&lt;script&gt;
+		//注册一个全局自定义指令 v-focus
+		Vue.directive('focus',{
+			// 当被绑定的元素插入到 DOM 中时……
+			inserted:function(el){
+				// 聚焦元素
+				// el 相当于input对象
+				el.focus()
+				el.style.border = &quot;10px solid pink&quot;
+			}
+		})
+		// 输出钩子函数一些参数
+		// binding绑定了一参数   vnode虚拟节点
+		Vue.directive('demo', {
+		  bind: function (el, binding, vnode) {
+		    var s = JSON.stringify
+		    el.innerHTML =
+		      'name: '       + s(binding.name) + '&lt;br&gt;' +
+		      'value: '      + s(binding.value) + '&lt;br&gt;' +
+		      'expression: ' + s(binding.expression) + '&lt;br&gt;' +
+		      'argument: '   + s(binding.arg) + '&lt;br&gt;' +
+		      'modifiers: '  + s(binding.modifiers) + '&lt;br&gt;' +
+		      'vnode keys: ' + Object.keys(vnode).join(', ')
+		  }
+		})
+		Vue.directive('pin', {
+		  bind: function (el, binding, vnode) {
+		    el.style.position = 'fixed'
+		    el.style.top = binding.value + 'px'
+			 el.style.left = binding.value + 'px'
+		  }
+		})
+		
+		
+		Vue.directive('pin1', {
+		  bind: function (el, binding, vnode) {
+		    el.style.position = 'fixed'
+		    var s = (binding.arg == 'left' ? 'left' : 'animation')
+			// 	//  style[s] = style.animation
+		    //el.style[s] = binding.value + 'px'
+			// 有旋转的效果
+			el.style[s] = &quot;zhuan 3s linear infinite&quot;
+		  }
+		})
+		var app = new Vue({
+			el:&quot;#app&quot;,
+			data:{
+				msg:&quot;qewoi2313iojioj&quot;,
+				direction:&quot;top&quot;
+			},
+			directives: {
+			  focus1: {
+			    // 指令的定义
+			    inserted: function (el) {
+					// v-focus1 这个指令 让输入框变长
+			      el.style.width = &quot;900px&quot;;
+			    }
+			  }
+			}
+		
+		})
+	&lt;/script&gt;
+&lt;/html&gt;
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E6%99%AE%E9%80%9A%E7%BD%91%E9%A1%B5%E7%9A%84%E7%BB%84%E4%BB%B6%E5%8F%8A%E9%80%9A%E8%AE%AF">普通网页的组件及通讯</a></li>
+<li><a href="#%E6%8F%92%E6%A7%BD">插槽</a></li>
+<li><a href="#%E5%8A%A8%E6%80%81%E7%BB%84%E4%BB%B6">动态组件</a></li>
+<li><a href="#%E9%9D%9E%E7%88%B6%E5%AD%90%E7%BB%84%E4%BB%B6%E4%BC%A0%E8%BE%93">非父子组件传输</a></li>
+<li><a href="#%E8%BF%87%E6%BB%A4%E5%99%A8">过滤器</a></li>
+<li><a href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4">自定义指令</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://gblog.luciferryf.eu.org/post/dy-project-14/">
+              <h3 class="post-title">
+                类似抖音的短视频管理系统+Java后端+vue前端（14）
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://gblog.luciferryf.eu.org/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

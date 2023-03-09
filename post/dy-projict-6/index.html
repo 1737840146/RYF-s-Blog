@@ -1,0 +1,288 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>类似抖音的短视频管理系统+Java后端+vue前端（6） | RYF&#39;s Blog</title>
+<link rel="shortcut icon" href="https://gblog.luciferryf.eu.org/favicon.ico?v=1678337464009">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://gblog.luciferryf.eu.org/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="类似抖音的短视频管理系统+Java后端+vue前端（6） | RYF&#39;s Blog - Atom Feed" href="https://gblog.luciferryf.eu.org/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="完成查询功能
+js
+controller
+mapper
+2 dao层有一个搜索方法，和xml文件中写个搜索方法
+
+一、实现点击按钮响应事件（mydata.js）
+//实现点击搜索功能，点击按钮出现弹窗
+    //jquery点击事件
+  ..." />
+    <meta name="keywords" content="实习项目" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://gblog.luciferryf.eu.org">
+  <img class="avatar" src="https://gblog.luciferryf.eu.org/images/avatar.png?v=1678337464009" alt="">
+  </a>
+  <h1 class="site-title">
+    RYF&#39;s Blog
+  </h1>
+  <p class="site-description">
+    远离是非圈子  回归平静生活
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/1737840146" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              类似抖音的短视频管理系统+Java后端+vue前端（6）
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-02-23
+              </span>
+              <span>
+                3 min read
+              </span>
+              
+                <a href="https://gblog.luciferryf.eu.org/tag/jmh76P6JN/" class="post-tag">
+                  # 实习项目
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://gblog.luciferryf.eu.org/post-images/dy-projict-6.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <p>完成查询功能<br>
+js<br>
+controller<br>
+mapper<br>
+2 dao层有一个搜索方法，和xml文件中写个搜索方法</p>
+<!-- more -->
+<h1 id="一-实现点击按钮响应事件mydatajs">一、实现点击按钮响应事件（mydata.js）</h1>
+<pre><code>//实现点击搜索功能，点击按钮出现弹窗
+    //jquery点击事件
+    $(&quot;#re&quot;).click(function () {//#re 按钮的id
+        alert(&quot;111&quot;)
+    })
+</code></pre>
+<h1 id="二-实现将输入框的值传送到后端">二、实现将输入框的值传送到后端</h1>
+<pre><code>$(&quot;#re&quot;).click(function () {
+        var value = $(&quot;#videoLike&quot;).val()   //输入框的id
+        alert(value)
+})
+</code></pre>
+<h1 id="三-通过ajax完成回调得到后端反馈的值">三、通过ajax完成回调，得到后端反馈的值</h1>
+<pre><code>//实现点击搜索功能
+//jquery点击事件
+$(&quot;#re&quot;).click(function () {
+    var value = $(&quot;#videoLike&quot;).val()
+    $.ajax({
+        type:&quot;get&quot;,
+        url:&quot;/video/search&quot;,
+        data:{
+            keyword:value
+        },//回调
+        success:function (res) {
+            //得到后端反馈的值
+            console.log(res)
+        }
+    })
+})
+</code></pre>
+<p>虽然上面的方式可以实现返回对应的值，但是无法渲染到前端，所以</p>
+<h2 id="通过layui的方式重新对数据表格查询后渲染">通过layui的方式重新对数据表格查询后渲染</h2>
+<p>给表格初始渲染一个放回值tableIns，将表格进行重载，需要添加一个tableIns值<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677116676230.png" alt="" loading="lazy"></p>
+<pre><code>//通过layui的方式对数据表格重新渲染
+//tableIns 是上边 tableRender的返回值
+tableIns.reload({
+    url:&quot;/video/search&quot;,
+    where:{//设定异步数据接口的额外参数
+        keyword:value
+    },
+    page: {
+        curr:1  //重新重第一页开始
+    }
+})
+</code></pre>
+<h1 id="四-控制层controller方法">四、控制层Controller方法</h1>
+<pre><code>@RequestMapping(&quot;/search&quot;)
+@ResponseBody
+public Result search(String keyword){
+Result result = new Result();
+System.out.println(keyword);
+List&lt;Video&gt; videos = videoService.selectByUserId(keyword);
+if (videos.size() &gt; 0){
+result.setMessage(&quot;ok&quot;);
+result.setList(videos);
+}else result.setMessage(&quot;error&quot;);
+return result;
+}
+</code></pre>
+<h1 id="五-数据库连接层mapper方法">五、数据库连接层Mapper方法</h1>
+<p>mapper.java</p>
+<pre><code>//通过userId实现模糊查询
+List&lt;Video&gt; selectByUserId(@Param(&quot;keyword&quot;) String keyword);
+</code></pre>
+<p>mapper.xml</p>
+<pre><code>&lt;select id=&quot;selectByUserId&quot; parameterType=&quot;java.lang.String&quot; resultMap=&quot;BaseResultMap&quot;&gt;
+    select id, user_id, audio_id, video_desc, video_path, video_seconds, video_width,
+        video_height, cover_path, like_counts, status, create_time
+    from videos
+    where user_id like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+&lt;/select&gt;
+</code></pre>
+<h1 id="六-业务层service方法">六、业务层Service方法</h1>
+<p>service.java</p>
+<pre><code>List&lt;Video&gt; selectByUserId(String keyword);
+</code></pre>
+<p>serviceimpl.java</p>
+<pre><code>@Override
+public List&lt;Video&gt; selectByUserId(String keyword) {
+    return  videoMapper.selectByUserId(keyword);
+}
+</code></pre>
+<h1 id="七-测试">七、测试</h1>
+<figure data-type="image" tabindex="1"><img src="https://gblog.luciferryf.eu.org/post-images/1677120083433.png" alt="" loading="lazy"></figure>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E4%B8%80-%E5%AE%9E%E7%8E%B0%E7%82%B9%E5%87%BB%E6%8C%89%E9%92%AE%E5%93%8D%E5%BA%94%E4%BA%8B%E4%BB%B6mydatajs">一、实现点击按钮响应事件（mydata.js）</a></li>
+<li><a href="#%E4%BA%8C-%E5%AE%9E%E7%8E%B0%E5%B0%86%E8%BE%93%E5%85%A5%E6%A1%86%E7%9A%84%E5%80%BC%E4%BC%A0%E9%80%81%E5%88%B0%E5%90%8E%E7%AB%AF">二、实现将输入框的值传送到后端</a></li>
+<li><a href="#%E4%B8%89-%E9%80%9A%E8%BF%87ajax%E5%AE%8C%E6%88%90%E5%9B%9E%E8%B0%83%E5%BE%97%E5%88%B0%E5%90%8E%E7%AB%AF%E5%8F%8D%E9%A6%88%E7%9A%84%E5%80%BC">三、通过ajax完成回调，得到后端反馈的值</a>
+<ul>
+<li><a href="#%E9%80%9A%E8%BF%87layui%E7%9A%84%E6%96%B9%E5%BC%8F%E9%87%8D%E6%96%B0%E5%AF%B9%E6%95%B0%E6%8D%AE%E8%A1%A8%E6%A0%BC%E6%9F%A5%E8%AF%A2%E5%90%8E%E6%B8%B2%E6%9F%93">通过layui的方式重新对数据表格查询后渲染</a></li>
+</ul>
+</li>
+<li><a href="#%E5%9B%9B-%E6%8E%A7%E5%88%B6%E5%B1%82controller%E6%96%B9%E6%B3%95">四、控制层Controller方法</a></li>
+<li><a href="#%E4%BA%94-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E5%B1%82mapper%E6%96%B9%E6%B3%95">五、数据库连接层Mapper方法</a></li>
+<li><a href="#%E5%85%AD-%E4%B8%9A%E5%8A%A1%E5%B1%82service%E6%96%B9%E6%B3%95">六、业务层Service方法</a></li>
+<li><a href="#%E4%B8%83-%E6%B5%8B%E8%AF%95">七、测试</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://gblog.luciferryf.eu.org/post/dy-project-5/">
+              <h3 class="post-title">
+                类似抖音的短视频管理系统+Java后端+vue前端（5）
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://gblog.luciferryf.eu.org/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

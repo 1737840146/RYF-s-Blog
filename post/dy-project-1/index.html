@@ -1,0 +1,229 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>类似抖音的短视频管理系统+Java后端+vue前端（1） | RYF&#39;s Blog</title>
+<link rel="shortcut icon" href="https://gblog.luciferryf.eu.org/favicon.ico?v=1678337464009">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://gblog.luciferryf.eu.org/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="类似抖音的短视频管理系统+Java后端+vue前端（1） | RYF&#39;s Blog - Atom Feed" href="https://gblog.luciferryf.eu.org/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="一个基于Java+vue的类似抖音的短视频管理系统
+
+前期准备
+
+安装jdk
+安装完成后打开cmd命令行输入java -version查看是否安装成功
+安装idea
+安装Mysql和Navicat
+安装Tomcat
+安装maven
+
+修改m..." />
+    <meta name="keywords" content="实习项目" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://gblog.luciferryf.eu.org">
+  <img class="avatar" src="https://gblog.luciferryf.eu.org/images/avatar.png?v=1678337464009" alt="">
+  </a>
+  <h1 class="site-title">
+    RYF&#39;s Blog
+  </h1>
+  <p class="site-description">
+    远离是非圈子  回归平静生活
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/1737840146" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              类似抖音的短视频管理系统+Java后端+vue前端（1）
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-02-20
+              </span>
+              <span>
+                2 min read
+              </span>
+              
+                <a href="https://gblog.luciferryf.eu.org/tag/jmh76P6JN/" class="post-tag">
+                  # 实习项目
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://gblog.luciferryf.eu.org/post-images/dy-project-1.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <p>一个基于Java+vue的类似抖音的短视频管理系统</p>
+<!-- more -->
+<h1 id="前期准备"><strong>前期准备</strong></h1>
+<ol>
+<li>安装jdk<br>
+安装完成后打开cmd命令行输入<code>java -version</code>查看是否安装成功</li>
+<li>安装idea</li>
+<li>安装Mysql和Navicat</li>
+<li>安装Tomcat</li>
+<li>安装maven</li>
+</ol>
+<p>修改maven的配置文件<code>setting.xml</code>中的依赖项目录</p>
+<pre><code>&lt;localRepository&gt;D:\JetBrains\apache-maven-3.8.6\conf\repository&lt;/localRepository&gt;
+</code></pre>
+<p>添加依赖项仓库</p>
+<pre><code>&lt;!-- 阿里云仓库 --&gt;
+&lt;mirror&gt;
+&lt;id&gt;alimaven&lt;/id&gt;
+&lt;mirrorOf&gt;central&lt;/mirrorOf&gt;
+&lt;name&gt;aliyun maven&lt;/name&gt;
+&lt;url&gt;http://maven.aliyun.com/nexus/content/repositories/central/&lt;/url&gt;
+&lt;/mirror&gt;
+&lt;!-- 中央仓库1 --&gt;
+&lt;mirror&gt;
+&lt;id&gt;repo1&lt;/id&gt;
+&lt;mirrorOf&gt;central&lt;/mirrorOf&gt;
+&lt;name&gt;Human Readable Name for this Mirror.&lt;/name&gt;
+&lt;url&gt;http://repo1.maven.org/maven2/&lt;/url&gt;
+&lt;/mirror&gt;
+&lt;!-- 中央仓库2 --&gt;
+&lt;mirror&gt;
+&lt;id&gt;repo2&lt;/id&gt;
+&lt;mirrorOf&gt;central&lt;/mirrorOf&gt;
+&lt;name&gt;Human Readable Name for this Mirror.&lt;/name&gt;
+&lt;url&gt;http://repo2.maven.org/maven2/&lt;/url&gt;
+&lt;/mirror&gt;
+</code></pre>
+<h1 id="新建项目"><strong>新建项目</strong></h1>
+<ul>
+<li>打开idea，新建一个maven项目<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1676863824141.png" alt="" loading="lazy"><br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1676863838661.png" alt="" loading="lazy"></li>
+<li>添加main→java文件夹</li>
+<li>配置tomcat<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1676864044091.png" alt="" loading="lazy"><br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1676864048343.png" alt="" loading="lazy"></li>
+<li>启动项目，测试<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1676864081082.png" alt="" loading="lazy"></li>
+</ul>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E5%89%8D%E6%9C%9F%E5%87%86%E5%A4%87"><strong>前期准备</strong></a></li>
+<li><a href="#%E6%96%B0%E5%BB%BA%E9%A1%B9%E7%9B%AE"><strong>新建项目</strong></a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://gblog.luciferryf.eu.org/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

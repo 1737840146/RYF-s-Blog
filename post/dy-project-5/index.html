@@ -1,0 +1,374 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>类似抖音的短视频管理系统+Java后端+vue前端（5） | RYF&#39;s Blog</title>
+<link rel="shortcut icon" href="https://gblog.luciferryf.eu.org/favicon.ico?v=1678337464009">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://gblog.luciferryf.eu.org/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="类似抖音的短视频管理系统+Java后端+vue前端（5） | RYF&#39;s Blog - Atom Feed" href="https://gblog.luciferryf.eu.org/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="小作业：完成订单信息的显示与修改
+
+一、使用maven脚本命令generatorConfig.xml生成myorder的实体类和mapper文件
+
+二、编写Mapper层
+MyorderMapper.xml
+&lt;update id=&q..." />
+    <meta name="keywords" content="实习项目" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://gblog.luciferryf.eu.org">
+  <img class="avatar" src="https://gblog.luciferryf.eu.org/images/avatar.png?v=1678337464009" alt="">
+  </a>
+  <h1 class="site-title">
+    RYF&#39;s Blog
+  </h1>
+  <p class="site-description">
+    远离是非圈子  回归平静生活
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/1737840146" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              类似抖音的短视频管理系统+Java后端+vue前端（5）
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-02-22
+              </span>
+              <span>
+                6 min read
+              </span>
+              
+                <a href="https://gblog.luciferryf.eu.org/tag/jmh76P6JN/" class="post-tag">
+                  # 实习项目
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://gblog.luciferryf.eu.org/post-images/dy-project-5.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <p>小作业：完成订单信息的显示与修改</p>
+<!-- more -->
+<h1 id="一-使用maven脚本命令generatorconfigxml生成myorder的实体类和mapper文件">一、使用maven脚本命令generatorConfig.xml生成myorder的实体类和mapper文件</h1>
+<figure data-type="image" tabindex="1"><img src="https://gblog.luciferryf.eu.org/post-images/1677076254419.png" alt="" loading="lazy"></figure>
+<h1 id="二-编写mapper层">二、编写Mapper层</h1>
+<h2 id="myordermapperxml">MyorderMapper.xml</h2>
+<pre><code>&lt;update id=&quot;update1&quot; parameterType=&quot;java.lang.String&quot;&gt;
+    update myorder
+    set
+    &lt;if test=&quot;field == 'address'&quot;&gt;
+    address = #{value,jdbcType=VARCHAR}
+    &lt;/if&gt;
+    &lt;if test=&quot;field == 'subject'&quot;&gt;
+    subject = #{value,jdbcType=VARCHAR}
+    &lt;/if&gt;
+    &lt;if test=&quot;field == 'message'&quot;&gt;
+    message = #{value,jdbcType=VARCHAR}
+    &lt;/if&gt;
+    where order_id = #{id,jdbcType=VARCHAR}
+&lt;/update&gt;
+</code></pre>
+<figure data-type="image" tabindex="2"><img src="https://gblog.luciferryf.eu.org/post-images/1677076404905.png" alt="" loading="lazy"></figure>
+<h2 id="myordermapperjava">MyorderMapper.java</h2>
+<pre><code>int update1(@Param(&quot;field&quot;) String field, @Param(&quot;value&quot;) String value, @Param(&quot;id&quot;) String id);
+</code></pre>
+<figure data-type="image" tabindex="3"><img src="https://gblog.luciferryf.eu.org/post-images/1677076487674.png" alt="" loading="lazy"></figure>
+<h1 id="三-编写service层">三、编写Service层</h1>
+<h2 id="myorderservicejava">MyorderService.java</h2>
+<pre><code>public List&lt;Myorder&gt; selectAll();
+public int update1(String field,String value,String id);
+</code></pre>
+<figure data-type="image" tabindex="4"><img src="https://gblog.luciferryf.eu.org/post-images/1677076597748.png" alt="" loading="lazy"></figure>
+<h2 id="myorderserviceimpljava">MyorderServiceImpl.java</h2>
+<pre><code>@Autowired
+MyorderMapper myorderMapper;
+@Override
+public List&lt;Myorder&gt; selectAll() {
+    List&lt;Myorder&gt; myorders = myorderMapper.selectAll();
+    return myorders;
+}
+@Override
+public int update1(String field, String value, String id) {
+    int value1 = myorderMapper.update1(field, value, id);
+    return value1;
+}
+</code></pre>
+<figure data-type="image" tabindex="5"><img src="https://gblog.luciferryf.eu.org/post-images/1677076662751.png" alt="" loading="lazy"></figure>
+<h1 id="四-编写controller层">四、编写Controller层</h1>
+<pre><code>@Autowired
+MyorderService myorderService;
+@RequestMapping(&quot;/showAll&quot;)
+@ResponseBody
+public Result showAll(){
+    Result result = new Result();
+    List&lt;Myorder&gt; myorders = myorderService.selectAll();
+    result.setList(myorders);
+    result.setMessage(&quot;ok&quot;);
+    result.setStatus(0);
+    result.setTotalNum(myorders.size());
+    return result;
+}
+@RequestMapping(&quot;/myorder&quot;)
+public String video(){
+    return &quot;MyorderTable&quot;;
+}
+@RequestMapping(&quot;/update1&quot;)
+@ResponseBody
+public Result update1(String field,String value,String id){
+    Result result = new Result();
+    System.out.println(field+&quot;...&quot;+value+&quot;...&quot;+id);
+    int i = myorderService.update1(field,value,id);
+    System.out.println(i);
+    if (i &gt; 0){
+        result.setMessage(&quot;ok&quot;);
+    }else result.setMessage(&quot;error&quot;);
+    return result;
+}
+</code></pre>
+<figure data-type="image" tabindex="6"><img src="https://gblog.luciferryf.eu.org/post-images/1677076796065.png" alt="" loading="lazy"></figure>
+<h1 id="五-编写myordertablehtml">五、编写MyorderTable.html</h1>
+<pre><code>&lt;div class=&quot;like&quot; style=&quot;margin-top:10px;margin-left:35%&quot;&gt;
+搜索userId
+&lt;div class=&quot;layui-inline&quot;&gt;
+    &lt;input class=&quot;layui-input&quot; name=&quot;orderId&quot; id=&quot;orderLike&quot; autocomplete=&quot;off&quot;/&gt;
+&lt;/div&gt;
+&lt;button class=&quot;layui-btn&quot; data-type=&quot;reload&quot; id=&quot;re&quot;&gt;搜索&lt;/button&gt;
+&lt;/div&gt;
+&lt;table id=&quot;demo&quot; lay-filter=&quot;MyorderTable&quot;&gt;&lt;/table&gt;
+&lt;script type=&quot;text/html&quot; id=&quot;bar&quot;&gt;
+&lt;!-- layui监测三个按钮事件 lay-event里的内容，来确定点击的是哪个事件 --&gt;
+&lt;a class=&quot;layui-btn layui-btn-xs&quot; lay-event=&quot;add&quot;&gt;上传订单&lt;/a&gt;
+&lt;a class=&quot;layui-btn layui-btn-danger layui-btn-xs&quot; lay-event=&quot;del&quot;&gt;批量删除&lt;/a&gt;
+&lt;a class=&quot;layui-btn layui-btn-xs&quot; lay-event=&quot;daoru&quot;&gt;导入订单&lt;/a&gt;
+&lt;/script&gt;
+&lt;script th:src=&quot;@{/layui/layui.js}&quot;&gt;&lt;/script&gt;
+&lt;script th:src=&quot;@{/js/date.js}&quot;&gt;&lt;/script&gt;
+&lt;!--&lt;script th:src=&quot;@{/js/jquery.min.js}&quot;&gt;&lt;/script&gt;--&gt;
+&lt;script th:src=&quot;@{/js/myorder.js}&quot;&gt;&lt;/script&gt;
+</code></pre>
+<figure data-type="image" tabindex="7"><img src="https://gblog.luciferryf.eu.org/post-images/1677076950741.png" alt="" loading="lazy"></figure>
+<h1 id="六-编写myorderjs">六、编写myorder.js</h1>
+<pre><code>layui.use('table', function(){
+    var table = layui.table;
+    var $ = layui.jquery;
+    //第一个实例
+    table.render({
+        elem: '#demo'
+        ,height: 312
+        ,url: '/myorders/showAll' //数据接口
+        ,limit:3
+        ,limits:[3,5,10]
+        ,page: true //开启分页
+        ,parseData: function(res){ //res 即为原始返回的数据
+            // 判断是否有页数
+            console.log(this)
+            var  list1=[]
+            if(this.page.curr){
+                // （页数-1）每页多少条
+                list1 = res.list.slice((this.page.curr-1)*this.limit,this.page.curr*this.limit)
+            }else{
+                //如果页数无定义,默认从第一条开始
+                list1 = res.list.slice(0,this.limit)
+            }
+            return {
+                &quot;code&quot;: res.status, //解析接口状态
+                &quot;msg&quot;: res.message, //解析提示文本
+                &quot;count&quot;: res.totalNum, //解析数据长度
+                &quot;data&quot;: list1 //解析数据列表
+            };
+        }
+        ,cols: [[ //表头
+            {type: 'checkbox', fixed: 'left'}
+            ,{field: 'orderId', title: 'ID', width: 80, sort: true, align: &quot;center&quot;}
+            ,{field: 'orderUser', title: '订单用户', width: 100, align: &quot;center&quot;}
+            ,{field: 'address', title: '快递信息', width: 500, edit: &quot;text&quot;}
+            ,{field: 'mydate', title: '创建时间', sort: true, align: &quot;center&quot;,
+                templet:function (e) {
+                    return showTime(e.mydate)
+                }
+            }
+            ,{field: 'subject', title: '物品名称', width: 300, edit: &quot;text&quot;}
+            ,{field: 'message', title: '备注', width: 200, edit: &quot;text&quot;}
+        ]]
+    });
+    //单元格编辑
+    table.on('edit(MyorderTable)',function (obj) {
+            console.log(&quot;开始单元格编辑&quot;)
+            console.log(obj.value); //得到修改后的值
+            console.log(obj.field); //当前编辑字段名
+            console.log(obj.data);  //所在行的所有数据
+            $.ajax({
+                type:&quot;post&quot;,
+                url: &quot;/myorders/update1&quot;,
+                data: {
+                    field:obj.field,
+                    value:obj.value,
+                    id:obj.data.orderId
+                },
+                dataType:&quot;json&quot;,
+                success:function (res) {
+                    if (res.message == &quot;ok&quot;){
+                        var layer = layui.layer;
+                        layer.msg(&quot;修改成功&quot;)
+                    }
+                }
+            })
+        }
+    )
+});
+</code></pre>
+<p><img src="https://gblog.luciferryf.eu.org/post-images/1677077235173.png" alt="" loading="lazy"><br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677077245099.png" alt="" loading="lazy"><br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677077248360.png" alt="" loading="lazy"></p>
+<h1 id="七-测试">七、测试</h1>
+<figure data-type="image" tabindex="8"><img src="https://gblog.luciferryf.eu.org/post-images/1677077340692.png" alt="" loading="lazy"></figure>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E4%B8%80-%E4%BD%BF%E7%94%A8maven%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4generatorconfigxml%E7%94%9F%E6%88%90myorder%E7%9A%84%E5%AE%9E%E4%BD%93%E7%B1%BB%E5%92%8Cmapper%E6%96%87%E4%BB%B6">一、使用maven脚本命令generatorConfig.xml生成myorder的实体类和mapper文件</a></li>
+<li><a href="#%E4%BA%8C-%E7%BC%96%E5%86%99mapper%E5%B1%82">二、编写Mapper层</a>
+<ul>
+<li><a href="#myordermapperxml">MyorderMapper.xml</a></li>
+<li><a href="#myordermapperjava">MyorderMapper.java</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%89-%E7%BC%96%E5%86%99service%E5%B1%82">三、编写Service层</a>
+<ul>
+<li><a href="#myorderservicejava">MyorderService.java</a></li>
+<li><a href="#myorderserviceimpljava">MyorderServiceImpl.java</a></li>
+</ul>
+</li>
+<li><a href="#%E5%9B%9B-%E7%BC%96%E5%86%99controller%E5%B1%82">四、编写Controller层</a></li>
+<li><a href="#%E4%BA%94-%E7%BC%96%E5%86%99myordertablehtml">五、编写MyorderTable.html</a></li>
+<li><a href="#%E5%85%AD-%E7%BC%96%E5%86%99myorderjs">六、编写myorder.js</a></li>
+<li><a href="#%E4%B8%83-%E6%B5%8B%E8%AF%95">七、测试</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://gblog.luciferryf.eu.org/post/dy-project-4/">
+              <h3 class="post-title">
+                类似抖音的短视频管理系统+Java后端+vue前端（4）
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://gblog.luciferryf.eu.org/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

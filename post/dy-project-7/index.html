@@ -1,0 +1,383 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>类似抖音的短视频管理系统+Java后端+vue前端（7） | RYF&#39;s Blog</title>
+<link rel="shortcut icon" href="https://gblog.luciferryf.eu.org/favicon.ico?v=1678337464009">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://gblog.luciferryf.eu.org/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="类似抖音的短视频管理系统+Java后端+vue前端（7） | RYF&#39;s Blog - Atom Feed" href="https://gblog.luciferryf.eu.org/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="实现视频上传功能
+
+前端
+开启工具栏
+
+编写头工具栏事件
+//头工具栏事件
+table.on('toolbar(videoTable)', function(obj){
+    var checkStatus = table.checkSt..." />
+    <meta name="keywords" content="实习项目" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://gblog.luciferryf.eu.org">
+  <img class="avatar" src="https://gblog.luciferryf.eu.org/images/avatar.png?v=1678337464009" alt="">
+  </a>
+  <h1 class="site-title">
+    RYF&#39;s Blog
+  </h1>
+  <p class="site-description">
+    远离是非圈子  回归平静生活
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/1737840146" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              类似抖音的短视频管理系统+Java后端+vue前端（7）
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-02-23
+              </span>
+              <span>
+                6 min read
+              </span>
+              
+                <a href="https://gblog.luciferryf.eu.org/tag/jmh76P6JN/" class="post-tag">
+                  # 实习项目
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://gblog.luciferryf.eu.org/post-images/dy-project-7.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <p>实现视频上传功能</p>
+<!-- more -->
+<h1 id="前端">前端</h1>
+<h2 id="开启工具栏">开启工具栏</h2>
+<figure data-type="image" tabindex="1"><img src="https://gblog.luciferryf.eu.org/post-images/1677133607201.png" alt="" loading="lazy"></figure>
+<h2 id="编写头工具栏事件">编写头工具栏事件</h2>
+<pre><code>//头工具栏事件
+table.on('toolbar(videoTable)', function(obj){
+    var checkStatus = table.checkStatus(obj.config.id);
+    switch(obj.event){
+        case 'add':
+            layer.msg('添加');
+            break;
+        case 'delete':
+            layer.msg('删除');
+            break;
+        case 'daoru':
+            layer.msg('编辑');
+            break;
+    };
+});
+</code></pre>
+<p><img src="https://gblog.luciferryf.eu.org/post-images/1677133672241.png" alt="" loading="lazy"><br>
+<strong>注意：</strong></p>
+<ol>
+<li>toolbar(videoTable)中的videoTable指的是DataTable.html页面中的<code>&lt;table&gt;</code>标签的<code>lay-filter</code>属性</li>
+<li>下方的三个值指的是DataTable.html页面中的按钮事件<code>&lt;a&gt;</code>标签的<code>lay-event</code>属性</li>
+</ol>
+<h2 id="实现点击添加按钮跳出视频添加页面">实现点击添加按钮跳出视频添加页面</h2>
+<pre><code>case 'add':
+    layer.msg('添加');
+    //打开一个新的窗口，添加视频操作
+    var  layer = layui.layer;
+    layer.open({
+        type:2, //iframe可以直接引入一个页面
+        title:&quot;添加视频&quot;,
+        shade:0.5,  //窗口的外部阴影配置
+        shareClose:true,    //点击外部窗口消失
+        area:[&quot;60%&quot;,&quot;60%&quot;],
+        content:&quot;/templates/addvideo.html&quot;
+    })
+break;
+</code></pre>
+<h2 id="上传文件工具类">上传文件工具类</h2>
+<figure data-type="image" tabindex="2"><img src="https://gblog.luciferryf.eu.org/post-images/1677138208812.png" alt="" loading="lazy"></figure>
+<h2 id="视频文件的上传mydatajs">视频文件的上传mydata.js</h2>
+<pre><code>//视频上传
+upload.render({
+    elem: '#choosevideo' //绑定选择文件的按钮
+    ,url: '/videos/upload/' // 上传视频的路径
+    ,auto: false //选择文件后不自动上传
+    ,accept:'file'
+    ,size:500000
+    ,bindAction: '#sure' //指向一个按钮触发上传
+    ,choose: function(obj){
+        //将每次选择的文件追加到文件队列
+        var files = obj.pushFile();
+        //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
+        obj.preview(function(index, file, result){
+            console.log(index); //得到文件的名称
+            var  filename =file.name;
+            //把文件名称写入到输入框里
+            $(&quot;#video_url&quot;).val(filename)
+        });
+    }
+});
+</code></pre>
+<figure data-type="image" tabindex="3"><img src="https://gblog.luciferryf.eu.org/post-images/1677135768239.png" alt="" loading="lazy"></figure>
+<h2 id="视频上传完成弹出窗口">视频上传完成弹出窗口</h2>
+<pre><code>//上传完毕弹出一个小窗口
+,done: function(res, index, upload){
+    if (res.message == &quot;ok&quot;){
+        layer.msg(&quot;上传完毕 &quot;)
+    }
+},
+error:function (res) {
+    layer.msg(res.message)
+    //关闭弹窗
+    layer.closeAll()
+}
+</code></pre>
+<h2 id="上传页面addvideohtml">上传页面addvideo.html</h2>
+<pre><code>&lt;body&gt;
+&lt;form class=&quot;layui-form&quot; action=&quot;&quot; lay-filter=&quot;example&quot; id=&quot;form&quot;&gt;
+    &lt;div class=&quot;layui-form-item&quot;&gt;
+        &lt;label class=&quot;layui-form-label&quot;&gt;视频&lt;/label&gt;
+        &lt;div class=&quot;layui-input-block&quot;&gt;
+            &lt;input type=&quot;text&quot; id=&quot;video_url&quot; name=&quot;videoPath&quot; class=&quot;layui-input layui-disabled&quot;
+                placeholder=&quot;视频名称（只支持mp4)&quot;/&gt;
+            &lt;!--//上传按钮--&gt;
+            &lt;button type=&quot;button&quot; class=&quot;layui-btn&quot; id=&quot;choosevideo&quot;&gt;选择视频&lt;/button&gt;
+            &lt;button type=&quot;button&quot; class=&quot;layui-btn&quot; id=&quot;sure&quot;&gt;确定&lt;/button&gt;
+            &lt;/br&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;layui-form-item&quot;&gt;
+        &lt;label class=&quot;layui-form-label&quot;&gt;视频描述&lt;/label&gt;
+        &lt;div class=&quot;layui-input-block&quot;&gt;
+            &lt;input type=&quot;text&quot; name=&quot;videoDesc&quot; autocomplete=&quot;off&quot; placeholder=&quot;请输入视频描述&quot; class=&quot;layui-input&quot;&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;layui-form-item&quot;&gt;
+        &lt;div class=&quot;layui-input-block&quot;&gt;
+            &lt;button class=&quot;layui-btn&quot; lay-submit lay-filter=&quot;sub&quot; id=&quot;submit&quot;&gt;立即上传&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/form&gt;
+&lt;script src=&quot;../layui/layui.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;../js/mydata.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+</code></pre>
+<h1 id="后端">后端</h1>
+<h2 id="videocontroller">videocontroller</h2>
+<pre><code>//视频上传
+@RequestMapping(&quot;upload&quot;)
+@ResponseBody
+public Result upload(MultipartFile file, HttpServletRequest request){
+Result result = new Result();
+//输出到后台的文件名
+String filename = file.getOriginalFilename();
+System.out.println(filename);
+try {
+UpUtils.upfile(file,request);
+result.setMessage(&quot;ok&quot;);
+}catch (Exception e){
+e.printStackTrace();
+result.setMessage(&quot;error&quot;);
+}
+return result;
+}
+</code></pre>
+<figure data-type="image" tabindex="4"><img src="https://gblog.luciferryf.eu.org/post-images/1677135917507.png" alt="" loading="lazy"></figure>
+<h2 id="uputils工具类">UpUtils工具类</h2>
+<pre><code>public class UpUtils {
+    //静态的方法，通过类名直接调用方法
+    public static void upfile(MultipartFile file, HttpServletRequest request) {
+        //获取当前的路径----war包下的WEB-INF/video/路径
+        String realPath = request.getServletContext().getRealPath(&quot;/WEB-INF/video/&quot;);
+        System.out.println(&quot;realpath：&quot; + realPath);
+        // 开发代码的web-INF/video的路径:
+        String basePath = &quot;D:\\JetBrains\\project\\tiktok-project\\src\\main\\webapp\\WEB-INF\\video&quot;;
+        // 将参数里的 file写入到两个文件当中
+        //写入到war包的路径
+        File file1 = new File(realPath);
+        //写入到开发代码的文件路径当中
+        File file2 = new File(basePath);
+        //判断两个文件夹是否存在
+        if (!file1.exists()) {
+            file1.mkdirs();
+        }
+        if (!file2.exists()) {
+            file2.mkdirs();
+        }
+        //获取当前的文件名
+        String orgName = file.getOriginalFilename();
+        try {
+            //用输出流开始拷贝文件
+            // 参数1 拷贝文件的路径+文件名,参数2是否在文件的末尾追加内容
+            FileOutputStream fos1 = new FileOutputStream(realPath + orgName, false);
+            FileOutputStream fos2 = new FileOutputStream(basePath + orgName, false);
+            // file类型是 MultipartFile类型，可以转化为字节数组
+            fos1.write(file.getBytes());
+            fos2.write(file.getBytes());
+        /*   long  bs=new Date().getTime();
+            UUID.randomUUID().toString();*/
+            // 刷新缓存，把缓存内容，刷到文件当中
+            fos1.flush();
+            fos2.flush();
+            if (fos1 != null) {
+                fos1.close();
+            }
+            if (fos2 != null) {
+                fos2.close();
+            }
+        } catch (Exception e) {
+        }
+    }
+}
+</code></pre>
+<p><img src="https://gblog.luciferryf.eu.org/post-images/1677136226511.png" alt="" loading="lazy"><br>
+**注意：**这两个路径要改成自己的</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E5%89%8D%E7%AB%AF">前端</a>
+<ul>
+<li><a href="#%E5%BC%80%E5%90%AF%E5%B7%A5%E5%85%B7%E6%A0%8F">开启工具栏</a></li>
+<li><a href="#%E7%BC%96%E5%86%99%E5%A4%B4%E5%B7%A5%E5%85%B7%E6%A0%8F%E4%BA%8B%E4%BB%B6">编写头工具栏事件</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0%E7%82%B9%E5%87%BB%E6%B7%BB%E5%8A%A0%E6%8C%89%E9%92%AE%E8%B7%B3%E5%87%BA%E8%A7%86%E9%A2%91%E6%B7%BB%E5%8A%A0%E9%A1%B5%E9%9D%A2">实现点击添加按钮跳出视频添加页面</a></li>
+<li><a href="#%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%B7%A5%E5%85%B7%E7%B1%BB">上传文件工具类</a></li>
+<li><a href="#%E8%A7%86%E9%A2%91%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8A%E4%BC%A0mydatajs">视频文件的上传mydata.js</a></li>
+<li><a href="#%E8%A7%86%E9%A2%91%E4%B8%8A%E4%BC%A0%E5%AE%8C%E6%88%90%E5%BC%B9%E5%87%BA%E7%AA%97%E5%8F%A3">视频上传完成弹出窗口</a></li>
+<li><a href="#%E4%B8%8A%E4%BC%A0%E9%A1%B5%E9%9D%A2addvideohtml">上传页面addvideo.html</a></li>
+</ul>
+</li>
+<li><a href="#%E5%90%8E%E7%AB%AF">后端</a>
+<ul>
+<li><a href="#videocontroller">videocontroller</a></li>
+<li><a href="#uputils%E5%B7%A5%E5%85%B7%E7%B1%BB">UpUtils工具类</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://gblog.luciferryf.eu.org/post/dy-projict-6/">
+              <h3 class="post-title">
+                类似抖音的短视频管理系统+Java后端+vue前端（6）
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://gblog.luciferryf.eu.org/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

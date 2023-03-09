@@ -1,0 +1,621 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>类似抖音的短视频管理系统+Java后端+vue前端（4） | RYF&#39;s Blog</title>
+<link rel="shortcut icon" href="https://gblog.luciferryf.eu.org/favicon.ico?v=1678337464009">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://gblog.luciferryf.eu.org/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="类似抖音的短视频管理系统+Java后端+vue前端（4） | RYF&#39;s Blog - Atom Feed" href="https://gblog.luciferryf.eu.org/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="layui页面搭建，使用layui快速构建前端页面。并且将后端的数据通过layui显示在前端页面
+
+引入layui
+layui
+官网：https://www.ilayuis.com/doc/index.htm
+
+layui（谐音：类 UI)..." />
+    <meta name="keywords" content="实习项目" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://gblog.luciferryf.eu.org">
+  <img class="avatar" src="https://gblog.luciferryf.eu.org/images/avatar.png?v=1678337464009" alt="">
+  </a>
+  <h1 class="site-title">
+    RYF&#39;s Blog
+  </h1>
+  <p class="site-description">
+    远离是非圈子  回归平静生活
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/1737840146" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              类似抖音的短视频管理系统+Java后端+vue前端（4）
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-02-22
+              </span>
+              <span>
+                15 min read
+              </span>
+              
+                <a href="https://gblog.luciferryf.eu.org/tag/jmh76P6JN/" class="post-tag">
+                  # 实习项目
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://gblog.luciferryf.eu.org/post-images/dy-project-4.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <p>layui页面搭建，使用layui快速构建前端页面。并且将后端的数据通过layui显示在前端页面</p>
+<!-- more -->
+<h1 id="引入layui">引入layui</h1>
+<h2 id="layui">layui</h2>
+<p>官网：https://www.ilayuis.com/doc/index.htm</p>
+<blockquote>
+<p>layui（谐音：类 UI) 是一套开源的 Web UI 解决方案，采用自身经典的模块化规范，并遵循原生 HTML/CSS/JS 的开发方式，极易上手，拿来即用。其风格简约轻盈，而组件优雅丰盈，从源代码到使用方法的每一处细节都经过精心雕琢，非常适合网页界面的快速开发。layui 区别于那些基于 MVVM 底层的前端框架，却并非逆道而行，而是信奉返璞归真之道。准确地说，它更多是面向后端开发者，你无需涉足前端各种工具，只需面对浏览器本身，让一切你所需要的元素与交互，从这里信手拈来。</p>
+</blockquote>
+<h2 id="引入">引入</h2>
+<p>下载layui压缩包，在项目WEB-INF文件夹下新建layui文件夹，解压到其中<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677033814623.png" alt="" loading="lazy"></p>
+<h1 id="编写indexhtml页面">编写index.html页面</h1>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot; xmlns:th=&quot;http://www.thymeleaf.org&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, maximum-scale=1&quot;&gt;
+    &lt;title&gt;RYF's 抖抖后台&lt;/title&gt;
+    &lt;link rel=&quot;stylesheet&quot; th:href=&quot;@{/layui/css/layui.css}&quot;&gt;
+&lt;/head&gt;
+&lt;body class=&quot;layui-layout-body&quot;&gt;
+&lt;div class=&quot;layui-layout layui-layout-admin&quot;&gt;
+    &lt;div class=&quot;layui-header&quot;&gt;
+        &lt;div class=&quot;layui-logo&quot;&gt;抖抖后台&lt;/div&gt;
+        &lt;!-- 头部区域（可配合layui已有的水平导航） --&gt;
+        &lt;ul class=&quot;layui-nav layui-layout-right&quot;&gt;
+            &lt;li class=&quot;layui-nav-item&quot;&gt;
+                &lt;a href=&quot;javascript:;&quot;&gt;
+                    &lt;img src=&quot;http://t.cn/RCzsdCq&quot; class=&quot;layui-nav-img&quot;&gt;
+                    &lt;!--显示登陆人的信息--&gt;
+&lt;!--                    [[@{${session.user.username}}]]--&gt;
+                &lt;/a&gt;
+                &lt;dl class=&quot;layui-nav-child&quot;&gt;
+                    &lt;dd&gt;&lt;a href=&quot;&quot;&gt;基本资料&lt;/a&gt;&lt;/dd&gt;
+                    &lt;dd&gt;&lt;a href=&quot;&quot;&gt;安全设置&lt;/a&gt;&lt;/dd&gt;
+                &lt;/dl&gt;
+            &lt;/li&gt;
+            &lt;li class=&quot;layui-nav-item&quot;&gt;&lt;a href=&quot;/home/index&quot;&gt;退了&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/div&gt;
+&lt;div class=&quot;layui-side layui-bg-black&quot;&gt;
+    &lt;div class=&quot;layui-side-scroll&quot;&gt;
+        &lt;!-- 左侧导航区域（可配合layui已有的垂直导航） --&gt;
+        &lt;ul class=&quot;layui-nav layui-nav-tree&quot; lay-filter=&quot;test&quot;&gt;
+            &lt;li class=&quot;layui-nav-item layui-nav-itemed&quot;&gt;
+                &lt;a class=&quot;&quot; href=&quot;javascript:;&quot;&gt;视频管理&lt;/a&gt;
+                &lt;dl class=&quot;layui-nav-child&quot;&gt;
+                    &lt;dd&gt;&lt;a href=&quot;/videos/video&quot; target=&quot;main&quot;&gt;视频信息&lt;/a&gt;&lt;/dd&gt;
+                &lt;/dl&gt;
+            &lt;/li&gt;
+            &lt;li class=&quot;layui-nav-item&quot;&gt;
+                &lt;a href=&quot;javascript:;&quot;&gt;音乐管理&lt;/a&gt;
+                &lt;dl class=&quot;layui-nav-child&quot;&gt;
+                    &lt;dd&gt;&lt;a href=&quot;myform.html&quot; target=&quot;main&quot;&gt;音乐信息&lt;/a&gt;&lt;/dd&gt;
+                &lt;/dl&gt;
+            &lt;/li&gt;
+            &lt;li class=&quot;layui-nav-item&quot;&gt;
+                &lt;a href=&quot;javascript:;&quot;&gt;用户管理&lt;/a&gt;
+                &lt;dl class=&quot;layui-nav-child&quot;&gt;
+                    &lt;dd&gt;&lt;a href=&quot;/videos/video&quot; target=&quot;main&quot;&gt;用户信息&lt;/a&gt;&lt;/dd&gt;
+                &lt;/dl&gt;
+            &lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;layui-body&quot;&gt;
+    &lt;!-- 内容主体区域 --&gt;
+    &lt;!-- 控制器的路径--&gt;
+    &lt;!-- 请求后端的控制器--&gt;
+    &lt;iframe src=&quot;/videos/video&quot; width=&quot;100%&quot; height=&quot;100%&quot; name=&quot;main&quot;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+&lt;div class=&quot;layui-footer&quot;&gt;
+    &lt;!-- 底部固定区域 --&gt;
+    © layui.com - 底部固定区域
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;script th:src=&quot;@{/layui/layui.js}&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+    //JavaScript代码区域
+    layui.use('element', function () {
+        var element = layui.element;
+    });
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h1 id="设置indexjsp跳转到indexhtml">设置index,jsp跳转到index.html</h1>
+<p>当启动服务器时index.jsp页面自动跳转到index.html页面（设置主页）</p>
+<h2 id="编写homecontroller">编写HomeController</h2>
+<pre><code>@RequestMapping(&quot;/&quot;)
+    public String  home(){
+        return &quot;index&quot;;
+    }
+</code></pre>
+<h2 id="编写webxml">编写web.xml</h2>
+<pre><code>&lt;welcome-file-list&gt;
+    &lt;welcome-file&gt;/&lt;/welcome-file&gt;
+&lt;/welcome-file-list&gt;
+</code></pre>
+<h2 id="测试">测试</h2>
+<figure data-type="image" tabindex="1"><img src="https://gblog.luciferryf.eu.org/post-images/1677034049597.png" alt="" loading="lazy"></figure>
+<h1 id="实现数据返回">实现数据返回</h1>
+<p>实现打开DataTable.html页面时，返回指定数据信息到前端</p>
+<h2 id="编写result类">编写Result类</h2>
+<p>新建<code>entily----Result</code>，数据返回的结果集合</p>
+<pre><code>public class Result {
+    //数据的长度
+    private  int totalNum;
+    //数据返回消息
+    private String message;
+    //具体的数据内容
+    private List list;
+    //状态码
+    private int status = 0;
+    public int getStatus() {return status;}
+    public void setStatus(int status) {this.status = status;}
+    public int getTotalNum() {return totalNum;}
+    public void setTotalNum(int totalNum) {this.totalNum = totalNum;}
+    public String getMessage() { return message; }
+    public void setMessage(String message) {this.message = message;}
+    public List getList() {return list;}
+    public void setList(List list) {this.list = list;}
+    public Result() {}
+    public Result(int totalNum, String message, List list, int status) {
+        this.totalNum = totalNum;
+        this.message = message;
+        this.list = list;
+        this.status = status;
+    }
+}
+</code></pre>
+<h2 id="编写videoservice接口以及实现类">编写VideoService接口以及实现类</h2>
+<p>VideoService.java接口</p>
+<pre><code>public interface VideoService {
+    public List&lt;Video&gt; selectAll();
+}
+</code></pre>
+<p>VideoServiceImpl.java实现类</p>
+<pre><code>//启动服务器的时候能够被注册扫描器扫描到
+@Service
+public class VideoServiceImpl implements VideoService {
+    @Autowired
+    VideoMapper videoMapper;
+    //返回所有视频信息
+    @Override
+    public List&lt;Video&gt; selectAll() {
+        List&lt;Video&gt; videos = videoMapper.selectAll();
+        return videos;
+    }
+}
+</code></pre>
+<h2 id="编写videocontroller">编写VideoController</h2>
+<pre><code>@Controller
+@RequestMapping(&quot;/videos&quot;)
+public class VideoController {
+
+@Autowired
+VideoService videoService;
+
+@ResponseBody
+@RequestMapping(&quot;/showAll&quot;)
+public Result showAll(){
+Result result = new Result();
+List&lt;Video&gt; videos = videoService.selectAll();
+result.setList(videos);
+//设置数据返回结果
+result.setMessage(&quot;ok&quot;);
+result.setStatus(0);
+//设置数据的长度
+result.setTotalNum(videos.size());
+return result;
+}
+@RequestMapping(&quot;/video&quot;)
+public String video(){
+return &quot;DataTable&quot;;
+}
+}
+</code></pre>
+<h2 id="编写datatablehtml">编写DataTable.html</h2>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot; xmlns:th=&quot;http://www.thymeleaf.org&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;title&gt;&lt;/title&gt;
+    &lt;link rel=&quot;stylesheet&quot; th:href=&quot;@{/layui/css/layui.css}&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;like&quot; style=&quot;margin-top:10px;margin-left:35%&quot;&gt;
+    搜索userId
+    &lt;div class=&quot;layui-inline&quot;&gt;
+        &lt;input class=&quot;layui-input&quot; name=&quot;userId&quot; id=&quot;videoLike&quot; autocomplete=&quot;off&quot;/&gt;
+    &lt;/div&gt;
+    &lt;button class=&quot;layui-btn&quot; data-type=&quot;reload&quot; id=&quot;re&quot;&gt;搜索&lt;/button&gt;
+&lt;/div&gt;
+&lt;table id=&quot;demo&quot; lay-filter=&quot;videoTable&quot;&gt;&lt;/table&gt;
+&lt;script type=&quot;text/html&quot; id=&quot;bar&quot;&gt;
+    &lt;!-- layui监测三个按钮事件 lay-event里的内容，来确定点击的是哪个事件 --&gt;
+    &lt;a class=&quot;layui-btn layui-btn-xs&quot; lay-event=&quot;add&quot;&gt;上传视频&lt;/a&gt;
+    &lt;a class=&quot;layui-btn layui-btn-danger layui-btn-xs&quot; lay-event=&quot;del&quot;&gt;批量删除&lt;/a&gt;
+    &lt;a class=&quot;layui-btn layui-btn-xs&quot; lay-event=&quot;daoru&quot;&gt;导入文件&lt;/a&gt;
+&lt;/script&gt;
+&lt;script th:src=&quot;@{/layui/layui.js}&quot;&gt;&lt;/script&gt;
+&lt;!--&lt;script th:src=&quot;@{/js/date.js}&quot;&gt;&lt;/script&gt;--&gt;
+&lt;script th:src=&quot;@{/js/jquery.min.js}&quot;&gt;&lt;/script&gt;
+&lt;script th:src=&quot;@{/js/mydata.js}&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h2 id="编写mydatajs">编写mydata.js</h2>
+<pre><code>$.ajax({
+    url:&quot;/videos/showAll&quot;,
+    type:&quot;get&quot;,
+    dataType:&quot;json&quot;,
+    // 在前端处理后台返回的数据
+    // success叫做回调函数
+    success:function (res) {
+        // 在前端输出后台返回的数据
+        console.log(res)
+    }
+})
+</code></pre>
+<h2 id="测试-2">测试</h2>
+<figure data-type="image" tabindex="2"><img src="https://gblog.luciferryf.eu.org/post-images/1677034706891.png" alt="" loading="lazy"></figure>
+<h1 id="用layui渲染显示数据">用layui渲染显示数据</h1>
+<h2 id="编写mydatajs-2">编写mydata.js</h2>
+<pre><code>layui.use('table', function(){
+    var table = layui.table;
+    //第一个实例
+    table.render({
+        elem: '#demo'
+        ,height: 312
+        ,url: '/videos/showAll' //数据接口
+        ,page: true //开启分页
+        ,parseData: function(res){ //res 即为原始返回的数据
+            return {
+                &quot;code&quot;: res.status, //解析接口状态
+                &quot;msg&quot;: res.message, //解析提示文本
+                &quot;count&quot;: res.totalNum, //解析数据长度
+                &quot;data&quot;: res.list //解析数据列表
+            };
+        }
+        ,cols: [[ //表头
+            {type: 'checkbox', fixed: 'left'}
+            ,{field: 'id', title: 'ID', width: 80, sort: true, align: &quot;center&quot;}
+            ,{field: 'userId', title: '发布者', width: 80}
+            ,{field: 'videoDesc', title: '描述', width: 90, align: &quot;center&quot;, edit: &quot;text&quot;}
+            ,{field: 'videoPath', title: '视频内容', align: &quot;center&quot;}
+            ,{field: 'videoSeconds', title: '视频播放时长', align: &quot;center&quot;}
+            ,{field: 'coverPath', title: '封面图', align: &quot;center&quot;, width: 120, height: 120,
+                templet:function (e) {
+                    return &quot;&lt;img src='/&quot;+e.coverPath+&quot;' /&gt;&quot;
+                }
+            }
+            ,{field: 'likeCounts', title: '点赞次数', sort: true, edit: &quot;text&quot;}
+            ,{field: 'status', title: '状态', align: &quot;center&quot;, edit: &quot;text&quot;,
+                templet:function (e) {
+                    if (e.status == 1){
+                        return '正常'
+                    }else return '异常'
+                }
+            }
+            ,{field: 'createTime', title: '创建时间', sort: true, align: &quot;center&quot;, edit: &quot;text&quot;,
+                templet:function (e) {
+                    return showTime(e.createTime)
+                }
+            }
+        ]]
+    });
+});
+</code></pre>
+<h2 id="处理日期数据">处理日期数据</h2>
+<pre><code>templet:function (e) {
+                    return showTime(e.createTime)
+                }
+</code></pre>
+<h2 id="处理图片数据">处理图片数据</h2>
+<pre><code>templet:function (e) {
+                    return &quot;&lt;img src='/&quot;+e.coverPath+&quot;' /&gt;&quot;
+                }
+</code></pre>
+<h2 id="处理状态数据">处理状态数据</h2>
+<pre><code>templet:function (e) {
+                    if (e.status = 1){
+                        return '正常'
+                    }else return '异常'
+                }
+</code></pre>
+<h2 id="处理分页">处理分页</h2>
+<pre><code>// 判断是否有页数
+            console.log(this)
+            var  list1=[]
+            if(this.page.curr){
+                // （页数-1）每页多少条
+                list1 = res.list.slice((this.page.curr-1)*this.limit,this.page.curr*this.limit)
+            }else{
+                //如果页数无定义,默认从第一条开始
+                list1 = res.list.slice(0,this.limit)
+            }
+</code></pre>
+<figure data-type="image" tabindex="3"><img src="https://gblog.luciferryf.eu.org/post-images/1677052487154.png" alt="" loading="lazy"></figure>
+<ul>
+<li><strong>注意：返回return里的data也要改成list1</strong></li>
+</ul>
+<h2 id="处理视频数据">处理视频数据</h2>
+<p>方法一：（直接在表格内显示）</p>
+<pre><code>templet:function (e) {
+    return &quot;&lt;video src='/&quot;+e.videoPath+&quot;' width='200px' controls /&gt;&quot;
+}
+</code></pre>
+<p>方法二：（点击按钮，弹窗播放）</p>
+<pre><code>//视频的播放函数
+function  showVideo(src1){
+    var   videoStr = &quot;&lt;video src='/&quot;+src1+&quot;'  controls style=\&quot;width:100%;height:100%\&quot;&gt;\n&quot; +
+        &quot;\t\t\t\t\t \n&quot; +
+        &quot;\t\t&lt;/video&gt;&quot;
+    var layer = layui.layer;
+    layer.open({
+        type:1,
+        title:&quot;播放视频&quot;,
+        area:[&quot;90%&quot;,&quot;90%&quot;],
+        content:videoStr
+    })
+}
+
+templet:function (e) {
+                // return &quot;&lt;video src='/&quot;+e.videoPath+&quot;' width='200px' controls /&gt;&quot;
+                return  &quot;&lt;button class='layui-btn layui-btn-normal' onclick='showVideo(\&quot;&quot;+e.videoPath+&quot;\&quot;)'&gt;&quot;+&quot;播放&quot;+&quot;&lt;/button&gt;&quot;
+
+}
+</code></pre>
+<h2 id="单元格编辑">单元格编辑</h2>
+<p>在mydata.js中通过监听dataTable.html中的<code>table</code>标签的<code>lay-filter</code>字段来实现单元格内容的编辑。前端修改的数据通过mydata.js转变成字符串，然后通过jQuery和Ajax将数据发送到后端，后端通过@RequestMapping注解将数据映射到对应的VideoController类中的方法中，controller方法传给VideoService接口定义，VideoServiceImpl类对接口进行实现并调用Mapper接口，mapper.java通过mapper.xml文件实现对数据库的操作。操作完成后再将结果通过Mapper接口和Service接口传回给Controller方法，Controller方法判断后将结果传回到前端。</p>
+<h3 id="mydatajs">mydata.js</h3>
+<pre><code>//单元格编辑
+    table.on('edit(videoTable)',function (obj) {
+        console.log(&quot;开始单元格编辑&quot;)
+        console.log(obj.value); //得到修改后的值
+        console.log(obj.field); //当前编辑字段名
+        console.log(obj.data);  //所在行的所有数据
+        $.ajax({
+            type:&quot;post&quot;,
+            url: &quot;/video/update1&quot;,
+            data: {
+                field:obj.field,
+                value:obj.value,
+                id:obj.data.id
+            },
+            dataType:&quot;json&quot;,
+            success:function (res) {
+                if (res.message == &quot;ok&quot;){
+                    var layer = layui.layer;
+                    layer.msg(&quot;修改成功&quot;)
+                }
+            }
+        })
+        }
+    )
+</code></pre>
+<h2 id="videoservicejava">VideoService.java</h2>
+<pre><code>public int update1(String field,String value,String id);
+</code></pre>
+<h2 id="videoserviceimpljava">VideoServiceImpl.java</h2>
+<pre><code>@Override
+public int update1(String field, String value, String id) {
+    int value1 = videoMapper.update1(field, value, id);
+    return value1;
+}
+</code></pre>
+<h2 id="videomapperjava">VideoMapper.java</h2>
+<pre><code>int update1(@Param(&quot;field&quot;) String field,@Param(&quot;value&quot;) String value,@Param(&quot;id&quot;) String id);
+</code></pre>
+<h2 id="videomapperxml">VideoMapper.xml</h2>
+<pre><code>&lt;update id=&quot;update1&quot; parameterType=&quot;java.lang.String&quot;&gt;
+    update videos set
+    &lt;if test=&quot;field == 'videoDesc' &quot;&gt; video_desc = #{value,jdbcType=VARCHAR} &lt;/if&gt;
+    &lt;if test=&quot;field == 'likeCounts' &quot;&gt; like_counts = #{value,jdbcType=VARCHAR} &lt;/if&gt;
+    &lt;if test=&quot;field == 'status' &quot;&gt; status = #{value,jdbcType=VARCHAR} &lt;/if&gt;
+    where id = #{id,jdbcType=VARCHAR}
+&lt;/update&gt;
+</code></pre>
+<h2 id="videocontrollerjava">VideoController.java</h2>
+<pre><code>@RequestMapping(&quot;/update1&quot;)
+@ResponseBody
+public Result updata1(String field,String value,String id){
+    Result result = new Result();
+    System.out.println(field+&quot;...&quot;+value+&quot;...&quot;+id);
+    int i = videoService.update1(field,value,id);
+    if (i &gt; 0){
+    result.setMessage(&quot;ok&quot;);
+    }else result.setMessage(&quot;error&quot;);
+    return result;
+}
+</code></pre>
+<h2 id="测试-3">测试</h2>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E5%BC%95%E5%85%A5layui">引入layui</a>
+<ul>
+<li><a href="#layui">layui</a></li>
+<li><a href="#%E5%BC%95%E5%85%A5">引入</a></li>
+</ul>
+</li>
+<li><a href="#%E7%BC%96%E5%86%99indexhtml%E9%A1%B5%E9%9D%A2">编写index.html页面</a></li>
+<li><a href="#%E8%AE%BE%E7%BD%AEindexjsp%E8%B7%B3%E8%BD%AC%E5%88%B0indexhtml">设置index,jsp跳转到index.html</a>
+<ul>
+<li><a href="#%E7%BC%96%E5%86%99homecontroller">编写HomeController</a></li>
+<li><a href="#%E7%BC%96%E5%86%99webxml">编写web.xml</a></li>
+<li><a href="#%E6%B5%8B%E8%AF%95">测试</a></li>
+</ul>
+</li>
+<li><a href="#%E5%AE%9E%E7%8E%B0%E6%95%B0%E6%8D%AE%E8%BF%94%E5%9B%9E">实现数据返回</a>
+<ul>
+<li><a href="#%E7%BC%96%E5%86%99result%E7%B1%BB">编写Result类</a></li>
+<li><a href="#%E7%BC%96%E5%86%99videoservice%E6%8E%A5%E5%8F%A3%E4%BB%A5%E5%8F%8A%E5%AE%9E%E7%8E%B0%E7%B1%BB">编写VideoService接口以及实现类</a></li>
+<li><a href="#%E7%BC%96%E5%86%99videocontroller">编写VideoController</a></li>
+<li><a href="#%E7%BC%96%E5%86%99datatablehtml">编写DataTable.html</a></li>
+<li><a href="#%E7%BC%96%E5%86%99mydatajs">编写mydata.js</a></li>
+<li><a href="#%E6%B5%8B%E8%AF%95-2">测试</a></li>
+</ul>
+</li>
+<li><a href="#%E7%94%A8layui%E6%B8%B2%E6%9F%93%E6%98%BE%E7%A4%BA%E6%95%B0%E6%8D%AE">用layui渲染显示数据</a>
+<ul>
+<li><a href="#%E7%BC%96%E5%86%99mydatajs-2">编写mydata.js</a></li>
+<li><a href="#%E5%A4%84%E7%90%86%E6%97%A5%E6%9C%9F%E6%95%B0%E6%8D%AE">处理日期数据</a></li>
+<li><a href="#%E5%A4%84%E7%90%86%E5%9B%BE%E7%89%87%E6%95%B0%E6%8D%AE">处理图片数据</a></li>
+<li><a href="#%E5%A4%84%E7%90%86%E7%8A%B6%E6%80%81%E6%95%B0%E6%8D%AE">处理状态数据</a></li>
+<li><a href="#%E5%A4%84%E7%90%86%E5%88%86%E9%A1%B5">处理分页</a></li>
+<li><a href="#%E5%A4%84%E7%90%86%E8%A7%86%E9%A2%91%E6%95%B0%E6%8D%AE">处理视频数据</a></li>
+<li><a href="#%E5%8D%95%E5%85%83%E6%A0%BC%E7%BC%96%E8%BE%91">单元格编辑</a>
+<ul>
+<li><a href="#mydatajs">mydata.js</a></li>
+</ul>
+</li>
+<li><a href="#videoservicejava">VideoService.java</a></li>
+<li><a href="#videoserviceimpljava">VideoServiceImpl.java</a></li>
+<li><a href="#videomapperjava">VideoMapper.java</a></li>
+<li><a href="#videomapperxml">VideoMapper.xml</a></li>
+<li><a href="#videocontrollerjava">VideoController.java</a></li>
+<li><a href="#%E6%B5%8B%E8%AF%95-3">测试</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://gblog.luciferryf.eu.org/post/dy-project-3/">
+              <h3 class="post-title">
+                类似抖音的短视频管理系统+Java后端+vue前端（3）
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://gblog.luciferryf.eu.org/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

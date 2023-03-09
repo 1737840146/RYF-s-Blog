@@ -1,0 +1,507 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title> 类似抖音的短视频管理系统+Java后端+vue前端（16） | RYF&#39;s Blog</title>
+<link rel="shortcut icon" href="https://gblog.luciferryf.eu.org/favicon.ico?v=1678337464009">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://gblog.luciferryf.eu.org/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title=" 类似抖音的短视频管理系统+Java后端+vue前端（16） | RYF&#39;s Blog - Atom Feed" href="https://gblog.luciferryf.eu.org/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="外卖项目首页搭建
+
+前期准备
+安装swiper
+官网：https://3.swiper.com.cn/usage/index.html
+npm  install -i  swiper@4.5.1  -s
+
+编写路由
+在src目录下新建rou..." />
+    <meta name="keywords" content="实习项目" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://gblog.luciferryf.eu.org">
+  <img class="avatar" src="https://gblog.luciferryf.eu.org/images/avatar.png?v=1678337464009" alt="">
+  </a>
+  <h1 class="site-title">
+    RYF&#39;s Blog
+  </h1>
+  <p class="site-description">
+    远离是非圈子  回归平静生活
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/1737840146" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+               类似抖音的短视频管理系统+Java后端+vue前端（16）
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-03-01
+              </span>
+              <span>
+                7 min read
+              </span>
+              
+                <a href="https://gblog.luciferryf.eu.org/tag/jmh76P6JN/" class="post-tag">
+                  # 实习项目
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://gblog.luciferryf.eu.org/post-images/dy-project-16.png" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <p>外卖项目首页搭建</p>
+<!-- more -->
+<h1 id="前期准备">前期准备</h1>
+<h2 id="安装swiper">安装swiper</h2>
+<p>官网：https://3.swiper.com.cn/usage/index.html</p>
+<pre><code class="language-cmd">npm  install -i  swiper@4.5.1  -s
+</code></pre>
+<h2 id="编写路由">编写路由</h2>
+<p>在src目录下新建router目录，并新建index.js<br>
+在views下新建三个vue，分别是Home、Order、My</p>
+<pre><code class="language-js">import Vue from 'vue'
+import VueRouter from 'vue-router'
+import HomeView from '../views/HomeView.vue'
+import Home from '../views/Home.vue'
+
+Vue.use(VueRouter)
+
+const routes = [
+  {
+    path: '/',
+    name: 'home',
+    component: Home
+  },
+  {
+    path: '/order',
+    name: 'order',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =&gt; import(/* webpackChunkName: &quot;about&quot; */ '../views/Order.vue')
+  },
+  {
+    path: '/my',
+    name: 'my',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =&gt; import(/* webpackChunkName: &quot;about&quot; */ '../views/My.vue')
+  }
+]
+
+const router = new VueRouter({
+  mode: 'history',
+  base: process.env.BASE_URL,
+  routes
+})
+
+export default router
+</code></pre>
+<h1 id="底部主栏">底部主栏</h1>
+<p>新建NavButtom.vue</p>
+<pre><code class="language-html">&lt;template&gt;
+	&lt;div  class=&quot;nav-bottom&quot;&gt;
+		&lt;router-link to=&quot;/&quot;&gt;
+			&lt;i&gt;首页&lt;/i&gt;
+		&lt;/router-link&gt;
+		&lt;router-link to=&quot;/order&quot;&gt;
+			&lt;i&gt;订单&lt;/i&gt;
+		&lt;/router-link&gt;
+		&lt;router-link to=&quot;/my&quot;&gt;
+			&lt;i&gt;我的&lt;/i&gt;
+		&lt;/router-link&gt;
+	&lt;/div&gt;
+	
+&lt;/template&gt;
+
+&lt;script&gt;
+&lt;/script&gt;
+
+&lt;style&gt;
+	.nav-bottom{
+		width:100%;
+		height:40px;
+		background-color: antiquewhite;
+		position: fixed;
+		bottom: 0;
+		display: flex;
+	}
+	
+	.nav-bottom a{
+		display: block;
+		width:33%;
+		flex:1;
+		text-decoration: none;
+		line-height: 40px;
+		text-align: center;
+	/* 	width:200px; */
+	}
+	
+&lt;/style&gt;
+</code></pre>
+<p>在App.vue里引入NavButtom</p>
+<pre><code class="language-html">&lt;template&gt;
+  &lt;div id=&quot;app&quot;&gt;
+	  &lt;NavBottom&gt;&lt;/NavBottom&gt;
+    &lt;router-view/&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+&lt;script&gt;
+	import NavBottom from &quot;@/components/NavButtom.vue&quot;
+	export default{
+		&quot;name&quot;:&quot;app&quot;,
+		data:function(){
+			return{
+				
+			}
+		},
+		components:{
+			NavBottom
+		}
+	}
+	
+&lt;/script&gt;
+
+&lt;style&gt;
+  *{
+	  margin:0;
+	  padding:0;
+  }
+&lt;/style&gt;
+</code></pre>
+<p>效果<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677659995811.png" alt="" loading="lazy"></p>
+<h1 id="轮播图">轮播图</h1>
+<p>新建Banner.vue</p>
+<pre><code class="language-html">&lt;template&gt;
+		&lt;div class=&quot;banner&quot;&gt; 
+		&lt;!--  绑定src属性 --&gt;
+		&lt;!-- &lt;img :src=&quot;imgs[myindex]&quot; /&gt; --&gt;
+			&lt;div class=&quot;swiper-container&quot;&gt;
+				&lt;div class=&quot;swiper-wrapper&quot;&gt;
+					&lt;div class=&quot;swiper-slide&quot;&gt;
+						&lt;img :src=&quot;imgs[0]&quot; alt=&quot;&quot;&gt;
+					&lt;/div&gt;
+					&lt;div class=&quot;swiper-slide&quot;&gt;
+						&lt;img :src=&quot;imgs[1]&quot; alt=&quot;&quot;&gt;
+					&lt;/div&gt;
+					&lt;div class=&quot;swiper-slide&quot;&gt;
+						&lt;img :src=&quot;imgs[2]&quot; alt=&quot;&quot;&gt;
+					&lt;/div&gt;
+				&lt;/div&gt;
+				&lt;!-- 如果需要分页器 --&gt;
+				&lt;div class=&quot;swiper-pagination&quot;&gt;&lt;/div&gt;
+				
+				&lt;!-- 如果需要导航按钮 --&gt;
+				&lt;div class=&quot;swiper-button-prev&quot;&gt;&lt;/div&gt;
+				&lt;div class=&quot;swiper-button-next&quot;&gt;&lt;/div&gt;
+				
+				&lt;!-- 如果需要滚动条 --&gt;
+				&lt;div class=&quot;swiper-scrollbar&quot;&gt;&lt;/div&gt;
+			&lt;/div&gt;
+		&lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+	import Swiper from 'swiper'
+	import 'swiper/dist/css/swiper.css'
+		export default{
+			name:&quot;banner&quot;,
+			data:function(){
+				return {
+					imgs:[
+						require(&quot;@/assets/banner/banner1.jpg&quot;),
+						require(&quot;@/assets/banner/banner2.jpg&quot;),
+						require(&quot;@/assets/banner/banner3.jpg&quot;)
+						
+					],
+					myindex:0
+				}
+			},
+			mounted() {
+				var that = this
+				var mySwiper = new Swiper ('.swiper-container', {
+				    // 图片的滚动方向
+					// direction: 'vertical',
+					speed:1000,
+					autoplay:{
+						delay:3000
+					},
+					autoplay:true,
+				    loop: true,
+				    
+				    // 如果需要分页器
+				    pagination:{
+						el:'.swiper-pagination'
+					},
+				    
+				    // 如果需要前进后退按钮
+				    navigation: {
+						nextEl:'.swiper-button-next',
+						prevEl:'.swiper-button-prev'
+					},
+				    
+				    // 如果需要滚动条
+				    scrollbar: {
+						el:'.swiper-scrollbar'
+					},
+				  })        
+			}
+		}
+&lt;/script&gt;
+&lt;style&gt;
+		.banner{
+			width:100%;
+			/* position: fixed; */
+		}
+		img{
+			width:100%;
+			height: 150px;
+		}
+&lt;/style&gt;
+</code></pre>
+<p>效果<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677660170951.png" alt="" loading="lazy"></p>
+<h1 id="推荐">推荐</h1>
+<p>新建catogery.vue</p>
+<pre><code class="language-html">&lt;template&gt;
+	&lt;div class=&quot;catogery&quot;&gt;
+		&lt;ul&gt;
+			&lt;li v-for=&quot;(item,index) in subjects&quot;&gt;
+				&lt;img :src=&quot;item.pic&quot; alt=&quot;&quot; @click=&quot;changeType(index)&quot;&gt;
+				&lt;div&gt;
+					&lt;label for=&quot;&quot;&gt;{{item.subject}}&lt;/label&gt;
+				&lt;/div&gt;
+			&lt;/li&gt;
+			
+		&lt;/ul&gt;
+	&lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+	export default{
+		name:&quot;catogery&quot;,
+		data:function(){
+			return{
+				subjects:[
+					{subject:&quot;热门&quot;,pic:require('@/assets/catogery/hot.png')}
+				,  {subject:&quot;披萨&quot;,pic:require('@/assets/catogery/liulian.jpg')}
+				,  {subject:&quot;皮蛋瘦肉粥&quot;,pic:require('@/assets/catogery/zhou.jpg')}
+				,	{subject:&quot;饺子馄饨&quot;,pic:require('@/assets/catogery/jiaozi.jpg')}
+				,  {subject:&quot;披萨&quot;,pic:require('@/assets/catogery/liulian.jpg')}
+				,  {subject:&quot;皮蛋瘦肉粥&quot;,pic:require('@/assets/catogery/zhou.jpg')}
+				]
+
+			}
+		},
+		methods:{
+			changeType:function(data){
+				console.log(&quot;.....&quot;+data)
+			}
+		}
+	}
+&lt;/script&gt;
+
+&lt;style&gt;
+	.catogery{
+		/* margin-top: 150px; */
+		width: 100%;
+		height: 140px;
+		background: whitesmoke;
+		position: absolute;
+	}
+	.catogery ul{
+		display: flex;
+		flex-wrap: wrap;
+		font-size: 12px;
+		justify-content: space-around;
+	}
+	.catogery ul li{
+		width: 30%;
+		text-align: center;
+		list-style: none;
+	}
+	.catogery ul li img{
+		width: 45px;
+		height: 45px;
+		border-radius: 20%;
+	}
+&lt;/style&gt;
+</code></pre>
+<p>在home中引入Banner和catogery</p>
+<pre><code class="language-html">&lt;template&gt;
+	&lt;div class=&quot;home&quot;&gt;
+		&lt;Banner&gt;&lt;/Banner&gt;
+		&lt;Catogery&gt;&lt;/Catogery&gt;
+		&lt;router-view/&gt;
+	&lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+	import Banner from &quot;@/components/Banner.vue&quot;
+	import Catogery from &quot;@/components/catogery.vue&quot;
+	export default{
+		&quot;name&quot;:&quot;home&quot;,
+		data:function(){
+			return{
+				
+			}
+		},
+		components:{
+			Banner,
+			Catogery
+		}
+	}
+&lt;/script&gt;
+
+&lt;style&gt;
+	.home{
+		height: 900px;
+	}
+&lt;/style&gt;
+</code></pre>
+<p>效果<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1677660335163.png" alt="" loading="lazy"></p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E5%89%8D%E6%9C%9F%E5%87%86%E5%A4%87">前期准备</a>
+<ul>
+<li><a href="#%E5%AE%89%E8%A3%85swiper">安装swiper</a></li>
+<li><a href="#%E7%BC%96%E5%86%99%E8%B7%AF%E7%94%B1">编写路由</a></li>
+</ul>
+</li>
+<li><a href="#%E5%BA%95%E9%83%A8%E4%B8%BB%E6%A0%8F">底部主栏</a></li>
+<li><a href="#%E8%BD%AE%E6%92%AD%E5%9B%BE">轮播图</a></li>
+<li><a href="#%E6%8E%A8%E8%8D%90">推荐</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://gblog.luciferryf.eu.org/post/dy-project-15/">
+              <h3 class="post-title">
+                类似抖音的短视频管理系统+Java后端+vue前端（15）
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://gblog.luciferryf.eu.org/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

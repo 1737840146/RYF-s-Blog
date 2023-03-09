@@ -1,0 +1,497 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>类似抖音的短视频管理系统+Java后端+vue前端（3） | RYF&#39;s Blog</title>
+<link rel="shortcut icon" href="https://gblog.luciferryf.eu.org/favicon.ico?v=1678337464009">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://gblog.luciferryf.eu.org/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="类似抖音的短视频管理系统+Java后端+vue前端（3） | RYF&#39;s Blog - Atom Feed" href="https://gblog.luciferryf.eu.org/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="进行springMVC的配置，用于检测接受前端发来的消息并传输给后台。并进行消息传递的测试。
+
+配置springmvc配置文件spring-mvc.xml
+&lt;!--.jsp页面或者是.html页面，往后台传输消息--&gt;
+    ..." />
+    <meta name="keywords" content="实习项目" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://gblog.luciferryf.eu.org">
+  <img class="avatar" src="https://gblog.luciferryf.eu.org/images/avatar.png?v=1678337464009" alt="">
+  </a>
+  <h1 class="site-title">
+    RYF&#39;s Blog
+  </h1>
+  <p class="site-description">
+    远离是非圈子  回归平静生活
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/1737840146" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              类似抖音的短视频管理系统+Java后端+vue前端（3）
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-02-21
+              </span>
+              <span>
+                12 min read
+              </span>
+              
+                <a href="https://gblog.luciferryf.eu.org/tag/jmh76P6JN/" class="post-tag">
+                  # 实习项目
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://gblog.luciferryf.eu.org/post-images/dy-project-3.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <p>进行springMVC的配置，用于检测接受前端发来的消息并传输给后台。并进行消息传递的测试。</p>
+<!-- more -->
+<h1 id="配置springmvc配置文件spring-mvcxml"><strong>配置springmvc配置文件spring-mvc.xml</strong></h1>
+<pre><code>&lt;!--.jsp页面或者是.html页面，往后台传输消息--&gt;
+    &lt;!--配置Spring的扫描器   给带有特定注解bean注册到容器中--&gt;
+    &lt;context:component-scan base-package=&quot;com.qf.dy.controller&quot;&gt;
+    &lt;/context:component-scan&gt;
+    &lt;!-- 注册spring mvc的注解驱动，只有注册了springmvc才能使用完整的注解功能 --&gt;
+    &lt;!--可以驱动注解将  List  Map  或者自定义的类转化为json格式  --&gt;
+    &lt;mvc:annotation-driven&gt;
+        &lt;mvc:message-converters register-defaults=&quot;true&quot;&gt;
+            &lt;!-- 将StringHttpMessageConverter的默认编码设为UTF-8 --&gt;
+            &lt;bean class=&quot;org.springframework.http.converter.StringHttpMessageConverter&quot;&gt;
+                &lt;constructor-arg value=&quot;UTF-8&quot;/&gt;
+            &lt;/bean&gt;
+            &lt;bean class=&quot;org.springframework.http.converter.ByteArrayHttpMessageConverter&quot;/&gt;
+            &lt;!-- 将Jackson2HttpMessageConverter的默认格式化输出设为true --&gt;
+            &lt;bean class=&quot;org.springframework.http.converter.json.MappingJackson2HttpMessageConverter&quot;&gt;
+                &lt;property name=&quot;prettyPrint&quot; value=&quot;true&quot;/&gt;
+                &lt;!-- 避免IE执行AJAX时,返回JSON出现下载文件 --&gt;
+                &lt;property name=&quot;supportedMediaTypes&quot;&gt;
+                    &lt;list&gt;
+                        &lt;value&gt;application/json;charset=UTF-8&lt;/value&gt;
+                        &lt;value&gt;text/html;charset=UTF-8&lt;/value&gt;
+                    &lt;/list&gt;
+                &lt;/property&gt;
+            &lt;/bean&gt;
+        &lt;/mvc:message-converters&gt;
+    &lt;/mvc:annotation-driven&gt;
+&lt;!--  给返回前端的消息  加上 前缀/WEB-INF/templates/ login2.html（后缀 .html）  --&gt;
+&lt;bean id=&quot;templateResolver&quot;
+      class=&quot;org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver&quot;&gt;
+    &lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/templates/&quot;/&gt;
+    &lt;property name=&quot;suffix&quot; value=&quot;.html&quot;/&gt;
+    &lt;property name=&quot;characterEncoding&quot; value=&quot;UTF-8&quot;/&gt;
+    &lt;property name=&quot;order&quot; value=&quot;1&quot;/&gt;
+    &lt;property name=&quot;templateMode&quot; value=&quot;HTML5&quot;/&gt;
+    &lt;property name=&quot;cacheable&quot; value=&quot;false&quot;/&gt;
+&lt;/bean&gt;
+    &lt;bean id=&quot;templateEngine&quot;
+      class=&quot;org.thymeleaf.spring5.SpringTemplateEngine&quot;&gt;
+    &lt;property name=&quot;templateResolver&quot; ref=&quot;templateResolver&quot;/&gt;
+&lt;/bean&gt;
+&lt;bean id=&quot;viewResolver&quot; class=&quot;org.thymeleaf.spring5.view.ThymeleafViewResolver&quot;&gt;
+    &lt;property name=&quot;templateEngine&quot; ref=&quot;templateEngine&quot;/&gt;
+    &lt;property name=&quot;characterEncoding&quot; value=&quot;UTF-8&quot;/&gt;
+&lt;/bean&gt;
+    &lt;!--所有静态资源需要重新映射 --&gt;
+    &lt;mvc:resources location=&quot;/WEB-INF/js/&quot; mapping=&quot;/js/**&quot;&gt;
+    &lt;/mvc:resources&gt;
+    &lt;mvc:resources location=&quot;/WEB-INF/css/&quot; mapping=&quot;/css/**&quot;&gt;
+    &lt;/mvc:resources&gt;
+    &lt;mvc:resources location=&quot;/WEB-INF/img/&quot; mapping=&quot;/img/**&quot;&gt;
+    &lt;/mvc:resources&gt;
+    &lt;mvc:resources location=&quot;/WEB-INF/templates/&quot; mapping=&quot;/templates/**&quot;&gt;
+    &lt;/mvc:resources&gt;
+    &lt;mvc:resources location=&quot;/WEB-INF/layui/&quot; mapping=&quot;/layui/**&quot;&gt;
+    &lt;/mvc:resources&gt;
+    &lt;mvc:resources location=&quot;/WEB-INF/video/&quot; mapping=&quot;/video/**&quot;&gt;
+    &lt;/mvc:resources&gt;
+    &lt;mvc:resources location=&quot;/WEB-INF/bgm/&quot; mapping=&quot;/bgm/**&quot;&gt;
+    &lt;/mvc:resources&gt;
+    &lt;!-- 文件上传 的大小设置--&gt;
+    &lt;!-- 文件上传--&gt;
+    &lt;!--配置文件上传使用解析器--&gt;
+    &lt;bean id=&quot;multipartResolver&quot; class=&quot;org.springframework.web.multipart.commons.CommonsMultipartResolver&quot;&gt;
+        &lt;!-- 指定字符集为utf-8 --&gt;
+        &lt;property name=&quot;defaultEncoding&quot; value=&quot;UTF-8&quot;&gt;&lt;/property&gt;
+        &lt;!-- 文件大小最大值 --&gt;
+        &lt;property name=&quot;maxUploadSize&quot; value=&quot;10485760000&quot;/&gt;
+        &lt;!-- 内存中的最大值 --&gt;
+        &lt;property name=&quot;maxInMemorySize&quot; value=&quot;40960&quot;/&gt;
+    &lt;/bean&gt;
+</code></pre>
+<h1 id="配置web-inf目录下的子目录"><strong>配置WEB-INF目录下的子目录</strong></h1>
+<figure data-type="image" tabindex="1"><img src="https://gblog.luciferryf.eu.org/post-images/1676961497697.png" alt="" loading="lazy"></figure>
+<h1 id="配置webxml"><strong>配置web.xml</strong></h1>
+<pre><code>&lt;!--  定义spring相关的配置文件路径，除了springmvc之外的 --&gt;
+&lt;context-param&gt;
+    &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+    &lt;param-value&gt;classpath:spring-mybatis.xml&lt;/param-value&gt;
+&lt;/context-param&gt;
+
+&lt;!--用于处理post请求中文乱码的过滤器 --&gt;
+&lt;filter&gt;
+    &lt;filter-name&gt;springUtf8Encoding&lt;/filter-name&gt;
+    &lt;filter-class&gt;org.springframework.web.filter.CharacterEncodingFilter&lt;/filter-class&gt;
+    &lt;init-param&gt;
+    &lt;param-name&gt;encoding&lt;/param-name&gt;
+    &lt;param-value&gt;UTF-8&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;init-param&gt;
+    &lt;param-name&gt;forceEncoding&lt;/param-name&gt;
+    &lt;param-value&gt;true&lt;/param-value&gt;
+    &lt;/init-param&gt;
+&lt;/filter&gt;
+&lt;filter-mapping&gt;
+    &lt;filter-name&gt;springUtf8Encoding&lt;/filter-name&gt;
+    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+&lt;/filter-mapping&gt;
+
+&lt;!--配置的是Spring的监听器 --&gt;
+&lt;listener&gt;
+    &lt;listener-class&gt;org.springframework.web.context.ContextLoaderListener&lt;/listener-class&gt;
+&lt;/listener&gt;
+
+&lt;!--配置servlet(springMVC)的拦截 --&gt;
+&lt;servlet&gt;
+    &lt;servlet-name&gt;DispatcherServlet&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+    &lt;init-param&gt;
+    &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+    &lt;param-value&gt;classpath:spring-mvc.xml&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;!--当应用启动时加载该servlet --&gt;
+    &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+&lt;/servlet&gt;
+&lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;DispatcherServlet&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+
+&lt;welcome-file-list&gt;
+    &lt;welcome-file&gt;index.jsp&lt;/welcome-file&gt;
+&lt;/welcome-file-list&gt;
+</code></pre>
+<h1 id="新建一个inforhtml文件"><strong>新建一个infor.html文件</strong></h1>
+<p>在templates文件夹下新建，然后随便写点内容</p>
+<h1 id="将jqueryminjs文件放入js文件夹中"><strong>将jquery.min.js文件放入js文件夹中</strong></h1>
+<h1 id="在controller目录下创建一个testcontroller文件"><strong>在controller目录下创建一个TestController文件</strong></h1>
+<p>编写TestController文件<br>
+在TestController类上添加注解</p>
+<pre><code>@Controller
+@RequestMapping(&quot;/test&quot;)
+</code></pre>
+<h1 id="编写indexjsp文件"><strong>编写index.jsp文件</strong></h1>
+<pre><code>&lt;%@page contentType=&quot;text/html; charset=utf-8&quot; language=&quot;java&quot; %&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h2&gt;Hello World!&lt;/h2&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h1 id="编写测试类"><strong>编写测试类</strong></h1>
+<h2 id="测试页面跳转">测试页面跳转</h2>
+<p>TestControlles.java</p>
+<pre><code>@RequestMapping(&quot;/mytest1&quot;)
+public String Mytest1(String username){
+    System.out.println(&quot;hahahaha,username=&quot;+username);
+    return &quot;infor&quot;;
+}
+</code></pre>
+<p>index.jsp</p>
+<pre><code>&lt;%-- 根项目名  --%&gt;
+&lt;a href=&quot;/test/mytest1?username=嘿嘿嘿&quot;&gt; 访问后台&lt;/a&gt;
+</code></pre>
+<h2 id="测试将后端的信息传送到前端">测试将后端的信息传送到前端</h2>
+<p>TestControlles.java</p>
+<pre><code>@RequestMapping(&quot;/mytest2&quot;)
+@ResponseBody
+public Map Muytest2(String username){
+    System.out.println(&quot;哈哈哈我是卖报的小行家：username=&quot;+username);
+    Map map = new HashMap();
+    map.put(&quot;message&quot;,&quot;收到信息&quot;);
+    //注解驱动将Map自动转化为json格式返回给前端
+    return map;
+}
+</code></pre>
+<p>index.jsp</p>
+<pre><code>&lt;%--     导入jquery的包--%&gt;
+    &lt;script src=&quot;/js/jquery.min.js&quot;&gt;&lt;/script&gt;
+&lt;button onclick=&quot;gotoPage()&quot;&gt;访问后台&lt;/button&gt;
+&lt;script&gt;
+    function gotoPage() {
+        //ajax (局部刷新 ,通过局部的标签访问后台，实现部分内容刷新)
+        $.ajax({
+            url:&quot;/test/mytest2&quot;,
+            type:&quot;get&quot;,
+            dataType:&quot;json&quot;,
+            data:{
+                username:&quot;咖啡不加糖，人人都是高启强&quot;
+            },
+            // 在前端处理后台返回的数据
+            // success叫做回调函数
+            success:function (res) {
+                // 在前端输出后台返回的数据
+                console.log(res)
+                if (res.message==&quot;收到信息&quot;){
+                    window.location = &quot;#&quot;
+                }
+            }
+        })
+    }
+&lt;/script&gt;
+</code></pre>
+<h2 id="测试用thymeleaf显示存储的值">测试用thymeleaf显示存储的值</h2>
+<p>TestControlles.java</p>
+<pre><code>@RequestMapping(&quot;/mytest3&quot;)
+    @ResponseBody
+    public ModelAndView mytest3(String username){
+        //通过jsp方式
+        List&lt;Users&gt; users  = usersMapper.selectAll();
+        System.out.println(users);
+        ModelAndView modelAndView = new ModelAndView();
+        //设置跳转页面
+        modelAndView.setViewName(&quot;infor&quot;);
+        //存储查询到的所有信息
+        modelAndView.addObject(&quot;list&quot;,users);
+        return  modelAndView;
+}
+</code></pre>
+<p>index.jsp</p>
+<pre><code>&lt;button onclick=&quot;gotoPage2()&quot;&gt;访问后台&lt;/button&gt;
+&lt;script&gt;
+        function gotoPage2() {
+        //ajax (局部刷新 ,通过局部的标签访问后台，实现部分内容刷新)
+    window.location=&quot;/test/mytest3&quot;
+    }
+&lt;/script&gt;
+</code></pre>
+<p>info.html</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot; xmlns:th=&quot;http://www.thymeleaf.org&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;info.html&lt;/h1&gt;
+&lt;ul&gt;
+    &lt;li th:each=&quot;resouce:${list}&quot;&gt;
+        &lt;h1 th:text=&quot;${resouce}&quot;&gt;&lt;/h1&gt;
+        &lt;hr/&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h2 id="测试把videos的数据显示到indexjsp">测试把videos的数据显示到index.jsp</h2>
+<p>TestControlles.java</p>
+<pre><code>@RequestMapping(&quot;/mytest4&quot;)
+@ResponseBody
+public List&lt;Users&gt; Muytest4(String username){
+    List&lt;Users&gt; users = usersMapper.selectAll();
+    Map map = new HashMap();
+    //注解驱动将users自动转化为json格式返回给前端
+    return users;
+}
+</code></pre>
+<p>index.jsp</p>
+<pre><code>&lt;button onclick=&quot;gotoPage()&quot;&gt;访问后台&lt;/button&gt;
+&lt;table border=&quot;1&quot; id=&quot;mytable&quot;&gt;
+&lt;/table&gt;
+&lt;script&gt;
+    function gotoPage() {
+        //ajax (局部刷新 ,通过局部的标签访问后台，实现部分内容刷新)
+    $.ajax({
+                url:&quot;/sxgc/test/mytest4&quot;,
+                type:&quot;get&quot;,
+                dataType:&quot;json&quot;,
+                data:{},
+                // 在前端处理后台返回的数据
+                // success叫做回调函数
+                success:function (res) {
+                    // 在前端输出后台返回的数据
+                    console.log(res)
+                    var innerHTML = &quot;&lt;tr&gt;&quot;+
+                                    &quot;&lt;td&gt;&quot;+ &quot;id&quot;+&quot;&lt;/td&gt;&quot;+
+                                    &quot;&lt;td&gt;&quot;+ &quot;用户名&quot;+&quot;&lt;/td&gt;&quot;+
+                                    &quot;&lt;td&gt;&quot;+ &quot;昵称&quot;+&quot;&lt;/td&gt;&quot;+
+                                    &quot;&lt;/tr&gt;&quot;
+                    for (var i=0;i&lt;res.length;i++){
+                        innerHTML =innerHTML+ &quot;&lt;tr&gt;&quot;+
+                                    &quot;&lt;td&gt;&quot;+ res[i].id+&quot;&lt;/td&gt;&quot;+
+                                    &quot;&lt;td&gt;&quot;+ res[i].username+&quot;&lt;/td&gt;&quot;+
+                                    &quot;&lt;td&gt;&quot;+ res[i].nickname+&quot;&lt;/td&gt;&quot;+
+                                    &quot;&lt;/tr&gt;&quot;
+                    }
+                    $(&quot;#mytable&quot;).html(innerHTML)
+        }
+    })
+    }
+&lt;/script&gt;
+</code></pre>
+<h1 id="启动服务器"><strong>启动服务器</strong></h1>
+<p>查看消息传输情况</p>
+<h1 id="qa"><strong>Q&amp;A</strong></h1>
+<ol>
+<li>Q：<code>21-Feb-2023 15:58:07.365 严重 [RMI TCP Connection(4)-127.0.0.1] org.apache.tomcat.util.modeler.BaseModelMBean.invoke 调用方法[manageApp]时发生异常</code><br>
+A：运行maven插件中的clean和compile<br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1676971486814.png" alt="" loading="lazy"></li>
+<li>Q：<code>Caused by: java.lang.IllegalArgumentException: 找到多个名为spring_web的片段。这是不合法的相对排序。有关详细信息，请参阅Servlet规范的第8.2.2 2c节。考虑使用绝对排序。</code><br>
+A：同1或者在web.xml文件的<code>&lt;display-name&gt;</code>标签下加入<code>&lt;absolute-ordering /&gt;</code></li>
+<li>Q：<code>严重 [RMI TCP Connection(5)-127.0.0.1] org.apache.catalina.core.StandardContext.startInternal 一个或多个listeners启动失败，更多详细信息查看对应的容器日志文件</code><br>
+A：mybaits-config.xml文件中必须要有<settings></settings><br>
+<img src="https://gblog.luciferryf.eu.org/post-images/1676975638059.png" alt="" loading="lazy"></li>
+</ol>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E9%85%8D%E7%BD%AEspringmvc%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6spring-mvcxml"><strong>配置springmvc配置文件spring-mvc.xml</strong></a></li>
+<li><a href="#%E9%85%8D%E7%BD%AEweb-inf%E7%9B%AE%E5%BD%95%E4%B8%8B%E7%9A%84%E5%AD%90%E7%9B%AE%E5%BD%95"><strong>配置WEB-INF目录下的子目录</strong></a></li>
+<li><a href="#%E9%85%8D%E7%BD%AEwebxml"><strong>配置web.xml</strong></a></li>
+<li><a href="#%E6%96%B0%E5%BB%BA%E4%B8%80%E4%B8%AAinforhtml%E6%96%87%E4%BB%B6"><strong>新建一个infor.html文件</strong></a></li>
+<li><a href="#%E5%B0%86jqueryminjs%E6%96%87%E4%BB%B6%E6%94%BE%E5%85%A5js%E6%96%87%E4%BB%B6%E5%A4%B9%E4%B8%AD"><strong>将jquery.min.js文件放入js文件夹中</strong></a></li>
+<li><a href="#%E5%9C%A8controller%E7%9B%AE%E5%BD%95%E4%B8%8B%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AAtestcontroller%E6%96%87%E4%BB%B6"><strong>在controller目录下创建一个TestController文件</strong></a></li>
+<li><a href="#%E7%BC%96%E5%86%99indexjsp%E6%96%87%E4%BB%B6"><strong>编写index.jsp文件</strong></a></li>
+<li><a href="#%E7%BC%96%E5%86%99%E6%B5%8B%E8%AF%95%E7%B1%BB"><strong>编写测试类</strong></a>
+<ul>
+<li><a href="#%E6%B5%8B%E8%AF%95%E9%A1%B5%E9%9D%A2%E8%B7%B3%E8%BD%AC">测试页面跳转</a></li>
+<li><a href="#%E6%B5%8B%E8%AF%95%E5%B0%86%E5%90%8E%E7%AB%AF%E7%9A%84%E4%BF%A1%E6%81%AF%E4%BC%A0%E9%80%81%E5%88%B0%E5%89%8D%E7%AB%AF">测试将后端的信息传送到前端</a></li>
+<li><a href="#%E6%B5%8B%E8%AF%95%E7%94%A8thymeleaf%E6%98%BE%E7%A4%BA%E5%AD%98%E5%82%A8%E7%9A%84%E5%80%BC">测试用thymeleaf显示存储的值</a></li>
+<li><a href="#%E6%B5%8B%E8%AF%95%E6%8A%8Avideos%E7%9A%84%E6%95%B0%E6%8D%AE%E6%98%BE%E7%A4%BA%E5%88%B0indexjsp">测试把videos的数据显示到index.jsp</a></li>
+</ul>
+</li>
+<li><a href="#%E5%90%AF%E5%8A%A8%E6%9C%8D%E5%8A%A1%E5%99%A8"><strong>启动服务器</strong></a></li>
+<li><a href="#qa"><strong>Q&amp;A</strong></a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://gblog.luciferryf.eu.org/post/dy-project-2/">
+              <h3 class="post-title">
+                类似抖音的短视频管理系统+Java后端+vue前端（2）
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://gblog.luciferryf.eu.org/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,383 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>类似抖音的短视频管理系统+Java后端+vue前端（14） | RYF&#39;s Blog</title>
+<link rel="shortcut icon" href="https://gblog.luciferryf.eu.org/favicon.ico?v=1678337464009">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://gblog.luciferryf.eu.org/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="类似抖音的短视频管理系统+Java后端+vue前端（14） | RYF&#39;s Blog - Atom Feed" href="https://gblog.luciferryf.eu.org/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="vue基础语法
+
+vue项目框架
+
+新建vue.config.js
+let path = require('path')
+const {defineConfig} =  require('@vue/cli-service')
+module...." />
+    <meta name="keywords" content="实习项目" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://gblog.luciferryf.eu.org">
+  <img class="avatar" src="https://gblog.luciferryf.eu.org/images/avatar.png?v=1678337464009" alt="">
+  </a>
+  <h1 class="site-title">
+    RYF&#39;s Blog
+  </h1>
+  <p class="site-description">
+    远离是非圈子  回归平静生活
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/1737840146" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              类似抖音的短视频管理系统+Java后端+vue前端（14）
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-02-27
+              </span>
+              <span>
+                5 min read
+              </span>
+              
+                <a href="https://gblog.luciferryf.eu.org/tag/jmh76P6JN/" class="post-tag">
+                  # 实习项目
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://gblog.luciferryf.eu.org/post-images/dy-project-14.png" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <p>vue基础语法</p>
+<!-- more -->
+<h1 id="vue项目框架">vue项目框架</h1>
+<figure data-type="image" tabindex="1"><img src="https://gblog.luciferryf.eu.org/post-images/1677465329256.jpg" alt="" loading="lazy"></figure>
+<h1 id="新建vueconfigjs">新建vue.config.js</h1>
+<pre><code class="language-js">let path = require('path')
+const {defineConfig} =  require('@vue/cli-service')
+module.exports = defineConfig({  
+    devServer: {
+        open: true,
+        host: 'localhost',
+        port: '9999',
+		historyApiFallback:true,
+		allowedHosts:&quot;all&quot;,
+		client:{
+			webSocketURL:'ws://0.0.0.0:9999/ws'
+		},
+		headers:{
+			'Access-Control-Allow-Origin':'*'
+		},
+		proxy: {
+			'/': {
+				target: 'http://localhost:3000', // 要请求springboot 后端的地址		      
+				changeOrigin: true,
+				pathRewrite: {
+					'^/': '/'
+				},
+				ws:false
+			}
+		}						//解决跨域问题
+    },
+	configureWebpack:(config)=&gt;{
+		config.resolve = {
+			extensions:['.js','.json','.vue'],
+			alias:{
+				'@':path.resolve(__dirname,'./src')
+			}		
+		}		
+	}
+});
+</code></pre>
+<h1 id="新建app1vue并在mainjs中添加">新建App1.vue并在main.js中添加</h1>
+<figure data-type="image" tabindex="2"><img src="https://gblog.luciferryf.eu.org/post-images/1677467071592.png" alt="" loading="lazy"></figure>
+<pre><code class="language-html">&lt;template&gt;
+  &lt;div id=&quot;app&quot;&gt;
+	  &lt;!-- {{插值表达式}} --&gt;
+	  &lt;!-- 以vue结尾的叫组件 --&gt;
+	  &lt;h1&gt;{{msg}}&lt;/h1&gt;
+	  &lt;ul&gt;
+		  &lt;!-- v-for 循环遍历数组 --&gt;
+		  &lt;li v-for=&quot;item in array&quot;&gt;
+			  {{item}}
+		  &lt;/li&gt;
+	  &lt;/ul&gt;
+	  &lt;!-- v-if 控制标签的显示与消失 --&gt;
+	  &lt;img v-if=&quot;flag&quot; :src=&quot;picUrl&quot; id=&quot;img1&quot;/&gt;
+	  &lt;!-- v- 控制标签的显示与隐藏 --&gt;
+	  &lt;img v-show=&quot;flag&quot; :src=&quot;picUrl1&quot;/&gt;
+	  &lt;!-- vue中的点击事件 --&gt;
+	  &lt;button v-on:click=&quot;flag =! flag&quot;&gt;显示与隐藏&lt;/button&gt;
+	  &lt;button @click=&quot;flag =! flag&quot;&gt;点击事件简写方式&lt;/button&gt;
+	  &lt;!-- v-html可以将标签元素嵌入到元素当中 --&gt;
+	  &lt;!-- v-bind:class样式属性绑定，样式是否存在由isActive决定--&gt;
+	  &lt;div v-html=&quot;myhtml1&quot; v-bind:class=&quot;{myborder:isActive}&quot;&gt;
+		  234234
+	  &lt;/div&gt;
+	  &lt;button @click=&quot;myAlert()&quot;&gt;点击弹出窗口&lt;/button&gt;
+	  &lt;!-- 实现双向数据绑定 --&gt;
+	  &lt;!-- v-model是语法优化 --&gt;
+	  &lt;!-- @keydown.enter 按下回车 --&gt;
+	  &lt;br /&gt;
+	  {{msg1}} 
+	  &lt;br /&gt;
+	  &lt;input v-model=&quot;msg1&quot; @keydown.enter=&quot;myAlert()&quot;/&gt;
+	  &lt;br/&gt;
+	  {{reverseMsg}}
+	  &lt;br /&gt;	  
+	  &lt;button @click=&quot;getJoke()&quot;&gt;笑话&lt;/button&gt;
+	  &lt;table border=&quot;1&quot;&gt;
+		  &lt;tr v-for=&quot;joke in msg2&quot;&gt;
+			  &lt;td&gt;
+				  {{joke}}
+			  &lt;/td&gt;
+			   
+		  &lt;/tr&gt;
+	  &lt;/table&gt;
+	  &lt;br /&gt;
+	  &lt;button @click=&quot;getVideo()&quot;&gt;笑话&lt;/button&gt;
+	  &lt;table border=&quot;1&quot;&gt;
+	  		  &lt;tr v-for=&quot;video in msg3&quot;&gt;
+	  			  &lt;td&gt;
+	  				  {{video}}
+	  			  &lt;/td&gt;
+	  			   
+	  		  &lt;/tr&gt;
+	  &lt;/table&gt;
+	  
+  &lt;/div&gt;
+&lt;/template&gt;
+&lt;script&gt;
+	//vue基础
+	export default{
+		name:'app1',
+		data:function(){
+			return{
+				msg:&quot;qweqweqwe&quot;,
+				array:['html','云计算','网络安全','大数据','java'],
+				flag:true,
+				myhtml:&quot;&lt;h2&gt;白龙马蹄朝西&lt;/h2&gt;&quot;,
+				myhtml1:&quot;&lt;img :src='picUrl'&gt;&quot;,
+				msg1:&quot;白龙马蹄朝西&quot;,
+				isActive:true,
+				//require 引入图片  @ 代表根路径
+				picUrl:require('@/assets/tiktok.png'),
+				picUrl1:require('@/assets/logo.png'),
+				msg2:'',
+				msg3:''
+			}
+		},
+		methods:{
+			myAlert:function(){
+				// alert(&quot;点点点点点点&quot;)
+				var img = document.getElementById(&quot;img1&quot;);
+				img.style.width = img.offsetWidth +5 +&quot;px&quot;;
+			},
+			getJoke:function(){
+				//通过'axios将msg2的值换掉
+				//this在then里面的function没有意义，所以需要将它赋值给that
+				var that = this
+				this.$http.get(&quot;https://autumnfish.cn/api/joke/list?num=5&quot;).then(function(res){
+					console.log(res)
+					that.msg2 = res
+				})
+			},
+			getVideo:function(){
+					//通过'axios将msg2的值换掉
+					//this在then里面的function没有意义，所以需要将它赋值给that
+					var that = this
+					axios({
+						type:&quot;get&quot;,
+						url:&quot;/videos/showAll&quot;,
+						method:&quot;get&quot;,
+						hraders:{
+							'content-type':'application/x-www-form-urlencoded'
+						}
+					}).then(function(res){
+						console.log(res)
+						that.msg3 = res
+					})
+				}
+			
+		},
+		computed:{
+			reverseMsg:function(msg1){
+				// split(&quot;&quot;)变成数组，reverse()反翻转，join(&quot;&quot;)变成字符串
+				return this.msg1.split(&quot;&quot;).reverse().join(&quot;&quot;)
+			}
+		}
+	}
+&lt;/script&gt;
+
+&lt;style&gt;
+.myborder{
+	width: 200px;
+	height: 200px;
+	border: 1px black solid;
+}
+img{
+	width: 100px;
+}
+&lt;/style&gt;
+</code></pre>
+<h1 id="mainjs">main.js</h1>
+<pre><code class="language-js">import Vue from 'vue'
+
+import App1 from './App1.vue'
+import router from './router'
+import store from './store'
+//axios 相对与ajax
+import axios from 'axios'
+
+Vue.config.productionTip = false
+//相当与vuecli中的全局变量
+Vue.prototype.$http = axios
+
+new Vue({
+  router,
+  store,
+  render: h =&gt; h(App1)
+}).$mount('#app')
+</code></pre>
+<h1 id="需要在项目node_moudules下安装axios">需要在项目node_moudules下安装axios</h1>
+<p>axios相当于ajax</p>
+<pre><code class="language-cmd">npm install -i axios -S
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#vue%E9%A1%B9%E7%9B%AE%E6%A1%86%E6%9E%B6">vue项目框架</a></li>
+<li><a href="#%E6%96%B0%E5%BB%BAvueconfigjs">新建vue.config.js</a></li>
+<li><a href="#%E6%96%B0%E5%BB%BAapp1vue%E5%B9%B6%E5%9C%A8mainjs%E4%B8%AD%E6%B7%BB%E5%8A%A0">新建App1.vue并在main.js中添加</a></li>
+<li><a href="#mainjs">main.js</a></li>
+<li><a href="#%E9%9C%80%E8%A6%81%E5%9C%A8%E9%A1%B9%E7%9B%AEnode_moudules%E4%B8%8B%E5%AE%89%E8%A3%85axios">需要在项目node_moudules下安装axios</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://gblog.luciferryf.eu.org/post/dy-project-13/">
+              <h3 class="post-title">
+                类似抖音的短视频管理系统+Java后端+vue前端（13）
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://gblog.luciferryf.eu.org/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
